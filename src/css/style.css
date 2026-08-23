@@ -1,0 +1,113 @@
+/* =========================================
+   NAVBAR ART&CO
+========================================= */
+
+.navbar-artco {
+    background-color: #202124;
+}
+
+.navbar-artco .container {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.logo-artco {
+    font-size: 27px;
+    font-weight: bold;
+    white-space: nowrap;
+    margin-right: 30px;
+
+    background: linear-gradient(
+        90deg,
+        #9b00ff,
+        #00b894
+    );
+
+    background-clip: text;
+    -webkit-background-clip: text;
+
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+}
+
+.menu-artco {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.links-artco {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: auto;
+}
+
+.links-artco .nav-link {
+    color: #bfc0c2;
+    white-space: nowrap;
+}
+
+.links-artco .nav-link.active {
+    color: #ffffff;
+}
+
+.links-artco .nav-link:hover {
+    color: #ffffff;
+}
+
+.pesquisa-artco {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+
+.pesquisa-artco .form-control {
+    width: 225px;
+}
+
+.btn-buscar {
+    background: linear-gradient(
+        90deg,
+        #9b00ff,
+        #00b894
+    );
+
+    border: none;
+    color: white;
+}
+
+.btn-buscar:hover {
+    color: white;
+    opacity: 0.9;
+}
+
+.usuario-navbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.btn-cadastrar {
+    background-color: #ffc400;
+    border: none;
+    color: #111;
+}
+
+.btn-cadastrar:hover {
+    background-color: #e6b000;
+}
+
+.linha-colorida {
+    height: 4px;
+
+    background: linear-gradient(
+        90deg,
+        #ff00cc,
+        #9b00ff,
+        #00b894,
+        #ffc400
+    );
+}

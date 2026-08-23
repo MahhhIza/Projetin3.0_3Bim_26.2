@@ -61,6 +61,10 @@ try {
         rel="stylesheet"
     >
 
+    <link
+    rel="stylesheet"
+    href="../src/css/style.css"
+    >
 
     <style>
 
@@ -168,28 +172,7 @@ try {
          MENU
     ========================================= -->
 
-    <nav class="navbar navbar-dark bg-dark">
-
-        <div class="container">
-
-            <a
-                class="navbar-brand fw-bold"
-                href="../index.php"
-            >
-                Art&Co
-            </a>
-
-
-            <a
-                href="../index.php"
-                class="btn btn-outline-light btn-sm"
-            >
-                Início
-            </a>
-
-        </div>
-
-    </nav>
+    <?php require_once "../componentes/navbar.php"; ?>
 
 
     <!-- =========================================
@@ -332,6 +315,10 @@ try {
         </div>
 
     </main>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    ></script>
 
 
 </body>
