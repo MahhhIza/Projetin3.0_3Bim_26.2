@@ -148,101 +148,105 @@ require_once "componentes/navbar.php";
 
         <!-- CARDS -->
 
-        <div class="row g-4">
+        <!-- DASHBOARD -->
+<div class="row g-4">
 
+    <!-- FATURAMENTO -->
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    💰 Faturamento
+                </h5>
 
-            <!-- PRODUTOS -->
+                <p
+                    id="faturamentoTotal"
+                    class="fs-4 fw-bold text-success"
+                >
+                    Carregando...
+                </p>
 
-            <div class="col-md-4">
-
-                <div class="card shadow-sm h-100">
-
-                    <div class="card-body">
-
-                        <h5 class="card-title">
-                            🎨 Produtos
-                        </h5>
-
-                        <p class="card-text text-muted">
-                            Encontre tintas, pincéis, papéis e outros
-                            materiais artísticos.
-                        </p>
-
-                        <a
-                            href="#"
-                            class="btn btn-primary"
-                        >
-                            Ver produtos
-                        </a>
-
-                    </div>
-
-                </div>
-
+                <p class="card-text text-muted">
+                    Faturamento total dos produtos.
+                </p>
             </div>
-
-
-            <!-- CATEGORIAS -->
-
-            <div class="col-md-4">
-
-                <div class="card shadow-sm h-100">
-
-                    <div class="card-body">
-
-                        <h5 class="card-title">
-                            🖌️ Categorias
-                        </h5>
-
-                        <p class="card-text text-muted">
-                            Explore nossos materiais separados por categoria.
-                        </p>
-
-                        <a
-                            href="#"
-                            class="btn btn-success"
-                        >
-                            Explorar categorias
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- CONTA -->
-
-            <div class="col-md-4">
-
-                <div class="card shadow-sm h-100">
-
-                    <div class="card-body">
-
-                        <h5 class="card-title">
-                            👤 Minha conta
-                        </h5>
-
-                        <p class="card-text text-muted">
-                            Acesse suas informações e acompanhe suas compras.
-                        </p>
-
-                        <a
-                            href="#"
-                            class="btn btn-warning"
-                        >
-                            Minha conta
-                        </a>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
         </div>
+    </div>
+
+    <!-- QUANTIDADE VENDIDA -->
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    📦 Vendas
+                </h5>
+
+                <p
+                    id="quantidadeTotal"
+                    class="fs-4 fw-bold text-primary"
+                >
+                    Carregando...
+                </p>
+
+                <p class="card-text text-muted">
+                    Quantidade total vendida.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUTOS -->
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    🎨 Produtos
+                </h5>
+
+                <p
+                    id="totalProdutos"
+                    class="fs-4 fw-bold text-dark"
+                >
+                    Carregando...
+                </p>
+
+                <p class="card-text text-muted">
+                    Produtos cadastrados.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ESTOQUE -->
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    🏷️ Estoque
+                </h5>
+
+                <p
+                    id="estoqueTotal"
+                    class="fs-4 fw-bold text-warning"
+                >
+                    Carregando...
+                </p>
+
+                <p class="card-text text-muted">
+                    Unidades disponíveis.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- MENSAGEM DA DASHBOARD -->
+<div
+    id="mensagemDashboard"
+    class="alert alert-info text-center mt-4 d-none"
+>
+</div>
 
 
     </main>
