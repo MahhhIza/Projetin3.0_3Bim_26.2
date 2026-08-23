@@ -22,6 +22,32 @@ $usuarioLogado = isset($_SESSION["usuario_id"]);
 
 $nomeUsuario = $_SESSION["usuario_nome"] ?? "Usuário";
 
+/*
+ * Busca as categorias cadastradas no banco.
+ */
+
+$categorias = [];
+
+try {
+
+    require_once $base . "config.php";
+
+    $sqlCategorias = "SELECT id, nome
+                      FROM categorias
+                      ORDER BY nome ASC";
+
+    $stmtCategorias = $pdo->prepare($sqlCategorias);
+
+    $stmtCategorias->execute();
+
+    $categorias = $stmtCategorias->fetchAll();
+
+} catch (PDOException $e) {
+
+    $categorias = [];
+
+}
+
 
 /*
  * Se a página não definir $base,
@@ -99,54 +125,40 @@ $base = $base ?? "";
 
                     <ul class="dropdown-menu">
 
-                        <li>
+    <?php if (count($categorias) > 0): ?>
 
-                            <a
-                                class="dropdown-item"
-                                href="#"
-                            >
-                                Aquarela
-                            </a>
+        <?php foreach ($categorias as $categoria): ?>
 
-                        </li>
+            <li>
 
+                <a
+                    class="dropdown-item"
+                    href="#"
+                >
 
-                        <li>
+                    <?= htmlspecialchars($categoria["nome"]) ?>
 
-                            <a
-                                class="dropdown-item"
-                                href="#"
-                            >
-                                Desenho
-                            </a>
+                </a>
 
-                        </li>
+            </li>
 
+        <?php endforeach; ?>
 
-                        <li>
+    <?php else: ?>
 
-                            <a
-                                class="dropdown-item"
-                                href="#"
-                            >
-                                Papéis
-                            </a>
+        <li>
 
-                        </li>
+            <span class="dropdown-item-text text-muted">
 
+                Nenhuma categoria cadastrada.
 
-                        <li>
+            </span>
 
-                            <a
-                                class="dropdown-item"
-                                href="#"
-                            >
-                                Pintura
-                            </a>
+        </li>
 
-                        </li>
+    <?php endif; ?>
 
-                    </ul>
+</ul>
 
                 </div>
 
