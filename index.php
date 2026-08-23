@@ -64,135 +64,130 @@ try {
             background-color: #f8f9fa;
         }
 
-        /* ==============================
-           NAVBAR
-        ============================== */
+        /* =========================================
+   NAVBAR ART&CO
+========================================= */
 
-        .navbar-artco {
-            background-color: #202124;
-        }
-        
-        /* Mantém os elementos principais da navbar na mesma linha */
-        .navbar-artco .container {
-            flex-wrap: nowrap;
-        }
-        
-        /* Logo */
-        .logo-artco {
+.navbar-artco {
+    background-color: #202124;
+}
 
-        font-size: 27px;
-        font-weight: bold;
+.navbar-artco .container {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
 
-        background: linear-gradient(
-            90deg,
-            #9b00ff,
-            #00b894
-        );
+/* Logo */
 
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+.logo-artco {
+    font-size: 27px;
+    font-weight: bold;
+    white-space: nowrap;
+    margin-right: 30px;
 
-        white-space: nowrap;
-    }
+    background: linear-gradient(
+        90deg,
+        #9b00ff,
+        #00b894
+    );
 
-    /* Links */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
-    .navbar-artco .nav-link {
-        color: #bfc0c2;
-        white-space: nowrap;
-    }
+/* Área principal da navbar */
 
-    .navbar-artco .nav-link.active {
-        color: #ffffff;
-    }
+.menu-artco {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
 
-    .navbar-artco .nav-link:hover {
-        color: #ffffff;
-    }
+/* Links */
 
-    /* Área que contém menu, pesquisa e usuário */
+.links-artco {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: auto;
+}
 
-    .navbar-artco .navbar-collapse {
-        align-items: center;
-    }
+.links-artco .nav-link {
+    color: #bfc0c2;
+    white-space: nowrap;
+}
 
-    /* Campo de pesquisa */
+.links-artco .nav-link.active {
+    color: #ffffff;
+}
 
-    .navbar-artco form {
-        flex-shrink: 1;
-    }
+.links-artco .nav-link:hover {
+    color: #ffffff;
+}
 
-    .navbar-artco form .form-control {
-        min-width: 180px;
-    }
+/* Pesquisa */
 
-    /* Área do usuário */
+.pesquisa-artco {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
 
-    .usuario-navbar {
-        white-space: nowrap;
-    }
+.pesquisa-artco .form-control {
+    width: 225px;
+}
 
-        /* ==============================
-           LINHA COLORIDA
-        ============================== */
+.btn-buscar {
+    background: linear-gradient(
+        90deg,
+        #9b00ff,
+        #00b894
+    );
 
-        .linha-colorida {
+    border: none;
+    color: white;
+}
 
-            height: 4px;
+.btn-buscar:hover {
+    color: white;
+    opacity: 0.9;
+}
 
-            background: linear-gradient(
-                90deg,
-                #ff00cc,
-                #9b00ff,
-                #00b894,
-                #ffc400
-            );
+/* Área do usuário */
 
-        }
+.usuario-navbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
 
-        /* ==============================
-           BOTÃO BUSCAR
-        ============================== */
+/* Botão cadastrar */
 
-        .btn-buscar {
+.btn-cadastrar {
+    background-color: #ffc400;
+    border: none;
+    color: #111;
+}
 
-            background: linear-gradient(
-                90deg,
-                #9b00ff,
-                #00b894
-            );
+.btn-cadastrar:hover {
+    background-color: #e6b000;
+}
 
-            border: none;
+/* Linha colorida */
 
-            color: white;
-        }
+.linha-colorida {
+    height: 4px;
 
-        .btn-buscar:hover {
-
-            color: white;
-
-            opacity: 0.9;
-        }
-
-        /* ==============================
-           BOTÃO CADASTRAR
-        ============================== */
-
-        .btn-cadastrar {
-
-            background-color: #ffc400;
-
-            border: none;
-
-            color: #111;
-        }
-
-        .btn-cadastrar:hover {
-
-            background-color: #e6b000;
-
-        }
-
+    background: linear-gradient(
+        90deg,
+        #ff00cc,
+        #9b00ff,
+        #00b894,
+        #ffc400
+    );
+}
         /* ==============================
            DESTAQUE
         ============================== */
@@ -238,7 +233,7 @@ try {
      NAVBAR
 =================================================== -->
 
-<nav class="navbar navbar-expand-lg navbar-artco">
+<nav class="navbar navbar-artco">
 
     <div class="container">
 
@@ -252,63 +247,41 @@ try {
         </a>
 
 
-        <!-- BOTÃO MOBILE -->
+        <!-- ÁREA PRINCIPAL -->
 
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#menuArtco"
-        >
-
-            <span class="navbar-toggler-icon"></span>
-
-        </button>
+        <div class="menu-artco">
 
 
-        <div
-            class="collapse navbar-collapse"
-            id="menuArtco"
-        >
+            <!-- LINKS -->
+
+            <div class="links-artco">
+
+                <a
+                    class="nav-link active"
+                    href="index.php"
+                >
+                    Início
+                </a>
 
 
-            <!-- MENU -->
-
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-                <li class="nav-item">
-
-                    <a
-                        class="nav-link active"
-                        href="index.php"
-                    >
-                        Início
-                    </a>
-
-                </li>
-
-
-                <li class="nav-item">
-
-                    <a
-                        class="nav-link"
-                        href="#"
-                    >
-                        Produtos
-                    </a>
-
-                </li>
+                <a
+                    class="nav-link"
+                    href="#"
+                >
+                    Produtos
+                </a>
 
 
                 <!-- CATEGORIAS -->
 
-                <li class="nav-item dropdown">
+                <div class="dropdown">
 
                     <a
                         class="nav-link dropdown-toggle"
                         href="#"
                         role="button"
                         data-bs-toggle="dropdown"
+                        aria-expanded="false"
                     >
                         Categorias
                     </a>
@@ -316,44 +289,50 @@ try {
 
                     <ul class="dropdown-menu">
 
-    <?php if (count($categorias) > 0): ?>
+                        <?php if (count($categorias) > 0): ?>
 
-        <?php foreach ($categorias as $categoria): ?>
+                            <?php foreach ($categorias as $categoria): ?>
 
-            <li>
+                                <li>
 
-                <a
-                    class="dropdown-item"
-                    href="#"
-                >
+                                    <a
+                                        class="dropdown-item"
+                                        href="#"
+                                    >
 
-                    <?= htmlspecialchars($categoria["nome"]) ?>
+                                        <?= htmlspecialchars($categoria["nome"]) ?>
 
-                </a>
+                                    </a>
 
-            </li>
+                                </li>
 
-        <?php endforeach; ?>
+                            <?php endforeach; ?>
 
-    <?php else: ?>
+                        <?php else: ?>
 
-        <li>
+                            <li>
 
-            <span class="dropdown-item-text">
-                Nenhuma categoria cadastrada.
-            </span>
+                                <span class="dropdown-item-text">
 
-        </li>
+                                    Nenhuma categoria cadastrada.
 
-    <?php endif; ?>
+                                </span>
 
-</ul>
+                            </li>
+
+                        <?php endif; ?>
+
+                    </ul>
+
+                </div>
+
+            </div>
 
 
             <!-- PESQUISA -->
 
             <form
-                class="d-flex me-3"
+                class="pesquisa-artco"
                 role="search"
             >
 
@@ -361,6 +340,7 @@ try {
                     class="form-control me-2"
                     type="search"
                     placeholder="Buscar materiais..."
+                    aria-label="Buscar"
                 >
 
                 <button
@@ -373,15 +353,13 @@ try {
             </form>
 
 
-            <!-- ==================================================
-                 USUÁRIO
-            =================================================== -->
+            <!-- USUÁRIO -->
 
             <?php if (!$usuarioLogado): ?>
 
                 <!-- VISITANTE -->
 
-                <div class="d-flex gap-2">
+                <div class="usuario-navbar">
 
                     <a
                         href="login.php"
@@ -404,7 +382,7 @@ try {
 
                 <!-- USUÁRIO LOGADO -->
 
-                <div class="d-flex align-items-center gap-2 usuario-navbar">
+                <div class="usuario-navbar">
 
                     <span class="text-white">
 
@@ -413,12 +391,14 @@ try {
 
                     </span>
 
+
                     <a
                         href="painel.php"
                         class="btn btn-outline-light btn-sm"
                     >
                         Minha conta
                     </a>
+
 
                     <a
                         href="logout.php"
