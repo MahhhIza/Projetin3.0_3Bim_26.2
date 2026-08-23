@@ -62,6 +62,10 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
             color: #bfc0c2;
         }
 
+        .navbar-artco .nav-link.active {
+            color: #ffffff;
+        }
+
         .navbar-artco .nav-link:hover {
             color: white;
         }
@@ -317,15 +321,6 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
     =========================================== -->
 
     <main class="container py-5">
-
-
-        <div class="alert alert-success">
-
-            <strong>Login realizado com sucesso!</strong>
-
-            Bem-vindo à Art&Co.
-
-        </div>
 
 
         <div class="mb-4">
