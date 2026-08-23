@@ -22,7 +22,7 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Art&Co - Painel</title>
+    <title>Art&Co - Início</title>
 
     <!-- Bootstrap -->
     <link
@@ -30,34 +30,275 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
         rel="stylesheet"
     >
 
+    <style>
+
+        /* ==============================
+           IDENTIDADE VISUAL ART&CO
+        ============================== */
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .navbar-artco {
+            background-color: #202124;
+        }
+
+        .logo-artco {
+            font-size: 27px;
+            font-weight: bold;
+
+            background: linear-gradient(
+                90deg,
+                #9b00ff,
+                #00b894
+            );
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .navbar-artco .nav-link {
+            color: #bfc0c2;
+        }
+
+        .navbar-artco .nav-link:hover {
+            color: white;
+        }
+
+        .linha-colorida {
+            height: 4px;
+
+            background: linear-gradient(
+                90deg,
+                #ff00cc,
+                #9b00ff,
+                #00b894,
+                #ffc400
+            );
+        }
+
+        .btn-buscar {
+            background: linear-gradient(
+                90deg,
+                #9b00ff,
+                #00b894
+            );
+
+            border: none;
+            color: white;
+        }
+
+        .btn-buscar:hover {
+            color: white;
+            opacity: 0.9;
+        }
+
+        .btn-cadastrar {
+            background-color: #ffc400;
+            border: none;
+            color: #111;
+        }
+
+        .btn-cadastrar:hover {
+            background-color: #e6b000;
+        }
+
+    </style>
+
 </head>
 
-<body class="bg-light">
+<body>
 
-    <!-- =====================================================
-         NAVBAR
-    ====================================================== -->
 
-    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+    <!-- ==========================================
+         NAVBAR ART&CO
+    =========================================== -->
+
+    <nav class="navbar navbar-expand-lg navbar-artco">
 
         <div class="container">
 
-            <a class="navbar-brand fw-bold" href="painel.php">
+            <!-- LOGO -->
+
+            <a
+                class="navbar-brand logo-artco"
+                href="painel.php"
+            >
                 Art&Co
             </a>
 
-            <div class="d-flex align-items-center">
 
-                <span class="text-white me-3">
-                    Olá, <?= htmlspecialchars($nomeUsuario) ?>
-                </span>
+            <!-- BOTÃO MOBILE -->
 
-                <a
-                    href="logout.php"
-                    class="btn btn-outline-light btn-sm"
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#menuArtco"
+                aria-controls="menuArtco"
+                aria-expanded="false"
+                aria-label="Abrir menu"
+            >
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+
+            <!-- MENU -->
+
+            <div
+                class="collapse navbar-collapse"
+                id="menuArtco"
+            >
+
+                <!-- LINKS -->
+
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link active"
+                            href="painel.php"
+                        >
+                            Início
+                        </a>
+
+                    </li>
+
+
+                    <li class="nav-item">
+
+                        <a
+                            class="nav-link"
+                            href="#"
+                        >
+                            Produtos
+                        </a>
+
+                    </li>
+
+
+                    <!-- CATEGORIAS -->
+
+                    <li class="nav-item dropdown">
+
+                        <a
+                            class="nav-link dropdown-toggle"
+                            href="#"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                        >
+                            Categorias
+                        </a>
+
+
+                        <ul class="dropdown-menu">
+
+                            <li>
+                                <a
+                                    class="dropdown-item"
+                                    href="#"
+                                >
+                                    🎨 Tintas
+                                </a>
+                            </li>
+
+                            <li>
+                                <a
+                                    class="dropdown-item"
+                                    href="#"
+                                >
+                                    🖌️ Pincéis
+                                </a>
+                            </li>
+
+                            <li>
+                                <a
+                                    class="dropdown-item"
+                                    href="#"
+                                >
+                                    ✏️ Desenho
+                                </a>
+                            </li>
+
+                            <li>
+                                <a
+                                    class="dropdown-item"
+                                    href="#"
+                                >
+                                    📄 Papéis
+                                </a>
+                            </li>
+
+                            <li>
+                                <a
+                                    class="dropdown-item"
+                                    href="#"
+                                >
+                                    🖼️ Telas
+                                </a>
+                            </li>
+
+                            <li>
+                                <a
+                                    class="dropdown-item"
+                                    href="#"
+                                >
+                                    🌈 Aquarela
+                                </a>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                </ul>
+
+
+                <!-- PESQUISA -->
+
+                <form
+                    class="d-flex me-3"
+                    role="search"
                 >
-                    Sair
-                </a>
+
+                    <input
+                        class="form-control me-2"
+                        type="search"
+                        placeholder="Buscar materiais..."
+                        aria-label="Buscar"
+                    >
+
+                    <button
+                        class="btn btn-buscar"
+                        type="submit"
+                    >
+                        Buscar
+                    </button>
+
+                </form>
+
+
+                <!-- USUÁRIO -->
+
+                <div class="d-flex align-items-center">
+
+                    <span class="text-white me-3">
+                        Olá, <?= htmlspecialchars($nomeUsuario) ?>
+                    </span>
+
+                    <a
+                        href="logout.php"
+                        class="btn btn-outline-light btn-sm"
+                    >
+                        Sair
+                    </a>
+
+                </div>
 
             </div>
 
@@ -66,46 +307,46 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
     </nav>
 
 
-    <!-- =====================================================
-         CONTEÚDO PRINCIPAL
-    ====================================================== -->
+    <!-- LINHA COLORIDA -->
+
+    <div class="linha-colorida"></div>
+
+
+    <!-- ==========================================
+         CONTEÚDO
+    =========================================== -->
 
     <main class="container py-5">
 
-        <!-- ALERT -->
 
-        <div class="alert alert-success" role="alert">
+        <div class="alert alert-success">
 
             <strong>Login realizado com sucesso!</strong>
 
-            Você está acessando o painel da Art&Co.
+            Bem-vindo à Art&Co.
 
         </div>
 
 
-        <!-- TÍTULO -->
-
         <div class="mb-4">
 
             <h1 class="fw-bold">
-                Painel Art&Co
+                Bem-vindo à Art&Co 🎨
             </h1>
 
             <p class="text-muted">
-                Sistema de gerenciamento da loja de produtos artísticos.
+                Materiais artísticos para transformar suas ideias em arte.
             </p>
 
         </div>
 
 
-        <!-- =================================================
-             CARDS
-        ================================================== -->
+        <!-- CARDS -->
 
         <div class="row g-4">
 
 
-            <!-- CARD PRODUTOS -->
+            <!-- PRODUTOS -->
 
             <div class="col-md-4">
 
@@ -118,7 +359,8 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
                         </h5>
 
                         <p class="card-text text-muted">
-                            Consulte os produtos disponíveis na loja.
+                            Encontre tintas, pincéis, papéis e outros
+                            materiais artísticos.
                         </p>
 
                         <a
@@ -135,7 +377,7 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
             </div>
 
 
-            <!-- CARD VENDAS -->
+            <!-- CATEGORIAS -->
 
             <div class="col-md-4">
 
@@ -144,18 +386,18 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
                     <div class="card-body">
 
                         <h5 class="card-title">
-                            🛒 Vendas
+                            🖌️ Categorias
                         </h5>
 
                         <p class="card-text text-muted">
-                            Registre e consulte as vendas realizadas.
+                            Explore nossos materiais separados por categoria.
                         </p>
 
                         <a
                             href="#"
                             class="btn btn-success"
                         >
-                            Ver vendas
+                            Explorar categorias
                         </a>
 
                     </div>
@@ -165,7 +407,7 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
             </div>
 
 
-            <!-- CARD DASHBOARD -->
+            <!-- CONTA -->
 
             <div class="col-md-4">
 
@@ -174,18 +416,18 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
                     <div class="card-body">
 
                         <h5 class="card-title">
-                            📊 Dashboard
+                            👤 Minha conta
                         </h5>
 
                         <p class="card-text text-muted">
-                            Visualize os principais dados da loja.
+                            Acesse suas informações e acompanhe suas compras.
                         </p>
 
                         <a
                             href="#"
                             class="btn btn-warning"
                         >
-                            Ver dashboard
+                            Minha conta
                         </a>
 
                     </div>
@@ -194,34 +436,9 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
 
             </div>
 
-        </div>
-
-
-        <!-- =================================================
-             INFORMAÇÃO DO USUÁRIO
-        ================================================== -->
-
-        <div class="card mt-4 shadow-sm">
-
-            <div class="card-body">
-
-                <h5 class="card-title">
-                    Informações da conta
-                </h5>
-
-                <p class="mb-1">
-                    <strong>Nome:</strong>
-                    <?= htmlspecialchars($nomeUsuario) ?>
-                </p>
-
-                <p class="mb-0">
-                    <strong>Tipo:</strong>
-                    <?= htmlspecialchars($tipoUsuario) ?>
-                </p>
-
-            </div>
 
         </div>
+
 
     </main>
 
