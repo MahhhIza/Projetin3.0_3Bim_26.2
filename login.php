@@ -64,66 +64,119 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <title>Login - Art&Co</title>
 
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+>
+
+<link
+    rel="stylesheet"
+    href="src/css/style.css"
+>
+
 </head>
 
 <body>
 
-    <h1>Login - Art&Co</h1>
+    <?php
+    $base = "";
+    require_once "componentes/navbar.php";
+    ?>
 
-    <?php if ($mensagem !== ""): ?>
+    <main class="container py-5">
 
-        <p>
-            <?= htmlspecialchars($mensagem) ?>
-        </p>
+        <div class="row justify-content-center">
 
-    <?php endif; ?>
+            <div class="col-12 col-md-7 col-lg-5">
 
-    <form method="POST">
+                <div class="card shadow-sm border-0">
 
-        <div>
+                    <div class="card-body p-4">
 
-            <label for="email">
-                E-mail:
-            </label>
+                        <h1 class="text-center fw-bold mb-4">
+                            Login
+                        </h1>
 
-            <input
-                type="email"
-                id="email"
-                name="email"
-                required
-            >
+                        <?php if ($mensagem !== ""): ?>
+
+                            <div class="alert alert-info text-center">
+                                <?= htmlspecialchars($mensagem) ?>
+                            </div>
+
+                        <?php endif; ?>
+
+                        <form method="POST">
+
+                            <div class="mb-3">
+
+                                <label
+                                    for="email"
+                                    class="form-label"
+                                >
+                                    E-mail
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    class="form-control"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="mb-3">
+
+                                <label
+                                    for="senha"
+                                    class="form-label"
+                                >
+                                    Senha
+                                </label>
+
+                                <input
+                                    type="password"
+                                    id="senha"
+                                    name="senha"
+                                    class="form-control"
+                                    required
+                                >
+
+                            </div>
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary w-100"
+                            >
+                                Entrar
+                            </button>
+
+                        </form>
+
+                        <p class="text-center text-muted mt-4 mb-0">
+
+                            Ainda não possui uma conta?
+
+                            <a href="cadastro.php">
+                                Cadastre-se
+                            </a>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
-        <br>
+    </main>
 
-        <div>
-
-            <label for="senha">
-                Senha:
-            </label>
-
-            <input
-                type="password"
-                id="senha"
-                name="senha"
-                required
-            >
-
-        </div>
-
-        <br>
-
-        <button type="submit">
-            Entrar
-        </button>
-
-    </form>
-
-    <p>
-        Ainda não possui uma conta?
-        <a href="cadastro.php">Cadastre-se</a>
-    </p>
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
+    </script>
 
 </body>
 

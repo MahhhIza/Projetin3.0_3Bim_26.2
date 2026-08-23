@@ -233,11 +233,11 @@ require_once "componentes/navbar.php";
 
 
         <a
-            href="#"
-            class="btn btn-primary btn-lg"
-        >
-            Explorar produtos
-        </a>
+    href="produtos/produtos.php"
+    class="btn btn-primary btn-lg"
+>
+    Explorar produtos
+</a>
 
     </div>
 

@@ -1,0 +1,11 @@
+{
+    "name": "artco",
+    "version": "1.0.0",
+    "description": "Sistema Art&Co",
+    "scripts": {
+        "build": "tsc"
+    },
+    "devDependencies": {
+        "typescript": "^5.0.0"
+    }
+}
