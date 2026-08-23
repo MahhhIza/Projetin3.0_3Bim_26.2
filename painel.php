@@ -254,6 +254,8 @@ require_once "componentes/navbar.php";
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
     </script>
 
+    <script type="module" src="src/js/dashboard.js"></script>
+
 </body>
 
 </html>
