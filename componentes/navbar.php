@@ -19,9 +19,10 @@ if (session_status() === PHP_SESSION_NONE) {
 $usuarioLogado = isset($_SESSION["usuario_id"]);
 
 /*
- * Nome do usuário logado.
+ * Dados do usuário logado.
  */
 $nomeUsuario = $_SESSION["usuario_nome"] ?? "Usuário";
+$tipoUsuario = $_SESSION["usuario_tipo"] ?? "usuario";
 
 /*
  * Busca as categorias cadastradas no banco.
@@ -44,7 +45,6 @@ try {
 } catch (PDOException $e) {
 
     $categorias = [];
-
 }
 
 ?>
@@ -66,6 +66,7 @@ try {
             Art&Co
         </a>
 
+
         <div class="menu-artco">
 
             <!-- =========================================
@@ -83,6 +84,7 @@ try {
                     Início
                 </a>
 
+
                 <!-- PRODUTOS -->
 
                 <a
@@ -91,6 +93,7 @@ try {
                 >
                     Produtos
                 </a>
+
 
                 <!-- =========================================
                      CATEGORIAS
@@ -145,33 +148,35 @@ try {
 
             </div>
 
+
             <!-- =========================================
                  PESQUISA
             ========================================= -->
 
             <form
-    class="pesquisa-artco"
-    action="<?= $base ?>produtos/produtos.php"
-    method="GET"
-    role="search"
->
+                class="pesquisa-artco"
+                action="<?= $base ?>produtos/produtos.php"
+                method="GET"
+                role="search"
+            >
 
-    <input
-        class="form-control me-2"
-        type="search"
-        name="busca"
-        placeholder="Buscar materiais..."
-        aria-label="Buscar"
-    >
+                <input
+                    class="form-control me-2"
+                    type="search"
+                    name="busca"
+                    placeholder="Buscar materiais..."
+                    aria-label="Buscar"
+                >
 
-    <button
-        class="btn btn-buscar"
-        type="submit"
-    >
-        Buscar
-    </button>
+                <button
+                    class="btn btn-buscar"
+                    type="submit"
+                >
+                    Buscar
+                </button>
 
-</form>
+            </form>
+
 
             <!-- =========================================
                  USUÁRIO
@@ -199,6 +204,7 @@ try {
 
                 </div>
 
+
             <?php else: ?>
 
                 <!-- USUÁRIO LOGADO -->
@@ -206,16 +212,43 @@ try {
                 <div class="usuario-navbar">
 
                     <span class="text-white">
+
                         Olá,
                         <?= htmlspecialchars($nomeUsuario) ?>
+
                     </span>
 
-                    <a
-                        href="<?= $base ?>painel.php"
-                        class="btn btn-outline-light btn-sm"
-                    >
-                        Minha conta
-                    </a>
+
+                    <?php if ($tipoUsuario === "usuario"): ?>
+
+                        <!-- USUÁRIO COMUM -->
+
+                        <a
+                            href="<?= $base ?>compras.php"
+                            class="btn btn-outline-light btn-sm"
+                        >
+                            Compras
+                        </a>
+
+
+                    <?php elseif (
+                        $tipoUsuario === "vendedor"
+                        || $tipoUsuario === "admin"
+                    ): ?>
+
+                        <!-- VENDEDOR / ADMIN -->
+
+                        <a
+                            href="<?= $base ?>painel.php"
+                            class="btn btn-outline-light btn-sm"
+                        >
+                            Painel
+                        </a>
+
+                    <?php endif; ?>
+
+
+                    <!-- SAIR -->
 
                     <a
                         href="<?= $base ?>logout.php"
@@ -233,6 +266,7 @@ try {
     </div>
 
 </nav>
+
 
 <!-- =========================================
      LINHA COLORIDA
