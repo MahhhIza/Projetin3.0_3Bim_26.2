@@ -30,6 +30,11 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
         rel="stylesheet"
     >
 
+    <link
+    rel="stylesheet"
+    href="src/css/style.css"
+    >
+    
     <style>
 
         /* ==============================
