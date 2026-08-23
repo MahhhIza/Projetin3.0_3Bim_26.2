@@ -6,8 +6,7 @@ require_once "protecao/acesso.php";
 
 exigirPerfil(["admin", "vendedor"]);
 
-$nomeUsuario = $_SESSION["usuario_nome"];
-$tipoUsuario = $_SESSION["usuario_tipo"];
+require_once "config.php";
 
 $nomeUsuario = $_SESSION["usuario_nome"];
 $tipoUsuario = $_SESSION["usuario_tipo"];
