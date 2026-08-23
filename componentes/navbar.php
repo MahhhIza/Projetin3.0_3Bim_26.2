@@ -1,31 +1,31 @@
 <?php
 
 /*
+ * Se a página não definir $base,
+ * usamos o caminho da raiz.
+ */
+$base = $base ?? "";
+
+/*
  * Garante que a sessão esteja disponível.
  */
-
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-
 /*
  * Verifica se existe um usuário logado.
  */
-
 $usuarioLogado = isset($_SESSION["usuario_id"]);
-
 
 /*
  * Nome do usuário logado.
  */
-
 $nomeUsuario = $_SESSION["usuario_nome"] ?? "Usuário";
 
 /*
  * Busca as categorias cadastradas no banco.
  */
-
 $categorias = [];
 
 try {
@@ -37,7 +37,6 @@ try {
                       ORDER BY nome ASC";
 
     $stmtCategorias = $pdo->prepare($sqlCategorias);
-
     $stmtCategorias->execute();
 
     $categorias = $stmtCategorias->fetchAll();
@@ -47,14 +46,6 @@ try {
     $categorias = [];
 
 }
-
-
-/*
- * Se a página não definir $base,
- * usamos o caminho da raiz.
- */
-
-$base = $base ?? "";
 
 ?>
 
@@ -75,16 +66,13 @@ $base = $base ?? "";
             Art&Co
         </a>
 
-
         <div class="menu-artco">
-
 
             <!-- =========================================
                  LINKS PRINCIPAIS
             ========================================= -->
 
             <div class="links-artco">
-
 
                 <!-- INÍCIO -->
 
@@ -95,7 +83,6 @@ $base = $base ?? "";
                     Início
                 </a>
 
-
                 <!-- PRODUTOS -->
 
                 <a
@@ -104,7 +91,6 @@ $base = $base ?? "";
                 >
                     Produtos
                 </a>
-
 
                 <!-- =========================================
                      CATEGORIAS
@@ -122,48 +108,42 @@ $base = $base ?? "";
                         Categorias
                     </a>
 
-
                     <ul class="dropdown-menu">
 
-    <?php if (count($categorias) > 0): ?>
+                        <?php if (count($categorias) > 0): ?>
 
-        <?php foreach ($categorias as $categoria): ?>
+                            <?php foreach ($categorias as $categoria): ?>
 
-            <li>
+                                <li>
 
-                <a
-                    class="dropdown-item"
-                    href="#"
-                >
+                                    <a
+                                        class="dropdown-item"
+                                        href="<?= $base ?>produtos/produtos.php?categoria=<?= $categoria["id"] ?>"
+                                    >
+                                        <?= htmlspecialchars($categoria["nome"]) ?>
+                                    </a>
 
-                    <?= htmlspecialchars($categoria["nome"]) ?>
+                                </li>
 
-                </a>
+                            <?php endforeach; ?>
 
-            </li>
+                        <?php else: ?>
 
-        <?php endforeach; ?>
+                            <li>
 
-    <?php else: ?>
+                                <span class="dropdown-item-text text-muted">
+                                    Nenhuma categoria cadastrada.
+                                </span>
 
-        <li>
+                            </li>
 
-            <span class="dropdown-item-text text-muted">
+                        <?php endif; ?>
 
-                Nenhuma categoria cadastrada.
-
-            </span>
-
-        </li>
-
-    <?php endif; ?>
-
-</ul>
+                    </ul>
 
                 </div>
 
             </div>
-
 
             <!-- =========================================
                  PESQUISA
@@ -181,7 +161,6 @@ $base = $base ?? "";
                     aria-label="Buscar"
                 >
 
-
                 <button
                     class="btn btn-buscar"
                     type="submit"
@@ -191,13 +170,11 @@ $base = $base ?? "";
 
             </form>
 
-
             <!-- =========================================
                  USUÁRIO
             ========================================= -->
 
             <?php if (!$usuarioLogado): ?>
-
 
                 <!-- VISITANTE -->
 
@@ -210,7 +187,6 @@ $base = $base ?? "";
                         Login
                     </a>
 
-
                     <a
                         href="<?= $base ?>cadastro.php"
                         class="btn btn-cadastrar"
@@ -220,21 +196,16 @@ $base = $base ?? "";
 
                 </div>
 
-
             <?php else: ?>
-
 
                 <!-- USUÁRIO LOGADO -->
 
                 <div class="usuario-navbar">
 
                     <span class="text-white">
-
                         Olá,
                         <?= htmlspecialchars($nomeUsuario) ?>
-
                     </span>
-
 
                     <a
                         href="<?= $base ?>painel.php"
@@ -242,7 +213,6 @@ $base = $base ?? "";
                     >
                         Minha conta
                     </a>
-
 
                     <a
                         href="<?= $base ?>logout.php"
@@ -253,16 +223,13 @@ $base = $base ?? "";
 
                 </div>
 
-
             <?php endif; ?>
-
 
         </div>
 
     </div>
 
 </nav>
-
 
 <!-- =========================================
      LINHA COLORIDA
