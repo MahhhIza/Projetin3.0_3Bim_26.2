@@ -71,33 +71,66 @@ try {
         .navbar-artco {
             background-color: #202124;
         }
-
+        
+        /* Mantém os elementos principais da navbar na mesma linha */
+        .navbar-artco .container {
+            flex-wrap: nowrap;
+        }
+        
+        /* Logo */
         .logo-artco {
 
-            font-size: 27px;
-            font-weight: bold;
+        font-size: 27px;
+        font-weight: bold;
 
-            background: linear-gradient(
-                90deg,
-                #9b00ff,
-                #00b894
-            );
+        background: linear-gradient(
+            90deg,
+            #9b00ff,
+            #00b894
+        );
 
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
 
-        .navbar-artco .nav-link {
-            color: #bfc0c2;
-        }
+        white-space: nowrap;
+    }
 
-        .navbar-artco .nav-link.active {
-            color: #ffffff;
-        }
+    /* Links */
 
-        .navbar-artco .nav-link:hover {
-            color: #ffffff;
-        }
+    .navbar-artco .nav-link {
+        color: #bfc0c2;
+        white-space: nowrap;
+    }
+
+    .navbar-artco .nav-link.active {
+        color: #ffffff;
+    }
+
+    .navbar-artco .nav-link:hover {
+        color: #ffffff;
+    }
+
+    /* Área que contém menu, pesquisa e usuário */
+
+    .navbar-artco .navbar-collapse {
+        align-items: center;
+    }
+
+    /* Campo de pesquisa */
+
+    .navbar-artco form {
+        flex-shrink: 1;
+    }
+
+    .navbar-artco form .form-control {
+        min-width: 180px;
+    }
+
+    /* Área do usuário */
+
+    .usuario-navbar {
+        white-space: nowrap;
+    }
 
         /* ==============================
            LINHA COLORIDA
@@ -371,7 +404,7 @@ try {
 
                 <!-- USUÁRIO LOGADO -->
 
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-2 usuario-navbar">
 
                     <span class="text-white">
 
