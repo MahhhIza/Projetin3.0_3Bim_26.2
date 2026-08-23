@@ -150,25 +150,28 @@ try {
             ========================================= -->
 
             <form
-                class="pesquisa-artco"
-                role="search"
-            >
+    class="pesquisa-artco"
+    action="<?= $base ?>produtos/produtos.php"
+    method="GET"
+    role="search"
+>
 
-                <input
-                    class="form-control me-2"
-                    type="search"
-                    placeholder="Buscar materiais..."
-                    aria-label="Buscar"
-                >
+    <input
+        class="form-control me-2"
+        type="search"
+        name="busca"
+        placeholder="Buscar materiais..."
+        aria-label="Buscar"
+    >
 
-                <button
-                    class="btn btn-buscar"
-                    type="submit"
-                >
-                    Buscar
-                </button>
+    <button
+        class="btn btn-buscar"
+        type="submit"
+    >
+        Buscar
+    </button>
 
-            </form>
+</form>
 
             <!-- =========================================
                  USUÁRIO

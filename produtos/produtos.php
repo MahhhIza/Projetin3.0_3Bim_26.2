@@ -11,6 +11,11 @@ require_once "../config.php";
 
 $categoriaSelecionada = $_GET["categoria"] ?? null;
 
+/*
+ * Verifica se o usuário realizou uma busca.
+ */
+
+$busca = trim($_GET["busca"] ?? "");
 
 /*
  * Busca os produtos.
@@ -18,60 +23,55 @@ $categoriaSelecionada = $_GET["categoria"] ?? null;
 
 try {
 
+    $sql = "SELECT
+                p.id,
+                p.nome,
+                p.descricao,
+                p.preco,
+                p.estoque,
+                c.nome AS categoria
+
+            FROM produtos p
+
+            INNER JOIN categorias c
+                ON p.categoria_id = c.id
+
+            WHERE p.ativo = TRUE";
+
+    $parametros = [];
+
+    /*
+     * Filtro por categoria
+     */
     if ($categoriaSelecionada !== null) {
 
-        /*
-         * Busca somente os produtos
-         * da categoria escolhida.
-         */
-
-        $sql = "SELECT
-                    p.id,
-                    p.nome,
-                    p.descricao,
-                    p.preco,
-                    p.estoque,
-                    c.nome AS categoria
-                FROM produtos p
-                INNER JOIN categorias c
-                    ON p.categoria_id = c.id
-                WHERE p.ativo = TRUE
-                AND c.id = ?
-                ORDER BY p.nome ASC";
-
-        $stmt = $pdo->prepare($sql);
-
-        $stmt->execute([$categoriaSelecionada]);
-
-    } else {
-
-        /*
-         * Se nenhuma categoria foi escolhida,
-         * mostra todos os produtos.
-         */
-
-        $sql = "SELECT
-                    p.id,
-                    p.nome,
-                    p.descricao,
-                    p.preco,
-                    p.estoque,
-                    c.nome AS categoria
-                FROM produtos p
-                INNER JOIN categorias c
-                    ON p.categoria_id = c.id
-                WHERE p.ativo = TRUE
-                ORDER BY p.nome ASC";
-
-        $stmt = $pdo->prepare($sql);
-
-        $stmt->execute();
+        $sql .= " AND c.id = ?";
+        $parametros[] = $categoriaSelecionada;
 
     }
 
+    /*
+     * Filtro por pesquisa
+     */
+    if ($busca !== "") {
+
+        $sql .= " AND (
+                    p.nome LIKE ?
+                    OR p.descricao LIKE ?
+                  )";
+
+        $parametros[] = "%" . $busca . "%";
+        $parametros[] = "%" . $busca . "%";
+
+    }
+
+    $sql .= " ORDER BY p.nome ASC";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute($parametros);
 
     $produtos = $stmt->fetchAll();
-
 
 } catch (PDOException $e) {
 
@@ -228,8 +228,23 @@ try {
         <div class="container">
 
             <h1>
-                Nossos Produtos 🎨
-            </h1>
+
+    <?php if ($busca !== ""): ?>
+
+        Resultados para:
+        "<?= htmlspecialchars($busca) ?>" 🔎
+
+    <?php elseif ($categoriaSelecionada !== null): ?>
+
+        Produtos da categoria 🎨
+
+    <?php else: ?>
+
+        Nossos Produtos 🎨
+
+    <?php endif; ?>
+
+</h1>
 
             <p>
                 Encontre os materiais perfeitos para suas criações.
@@ -335,25 +350,38 @@ try {
 
             <?php else: ?>
 
+    <div class="col-12">
 
-                <div class="col-12">
+        <div class="alert alert-info text-center">
 
-                    <div class="alert alert-info text-center">
+            <?php if ($busca !== ""): ?>
 
-                        <strong>
-                            Nenhum produto cadastrado.
-                        </strong>
+                <strong>
+                    Nenhum produto encontrado.
+                </strong>
 
-                        <br>
+                <br>
 
-                        No momento não existem produtos disponíveis.
+                Não encontramos produtos para
+                "<?= htmlspecialchars($busca) ?>".
 
-                    </div>
+            <?php else: ?>
 
-                </div>
+                <strong>
+                    Nenhum produto cadastrado.
+                </strong>
 
+                <br>
+
+                No momento não existem produtos disponíveis.
 
             <?php endif; ?>
+
+        </div>
+
+    </div>
+
+<?php endif; ?>
 
 
         </div>
