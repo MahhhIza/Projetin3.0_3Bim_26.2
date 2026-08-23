@@ -2,11 +2,36 @@
 
 session_start();
 
+require_once "config.php";
+
 $usuarioLogado = isset($_SESSION["usuario_id"]);
 
 if ($usuarioLogado) {
 
     $nomeUsuario = $_SESSION["usuario_nome"];
+
+}
+
+
+/*
+ * Busca as categorias cadastradas no banco
+ */
+
+try {
+
+    $sqlCategorias = "SELECT id, nome
+                      FROM categorias
+                      ORDER BY nome ASC";
+
+    $stmtCategorias = $pdo->prepare($sqlCategorias);
+
+    $stmtCategorias->execute();
+
+    $categorias = $stmtCategorias->fetchAll();
+
+} catch (PDOException $e) {
+
+    $categorias = [];
 
 }
 
@@ -258,47 +283,38 @@ if ($usuarioLogado) {
 
                     <ul class="dropdown-menu">
 
-                        <li>
-                            <a
-                                class="dropdown-item"
-                                href="#"
-                            >
-                                🎨 Tintas
-                            </a>
-                        </li>
+    <?php if (count($categorias) > 0): ?>
 
-                        <li>
-                            <a
-                                class="dropdown-item"
-                                href="#"
-                            >
-                                🖌️ Pincéis
-                            </a>
-                        </li>
+        <?php foreach ($categorias as $categoria): ?>
 
-                        <li>
-                            <a
-                                class="dropdown-item"
-                                href="#"
-                            >
-                                ✏️ Desenho
-                            </a>
-                        </li>
+            <li>
 
-                        <li>
-                            <a
-                                class="dropdown-item"
-                                href="#"
-                            >
-                                📄 Papéis
-                            </a>
-                        </li>
+                <a
+                    class="dropdown-item"
+                    href="#"
+                >
 
-                    </ul>
+                    <?= htmlspecialchars($categoria["nome"]) ?>
 
-                </li>
+                </a>
 
-            </ul>
+            </li>
+
+        <?php endforeach; ?>
+
+    <?php else: ?>
+
+        <li>
+
+            <span class="dropdown-item-text">
+                Nenhuma categoria cadastrada.
+            </span>
+
+        </li>
+
+    <?php endif; ?>
+
+</ul>
 
 
             <!-- PESQUISA -->
