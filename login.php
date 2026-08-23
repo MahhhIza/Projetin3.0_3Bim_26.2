@@ -41,8 +41,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $_SESSION["usuario_nome"] = $usuario["nome"];
     $_SESSION["usuario_tipo"] = $usuario["tipo"];
 
+    if ($_SESSION["usuario_tipo"] === "admin" || $_SESSION["usuario_tipo"] === "vendedor") {
     header("Location: painel.php");
-    exit;
+} else {
+    header("Location: index.php");
+}
+
+exit;
 
 } else {
 

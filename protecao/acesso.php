@@ -2,10 +2,10 @@
 
 function exigirLogin()
 {
-    if (!isset($_SESSION["usuario_id"])) {
-        header("Location: login.php");
+    if (!in_array($tipoUsuario, $perfisPermitidos, true)) {
+        header("Location: index.php");
         exit;
-    }
+}
 }
 
 function exigirPerfil($perfisPermitidos)
