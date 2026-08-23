@@ -49,7 +49,7 @@ if (isset($_GET["adicionar"]) && is_numeric($_GET["adicionar"])) {
         }
     }
 
-    header("Location: carrinho.php");
+    header("Location: finalizar.php");
     exit;
 }
 
@@ -59,7 +59,7 @@ if (isset($_GET["remover"]) && is_numeric($_GET["remover"])) {
 
     unset($_SESSION["carrinho"][$produtoId]);
 
-    header("Location: carrinho.php");
+    header("Location: finalizar.php");
     exit;
 }
 
