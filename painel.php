@@ -2,11 +2,12 @@
 
 session_start();
 
-if (!isset($_SESSION["usuario_id"])) {
+require_once "protecao/acesso.php";
 
-    header("Location: login.php");
-    exit;
-}
+exigirPerfil(["admin", "vendedor"]);
+
+$nomeUsuario = $_SESSION["usuario_nome"];
+$tipoUsuario = $_SESSION["usuario_tipo"];
 
 $nomeUsuario = $_SESSION["usuario_nome"];
 $tipoUsuario = $_SESSION["usuario_tipo"];

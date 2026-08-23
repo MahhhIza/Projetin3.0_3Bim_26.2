@@ -31,7 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 ":senha" => $senhaHash
             ]);
 
-            $mensagem = "Cadastro realizado com sucesso!";
+            header("Location: login.php?cadastro=sucesso");
+            exit;
 
         } catch (PDOException $e) {
 

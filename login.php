@@ -5,6 +5,9 @@ session_start();
 require_once "config.php";
 
 $mensagem = "";
+if (isset($_GET["cadastro"]) && $_GET["cadastro"] === "sucesso") {
+    $mensagem = "Cadastro realizado com sucesso! Agora faça login.";
+}
 $loginSucesso = false;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
