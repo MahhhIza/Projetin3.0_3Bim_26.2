@@ -6,36 +6,78 @@ require_once "../config.php";
 
 
 /*
- * Busca os produtos cadastrados no banco
+ * Verifica se o usuário escolheu uma categoria.
+ */
+
+$categoriaSelecionada = $_GET["categoria"] ?? null;
+
+
+/*
+ * Busca os produtos.
  */
 
 try {
 
-    $sql = "SELECT
-                p.id,
-                p.nome,
-                p.descricao,
-                p.preco,
-                p.estoque,
-                c.nome AS categoria
-            FROM produtos p
-            INNER JOIN categorias c
-                ON p.categoria_id = c.id
-            WHERE p.ativo = TRUE
-            ORDER BY p.nome ASC";
+    if ($categoriaSelecionada !== null) {
 
-    $stmt = $pdo->prepare($sql);
+        /*
+         * Busca somente os produtos
+         * da categoria escolhida.
+         */
 
-    $stmt->execute();
+        $sql = "SELECT
+                    p.id,
+                    p.nome,
+                    p.descricao,
+                    p.preco,
+                    p.estoque,
+                    c.nome AS categoria
+                FROM produtos p
+                INNER JOIN categorias c
+                    ON p.categoria_id = c.id
+                WHERE p.ativo = TRUE
+                AND c.id = ?
+                ORDER BY p.nome ASC";
+
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->execute([$categoriaSelecionada]);
+
+    } else {
+
+        /*
+         * Se nenhuma categoria foi escolhida,
+         * mostra todos os produtos.
+         */
+
+        $sql = "SELECT
+                    p.id,
+                    p.nome,
+                    p.descricao,
+                    p.preco,
+                    p.estoque,
+                    c.nome AS categoria
+                FROM produtos p
+                INNER JOIN categorias c
+                    ON p.categoria_id = c.id
+                WHERE p.ativo = TRUE
+                ORDER BY p.nome ASC";
+
+        $stmt = $pdo->prepare($sql);
+
+        $stmt->execute();
+
+    }
+
 
     $produtos = $stmt->fetchAll();
+
 
 } catch (PDOException $e) {
 
     $produtos = [];
 
 }
-
 ?>
 
 <!DOCTYPE html>
