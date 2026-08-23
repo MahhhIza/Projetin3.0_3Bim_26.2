@@ -136,11 +136,11 @@ try {
 
     $pdo->commit();
 
-    $_SESSION["carrinho"] = [];
+        $_SESSION["carrinho"] = [];
 
-    $_SESSION["compra_sucesso"] = true;
+        $_SESSION["compra_sucesso"] = true;
 
-    header("Location: finalizar_compra.php?sucesso=1");
+    header("Location: finalizar.php");
     exit;
 
 } catch (Throwable $e) {
