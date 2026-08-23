@@ -111,3 +111,10 @@
         #ffc400
     );
 }
+
+.preco-produto {
+    font-size: 22px;
+    font-weight: 700;
+    font-family: Arial, sans-serif;
+    color: #7b1fa2;
+}

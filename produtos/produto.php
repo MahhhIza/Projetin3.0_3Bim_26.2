@@ -100,7 +100,7 @@ require_once "../componentes/navbar.php";
                             <?= htmlspecialchars($produto["descricao"]) ?>
                         </p>
 
-                        <h2 class="text-primary mt-4">
+                        <h2 class="preco-produto mt-4">
                             R$
                             <?= number_format(
                                 $produto["preco"],
@@ -116,6 +116,13 @@ require_once "../componentes/navbar.php";
                             unidades
                         </p>
 
+                        <a
+                            href="../carrinho.php?adicionar=<?= $produto["id"] ?>"
+                            class="btn btn-primary mt-3"
+                        >
+                            🛒 Adicionar ao carrinho
+                        </a>
+                        
                         <a
                             href="produtos.php"
                             class="btn btn-secondary mt-3"
