@@ -1,20 +1,5 @@
 async function buscarProdutos(): Promise<void> {
 
-    const faturamentoElemento =
-        document.getElementById("faturamentoTotal");
-
-    const quantidadeElemento =
-        document.getElementById("quantidadeTotal");
-
-    const produtosElemento =
-        document.getElementById("totalProdutos");
-
-    const estoqueElemento =
-        document.getElementById("estoqueTotal");
-
-    const mensagemElemento =
-        document.getElementById("mensagemDashboard");
-
     try {
 
         const resposta = await fetch("api/produtos.php");
@@ -25,29 +10,19 @@ async function buscarProdutos(): Promise<void> {
 
         const produtos = await resposta.json();
 
+        const mensagem = document.getElementById("mensagemDashboard");
+
         if (!Array.isArray(produtos) || produtos.length === 0) {
 
-            if (mensagemElemento) {
-                mensagemElemento.textContent =
-                    "Nenhum dado registrado.";
-                mensagemElemento.classList.remove("d-none");
+            if (mensagem) {
+                mensagem.textContent = "Nenhum dado registrado.";
+                mensagem.classList.remove("d-none");
             }
 
-            if (faturamentoElemento) {
-                faturamentoElemento.textContent = "R$ 0,00";
-            }
-
-            if (quantidadeElemento) {
-                quantidadeElemento.textContent = "0";
-            }
-
-            if (produtosElemento) {
-                produtosElemento.textContent = "0";
-            }
-
-            if (estoqueElemento) {
-                estoqueElemento.textContent = "0";
-            }
+            document.getElementById("faturamentoTotal")!.textContent = "R$ 0,00";
+            document.getElementById("quantidadeTotal")!.textContent = "0";
+            document.getElementById("totalProdutos")!.textContent = "0";
+            document.getElementById("estoqueTotal")!.textContent = "0";
 
             return;
         }
@@ -61,9 +36,7 @@ async function buscarProdutos(): Promise<void> {
 
         const quantidadeTotal = produtos.reduce(
             (total: number, produto: any) => {
-                return total + Number(
-                    produto.quantidade_vendida || 0
-                );
+                return total + Number(produto.quantidade_vendida || 0);
             },
             0
         );
@@ -75,29 +48,27 @@ async function buscarProdutos(): Promise<void> {
             0
         );
 
-        if (faturamentoElemento) {
-            faturamentoElemento.textContent =
-                "R$ " +
-                faturamentoTotal.toLocaleString("pt-BR", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-        }
+        const totalProdutos = produtos.reduce(
+            (total: number) => {
+                return total + 1;
+            },
+            0
+        );
 
-        if (quantidadeElemento) {
-            quantidadeElemento.textContent =
-                quantidadeTotal.toString();
-        }
+        document.getElementById("faturamentoTotal")!.textContent =
+            faturamentoTotal.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL"
+            });
 
-        if (produtosElemento) {
-            produtosElemento.textContent =
-                produtos.length.toString();
-        }
+        document.getElementById("quantidadeTotal")!.textContent =
+            quantidadeTotal.toString();
 
-        if (estoqueElemento) {
-            estoqueElemento.textContent =
-                estoqueTotal.toString();
-        }
+        document.getElementById("totalProdutos")!.textContent =
+            totalProdutos.toString();
+
+        document.getElementById("estoqueTotal")!.textContent =
+            estoqueTotal.toString();
 
     } catch (erro) {
 
@@ -106,12 +77,14 @@ async function buscarProdutos(): Promise<void> {
             erro
         );
 
-        if (mensagemElemento) {
-            mensagemElemento.textContent =
+        const mensagem = document.getElementById("mensagemDashboard");
+
+        if (mensagem) {
+            mensagem.textContent =
                 "Não foi possível carregar os dados da dashboard.";
-            mensagemElemento.classList.remove("d-none");
-            mensagemElemento.classList.remove("alert-info");
-            mensagemElemento.classList.add("alert-danger");
+            mensagem.classList.remove("d-none");
+            mensagem.classList.remove("alert-info");
+            mensagem.classList.add("alert-danger");
         }
     }
 }
