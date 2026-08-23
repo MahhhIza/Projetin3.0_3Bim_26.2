@@ -22,6 +22,14 @@ $usuarioLogado = isset($_SESSION["usuario_id"]);
 
 $nomeUsuario = $_SESSION["usuario_nome"] ?? "Usuário";
 
+
+/*
+ * Se a página não definir $base,
+ * usamos o caminho da raiz.
+ */
+
+$base = $base ?? "";
+
 ?>
 
 <!-- =========================================
@@ -36,7 +44,7 @@ $nomeUsuario = $_SESSION["usuario_nome"] ?? "Usuário";
 
         <a
             class="navbar-brand logo-artco"
-            href="/artco/index.php"
+            href="<?= $base ?>index.php"
         >
             Art&Co
         </a>
@@ -45,27 +53,36 @@ $nomeUsuario = $_SESSION["usuario_nome"] ?? "Usuário";
         <div class="menu-artco">
 
 
-            <!-- LINKS -->
+            <!-- =========================================
+                 LINKS PRINCIPAIS
+            ========================================= -->
 
             <div class="links-artco">
 
+
+                <!-- INÍCIO -->
+
                 <a
                     class="nav-link active"
-                    href="/artco/index.php"
+                    href="<?= $base ?>index.php"
                 >
                     Início
                 </a>
 
 
+                <!-- PRODUTOS -->
+
                 <a
                     class="nav-link"
-                    href="/artco/produtos/produtos.php"
+                    href="<?= $base ?>produtos/produtos.php"
                 >
                     Produtos
                 </a>
 
 
-                <!-- CATEGORIAS -->
+                <!-- =========================================
+                     CATEGORIAS
+                ========================================= -->
 
                 <div class="dropdown">
 
@@ -83,39 +100,50 @@ $nomeUsuario = $_SESSION["usuario_nome"] ?? "Usuário";
                     <ul class="dropdown-menu">
 
                         <li>
+
                             <a
                                 class="dropdown-item"
                                 href="#"
                             >
                                 Aquarela
                             </a>
+
                         </li>
 
+
                         <li>
+
                             <a
                                 class="dropdown-item"
                                 href="#"
                             >
                                 Desenho
                             </a>
+
                         </li>
 
+
                         <li>
+
                             <a
                                 class="dropdown-item"
                                 href="#"
                             >
                                 Papéis
                             </a>
+
                         </li>
 
+
                         <li>
+
                             <a
                                 class="dropdown-item"
                                 href="#"
                             >
                                 Pintura
                             </a>
+
                         </li>
 
                     </ul>
@@ -125,7 +153,9 @@ $nomeUsuario = $_SESSION["usuario_nome"] ?? "Usuário";
             </div>
 
 
-            <!-- PESQUISA -->
+            <!-- =========================================
+                 PESQUISA
+            ========================================= -->
 
             <form
                 class="pesquisa-artco"
@@ -139,6 +169,7 @@ $nomeUsuario = $_SESSION["usuario_nome"] ?? "Usuário";
                     aria-label="Buscar"
                 >
 
+
                 <button
                     class="btn btn-buscar"
                     type="submit"
@@ -149,21 +180,27 @@ $nomeUsuario = $_SESSION["usuario_nome"] ?? "Usuário";
             </form>
 
 
-            <!-- USUÁRIO -->
+            <!-- =========================================
+                 USUÁRIO
+            ========================================= -->
 
             <?php if (!$usuarioLogado): ?>
+
+
+                <!-- VISITANTE -->
 
                 <div class="usuario-navbar">
 
                     <a
-                        href="/artco/login.php"
+                        href="<?= $base ?>login.php"
                         class="btn btn-outline-light"
                     >
                         Login
                     </a>
 
+
                     <a
-                        href="/artco/cadastro.php"
+                        href="<?= $base ?>cadastro.php"
                         class="btn btn-cadastrar"
                     >
                         Cadastrar
@@ -173,6 +210,9 @@ $nomeUsuario = $_SESSION["usuario_nome"] ?? "Usuário";
 
 
             <?php else: ?>
+
+
+                <!-- USUÁRIO LOGADO -->
 
                 <div class="usuario-navbar">
 
@@ -185,7 +225,7 @@ $nomeUsuario = $_SESSION["usuario_nome"] ?? "Usuário";
 
 
                     <a
-                        href="/artco/painel.php"
+                        href="<?= $base ?>painel.php"
                         class="btn btn-outline-light btn-sm"
                     >
                         Minha conta
@@ -193,13 +233,14 @@ $nomeUsuario = $_SESSION["usuario_nome"] ?? "Usuário";
 
 
                     <a
-                        href="/artco/logout.php"
+                        href="<?= $base ?>logout.php"
                         class="btn btn-outline-light btn-sm"
                     >
                         Sair
                     </a>
 
                 </div>
+
 
             <?php endif; ?>
 
@@ -211,6 +252,8 @@ $nomeUsuario = $_SESSION["usuario_nome"] ?? "Usuário";
 </nav>
 
 
-<!-- LINHA COLORIDA -->
+<!-- =========================================
+     LINHA COLORIDA
+========================================= -->
 
 <div class="linha-colorida"></div>

@@ -172,8 +172,10 @@ try {
          MENU
     ========================================= -->
 
-    <?php require_once "../componentes/navbar.php"; ?>
-
+    <?php
+    $base = "../";
+    require_once "../componentes/navbar.php";
+    ?>
 
     <!-- =========================================
          CABEÇALHO DA PÁGINA
