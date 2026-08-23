@@ -331,11 +331,12 @@ try {
                                 </div>
 
 
-                                <button
-                                    class="btn btn-primary w-100 mt-3"
-                                >
-                                    Ver produto
-                                </button>
+                                <a
+    href="produto.php?id=<?= $produto['id'] ?>"
+    class="btn btn-primary w-100 mt-3"
+>
+    Ver produto
+</a>
 
 
                             </div>
