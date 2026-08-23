@@ -5,6 +5,7 @@ session_start();
 require_once "config.php";
 
 $mensagem = "";
+$loginSucesso = false;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
@@ -33,17 +34,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if ($usuario && password_verify($senha, $usuario["senha"])) {
 
-                $_SESSION["usuario_id"] = $usuario["id"];
-                $_SESSION["usuario_nome"] = $usuario["nome"];
-                $_SESSION["usuario_tipo"] = $usuario["tipo"];
+    $_SESSION["usuario_id"] = $usuario["id"];
+    $_SESSION["usuario_nome"] = $usuario["nome"];
+    $_SESSION["usuario_tipo"] = $usuario["tipo"];
 
-                $mensagem = "Login realizado com sucesso!";
+    header("Location: painel.php");
+    exit;
 
-            } else {
+} else {
 
-                $mensagem = "E-mail ou senha incorretos.";
-            }
-
+    $mensagem = "E-mail ou senha incorretos.";
+}
         } catch (PDOException $e) {
 
             $mensagem = "Erro ao realizar o login.";
@@ -99,11 +100,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                         <?php if ($mensagem !== ""): ?>
 
-                            <div class="alert alert-info text-center">
-                                <?= htmlspecialchars($mensagem) ?>
-                            </div>
+    <div class="alert alert-danger text-center">
+        <?= htmlspecialchars($mensagem) ?>
+    </div>
 
-                        <?php endif; ?>
+<?php endif; ?>
 
                         <form method="POST">
 
