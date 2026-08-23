@@ -122,7 +122,7 @@ require_once "componentes/navbar.php";
         </div>
 
         <a
-            href="paginas/produtos.php"
+            href="produtos/produtos.php"
             class="btn btn-primary"
         >
             Ver produtos
@@ -235,18 +235,18 @@ require_once "componentes/navbar.php";
         <div class="d-flex justify-content-between mt-4">
 
             <a
-                href="paginas/produtos.php"
+                href="produtos/produtos.php"
                 class="btn btn-outline-secondary"
             >
                 ← Continuar comprando
             </a>
 
-            <button
-                class="btn btn-success"
-                disabled
+            <a
+                href="finalizar_compra.php"
+                    class="btn btn-success"
             >
                 Finalizar compra
-            </button>
+            </a>
 
         </div>
 
