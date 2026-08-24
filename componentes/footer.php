@@ -1,6 +1,26 @@
-<footer class="footer-artco">
+<footer
+    style="
+        background-color: #202124 !important;
+        color: #bfc0c2;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    "
+>
 
-    <div class="footer-linha-colorida"></div>
+    <div
+        style="
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(
+                90deg,
+                #ff00cc,
+                #9b00ff,
+                #00b894,
+                #ffc400
+            );
+        "
+    ></div>
 
     <div class="container py-4">
 
@@ -8,7 +28,13 @@
 
             <div class="col-md-6 text-center text-md-start">
 
-                <div class="footer-logo">
+                <div
+                    style="
+                        font-size: 27px;
+                        font-weight: bold;
+                        color: #bfc0c2;
+                    "
+                >
                     Art&Co
                 </div>
 
@@ -22,14 +48,25 @@
 
                 <a
                     href="index.php"
-                    class="footer-link me-3"
+                    style="
+                        color: #bfc0c2;
+                        text-decoration: none;
+                        margin-right: 20px;
+                    "
+                    onmouseover="this.style.color='#ffffff'"
+                    onmouseout="this.style.color='#bfc0c2'"
                 >
                     Início
                 </a>
 
                 <a
                     href="mailto:maria.izabelly@grupointegrado.br"
-                    class="footer-link"
+                    style="
+                        color: #bfc0c2;
+                        text-decoration: none;
+                    "
+                    onmouseover="this.style.color='#ffffff'"
+                    onmouseout="this.style.color='#bfc0c2'"
                 >
                     Mais informações
                 </a>
