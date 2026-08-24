@@ -279,7 +279,38 @@ require_once "componentes/navbar.php";
                     Administração
                 </a>
 
+                <!-- MINHAS COMPRAS -->
+                <a
+                    href="finalizar.php"
+                    class="btn btn-success"
+                >
+                    🛍️ Minhas compras
+                </a>
+
             </div>
+
+        </div>
+    </div>
+
+<?php elseif ($tipoUsuario === "vendedor"): ?>
+
+    <div class="card shadow-sm border-0 mt-5">
+        <div class="card-body">
+
+            <h3 class="fw-bold mb-3">
+                Minhas compras
+            </h3>
+
+            <p class="text-muted">
+                Consulte suas compras realizadas na Art&Co.
+            </p>
+
+            <a
+                href="finalizar.php"
+                class="btn btn-success"
+            >
+                Ver minhas compras
+            </a>
 
         </div>
     </div>
@@ -288,6 +319,10 @@ require_once "componentes/navbar.php";
 
 
     </main>
+
+    <?php
+    require_once "componentes/footer.php";
+    ?>
 
 
     <!-- Bootstrap JavaScript -->

@@ -243,6 +243,9 @@ require_once "componentes/navbar.php";
 
 </section>
 
+<?php
+require_once "componentes/footer.php";
+?>
 
 <!-- Bootstrap -->
 
