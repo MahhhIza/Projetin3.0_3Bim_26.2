@@ -7,6 +7,35 @@ require_once "../../protecao/acesso.php";
 
 exigirPerfil(["admin"]);
 
+$produtos = [];
+
+try {
+
+    $sql = "
+        SELECT
+            p.id,
+            p.nome,
+            p.preco,
+            p.estoque,
+            p.ativo,
+            c.nome AS categoria
+        FROM produtos p
+        INNER JOIN categorias c
+            ON p.categoria_id = c.id
+        ORDER BY p.id DESC
+    ";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+
+    $produtos = $stmt->fetchAll();
+
+} catch (PDOException $e) {
+
+    $produtos = [];
+
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -70,19 +99,127 @@ require_once "../../componentes/navbar.php";
 
     </div>
 
-    <div class="card shadow-sm border-0">
+    <?php if (count($produtos) > 0): ?>
 
-        <div class="card-body">
+        <div class="card shadow-sm border-0">
 
-            <div class="alert alert-info mb-0">
+            <div class="card-body">
 
-                A área de gerenciamento de produtos está funcionando.
+                <div class="table-responsive">
+
+                    <table class="table align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Produto</th>
+
+                                <th>Categoria</th>
+
+                                <th>Preço</th>
+
+                                <th>Estoque</th>
+
+                                <th>Status</th>
+
+                                <th>Ações</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <?php foreach ($produtos as $produto): ?>
+
+                                <tr>
+
+                                    <td>
+
+                                        <strong>
+                                            <?= htmlspecialchars($produto["nome"]) ?>
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+
+                                        <?= htmlspecialchars($produto["categoria"]) ?>
+
+                                    </td>
+
+                                    <td>
+
+                                        R$
+
+                                        <?= number_format(
+                                            $produto["preco"],
+                                            2,
+                                            ",",
+                                            "."
+                                        ) ?>
+
+                                    </td>
+
+                                    <td>
+
+                                        <?= $produto["estoque"] ?>
+
+                                    </td>
+
+                                    <td>
+
+                                        <?php if ($produto["ativo"]): ?>
+
+                                            <span class="badge bg-success">
+                                                Ativo
+                                            </span>
+
+                                        <?php else: ?>
+
+                                            <span class="badge bg-secondary">
+                                                Inativo
+                                            </span>
+
+                                        <?php endif; ?>
+
+                                    </td>
+
+                                    <td>
+
+                                        <a
+                                            href="editar.php?id=<?= $produto["id"] ?>"
+                                            class="btn btn-sm btn-outline-primary"
+                                        >
+                                            Editar
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                            <?php endforeach; ?>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
+    <?php else: ?>
+
+        <div class="alert alert-info text-center">
+
+            Nenhum produto cadastrado.
+
+        </div>
+
+    <?php endif; ?>
 
 </main>
 
