@@ -201,6 +201,21 @@ try {
 
         }
 
+        .produto-imagem {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .produto-imagem img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: blur(0.3px);
+        }
+
 
     </style>
 
@@ -277,10 +292,11 @@ try {
 
                             <!-- Ícone temporário -->
 
-                            <div class="produto-icone">
-
-                                🎨
-
+                            <div class="produto-imagem">
+                                <img
+                                    src="../src/img/produto-padrao.jpg"
+                                    alt="<?= htmlspecialchars($produto["nome"]) ?>"
+                                >
                             </div>
 
 

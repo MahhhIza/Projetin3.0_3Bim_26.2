@@ -64,6 +64,23 @@ if ($id !== null) {
         href="../src/css/style.css"
     >
 
+    <style>
+    .produto-imagem {
+        width: 100%;
+        height: 300px;
+        overflow: hidden;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .produto-imagem img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: blur(0.3px);
+    }
+</style>
+
 </head>
 
 <body>
@@ -85,6 +102,13 @@ require_once "../componentes/navbar.php";
             <div class="col-12 col-lg-8">
 
                 <div class="card shadow-sm border-0">
+
+                    <div class="produto-imagem">
+                        <img
+                            src="../src/img/produto-padrao.jpg"
+                            alt="<?= htmlspecialchars($produto["nome"]) ?>"
+                        >
+                    </div>
 
                     <div class="card-body p-4">
 
