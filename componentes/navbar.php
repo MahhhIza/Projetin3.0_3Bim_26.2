@@ -78,7 +78,7 @@ try {
                 <!-- INÍCIO -->
 
                 <a
-                    class="nav-link active"
+                    class="nav-link"
                     href="<?= $base ?>index.php"
                 >
                     Início
@@ -197,7 +197,7 @@ try {
 
                     <a
                         href="<?= $base ?>cadastro.php"
-                        class="btn btn-cadastrar"
+                        class="btn btn-buscar"
                     >
                         Cadastrar
                     </a>
