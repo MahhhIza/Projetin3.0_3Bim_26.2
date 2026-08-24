@@ -258,23 +258,25 @@ require_once "componentes/navbar.php";
             </h3>
 
             <p class="text-muted">
-                Gerencie os produtos e os usuários da Art&Co.
+                Gerencie os produtos e a administração da Art&Co.
             </p>
 
             <div class="d-flex flex-wrap gap-2">
 
+                <!-- GERENCIAR PRODUTOS -->
                 <a
-                    href="admin/index.php"
-                    class="btn btn-dark"
+                    href="admin/produtos/index.php"
+                    class="btn btn-primary"
                 >
-                    ⚙️ Administração
+                    Gerenciar produtos
                 </a>
 
+                <!-- ADMINISTRAÇÃO -->
                 <a
-                    href="admin/usuarios/index.php"
+                    href="admin/index.php"
                     class="btn btn-outline-secondary"
                 >
-                    👥 Gerenciar usuários
+                    Administração
                 </a>
 
             </div>
