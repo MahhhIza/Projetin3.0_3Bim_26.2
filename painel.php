@@ -264,10 +264,10 @@ require_once "componentes/navbar.php";
             <div class="d-flex flex-wrap gap-2">
 
                 <a
-                    href="admin/produtos/index.php"
-                    class="btn btn-primary"
+                    href="admin/index.php"
+                    class="btn btn-dark"
                 >
-                    🎨 Gerenciar produtos
+                    ⚙️ Administração
                 </a>
 
                 <a
