@@ -1,10 +1,6 @@
-const PRODUTOS_POR_PAGINA = 10;
-const LIMITE_BUSCA = PRODUTOS_POR_PAGINA + 1;
-let paginaAtual = 1;
 /*
-
-* VALIDAÇÃO DO PRODUTO
-  */
+ * VALIDAÇÃO DO PRODUTO
+ */
 function ehProdutoAnalitico(valor) {
     if (typeof valor !== "object" ||
         valor === null) {
@@ -20,17 +16,15 @@ function ehProdutoAnalitico(valor) {
         typeof produto.faturamento === "number");
 }
 /*
-
-* VALIDAÇÃO DA LISTA DE PRODUTOS
-  */
+ * VALIDAÇÃO DA LISTA DE PRODUTOS
+ */
 function ehListaProdutos(valor) {
     return (Array.isArray(valor) &&
         valor.every(ehProdutoAnalitico));
 }
 /*
-
-* ATUALIZA TEXTO DE UM ELEMENTO
-  */
+ * ATUALIZA TEXTO DE UM ELEMENTO
+ */
 function atualizarTexto(id, texto) {
     const elemento = document.getElementById(id);
     if (elemento) {
@@ -38,9 +32,8 @@ function atualizarTexto(id, texto) {
     }
 }
 /*
-
-* FORMATA VALORES EM REAL
-  */
+ * FORMATA VALORES EM REAL
+ */
 function formatarMoeda(valor) {
     return valor.toLocaleString("pt-BR", {
         style: "currency",
@@ -48,38 +41,10 @@ function formatarMoeda(valor) {
     });
 }
 /*
-
-* ATUALIZA INDICADOR DA PÁGINAÇÃO
-  */
-function atualizarPaginacao() {
-    const elemento = document.getElementById("paginaAtual");
-    if (!elemento) {
-        return;
-    }
-    elemento.textContent =
-        `Página ${paginaAtual}`;
-}
-/*
-
-* ATUALIZA ESTADO DOS BOTÕES
-  */
-function atualizarEstadoPaginacao(existeProximaPagina) {
-    const botaoAnterior = document.getElementById("btnPaginaAnterior");
-    const botaoProxima = document.getElementById("btnProximaPagina");
-    if (!botaoAnterior || !botaoProxima) {
-        return;
-    }
-    botaoAnterior.disabled =
-        paginaAtual === 1;
-    botaoProxima.disabled =
-        !existeProximaPagina;
-}
-/*
-
-* EXIBE RANKING DOS PRODUTOS
-*
-* FILTER + MAP + SORT + SLICE
-  */
+ * EXIBE RANKING DOS PRODUTOS
+ *
+ * FILTER + MAP + SORT + SLICE
+ */
 function exibirRanking(produtos) {
     const elemento = document.getElementById("rankingProdutos");
     if (!elemento) {
@@ -125,11 +90,10 @@ function exibirRanking(produtos) {
     });
 }
 /*
-
-* EXIBE PRODUTOS COM ESTOQUE CRÍTICO
-*
-* FILTER
-  */
+ * EXIBE PRODUTOS COM ESTOQUE CRÍTICO
+ *
+ * FILTER
+ */
 function exibirEstoqueCritico(produtos) {
     const elemento = document.getElementById("estoqueCritico");
     if (!elemento) {
@@ -165,9 +129,8 @@ function exibirEstoqueCritico(produtos) {
     });
 }
 /*
-
-* ATUALIZA CARDS COM BANCO VAZIO
-  */
+ * ATUALIZA CARDS COM BANCO VAZIO
+ */
 function limparDashboard() {
     atualizarTexto("faturamentoTotal", "R$ 0,00");
     atualizarTexto("quantidadeTotal", "0");
@@ -177,23 +140,20 @@ function limparDashboard() {
     exibirEstoqueCritico([]);
 }
 /*
-
-* BUSCA OS PRODUTOS NA API
-*
-* FETCH + ASYNC/AWAIT + TRY/CATCH
-  */
+ * BUSCA OS PRODUTOS NA API
+ *
+ * FETCH + ASYNC/AWAIT + TRY/CATCH
+ */
 async function buscarProdutos() {
     try {
-        const offset = (paginaAtual - 1) *
-            PRODUTOS_POR_PAGINA;
         /*
-         * Buscamos 11 registros.
+         * O painel é um dashboard geral.
          *
-         * Os primeiros 10 aparecem na página.
-         * O 11º serve apenas para saber
-         * se existe uma próxima página.
+         * Por isso não usamos paginação aqui.
+         * Buscamos até 100 produtos para que os
+         * indicadores representem o conjunto do catálogo.
          */
-        const resposta = await fetch(`api/produtos.php?limite=${LIMITE_BUSCA}&offset=${offset}`);
+        const resposta = await fetch("api/produtos.php?limite=100");
         if (!resposta.ok) {
             throw new Error("Erro ao carregar os produtos.");
         }
@@ -201,34 +161,11 @@ async function buscarProdutos() {
         if (!ehListaProdutos(dados)) {
             throw new Error("Formato de dados inválido.");
         }
-        /*
-         * Se o usuário avançar para uma página
-         * que não existe, volta automaticamente.
-         */
-        if (dados.length === 0 &&
-            paginaAtual > 1) {
-            paginaAtual--;
-            atualizarPaginacao();
-            await buscarProdutos();
-            return;
-        }
-        /*
-         * Os dados exibidos são somente
-         * os 10 produtos da página.
-         */
-        const produtos = dados.slice(0, PRODUTOS_POR_PAGINA);
-        /*
-         * Existe próxima página se a API
-         * retornou o 11º registro.
-         */
-        const existeProximaPagina = dados.length >
-            PRODUTOS_POR_PAGINA;
-        atualizarEstadoPaginacao(existeProximaPagina);
         const mensagem = document.getElementById("mensagemDashboard");
         /*
          * BANCO VAZIO
          */
-        if (produtos.length === 0) {
+        if (dados.length === 0) {
             if (mensagem) {
                 mensagem.textContent =
                     "Nenhum dado registrado.";
@@ -250,7 +187,7 @@ async function buscarProdutos() {
          *
          * Faturamento total
          */
-        const faturamentoTotal = produtos.reduce((total, produto) => {
+        const faturamentoTotal = dados.reduce((total, produto) => {
             return total +
                 produto.faturamento;
         }, 0);
@@ -259,7 +196,7 @@ async function buscarProdutos() {
          *
          * Quantidade vendida
          */
-        const quantidadeTotal = produtos.reduce((total, produto) => {
+        const quantidadeTotal = dados.reduce((total, produto) => {
             return total +
                 produto.quantidade_vendida;
         }, 0);
@@ -268,7 +205,7 @@ async function buscarProdutos() {
          *
          * Estoque total
          */
-        const estoqueTotal = produtos.reduce((total, produto) => {
+        const estoqueTotal = dados.reduce((total, produto) => {
             return total +
                 produto.estoque;
         }, 0);
@@ -277,7 +214,7 @@ async function buscarProdutos() {
          *
          * Quantidade de produtos
          */
-        const totalProdutos = produtos.reduce((total) => {
+        const totalProdutos = dados.reduce((total) => {
             return total + 1;
         }, 0);
         /*
@@ -292,13 +229,13 @@ async function buscarProdutos() {
          *
          * Ranking dos produtos
          */
-        exibirRanking(produtos);
+        exibirRanking(dados);
         /*
          * FILTER
          *
          * Estoque crítico
          */
-        exibirEstoqueCritico(produtos);
+        exibirEstoqueCritico(dados);
     }
     catch (erro) {
         console.error("Não foi possível carregar os produtos.", erro);
@@ -314,45 +251,7 @@ async function buscarProdutos() {
     }
 }
 /*
-
-* CONFIGURA OS BOTÕES DE PAGINAÇÃO
-  */
-function configurarPaginacao() {
-    const botaoAnterior = document.getElementById("btnPaginaAnterior");
-    const botaoProxima = document.getElementById("btnProximaPagina");
-    if (!botaoAnterior || !botaoProxima) {
-        return;
-    }
-    /*
-  
-    * BOTÃO ANTERIOR
-      */
-    botaoAnterior.addEventListener("click", () => {
-        if (paginaAtual > 1) {
-            paginaAtual--;
-            atualizarPaginacao();
-            void buscarProdutos();
-        }
-    });
-    /*
-  
-    * BOTÃO PRÓXIMA
-      */
-    botaoProxima.addEventListener("click", () => {
-        const botao = botaoProxima;
-        if (botao.disabled) {
-            return;
-        }
-        paginaAtual++;
-        atualizarPaginacao();
-        void buscarProdutos();
-    });
-}
-/*
-
-* INICIALIZAÇÃO DA DASHBOARD
-  */
-configurarPaginacao();
-atualizarPaginacao();
+ * INICIALIZAÇÃO DA DASHBOARD
+ */
 void buscarProdutos();
 export {};
