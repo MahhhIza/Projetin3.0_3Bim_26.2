@@ -1,67 +1,96 @@
 <?php
 
+session_start();
+
 require_once "../../config.php";
 require_once "../../protecao/acesso.php";
 
 exigirPerfil(["admin"]);
 
-$sucesso = $_GET["sucesso"] ?? "";
-$erro = $_GET["erro"] ?? "";
-
-$mensagemSucesso = "";
 $mensagemErro = "";
 
-if ($sucesso === "usuario_criado") {
-    $mensagemSucesso = "Usuário cadastrado com sucesso.";
-}
+$nome = "";
+$email = "";
+$tipo = "cliente";
 
-if ($sucesso === "usuario_editado") {
-    $mensagemSucesso = "Usuário atualizado com sucesso.";
-}
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-if ($sucesso === "usuario_excluido") {
-    $mensagemSucesso = "Usuário excluído com sucesso.";
-}
+    $nome = trim($_POST["nome"] ?? "");
+    $email = trim($_POST["email"] ?? "");
+    $senha = $_POST["senha"] ?? "";
+    $tipo = $_POST["tipo"] ?? "cliente";
 
-if ($erro === "usuario_vinculado") {
-    $mensagemErro =
-        "Este usuário não pode ser excluído porque possui vendas registradas.";
-}
+    if ($nome === "") {
 
-if ($erro === "usuario_atual") {
-    $mensagemErro =
-        "Você não pode excluir o usuário que está conectado.";
-}
+        $mensagemErro = "Informe o nome do usuário.";
 
-if ($erro === "nao_encontrado") {
-    $mensagemErro = "Usuário não encontrado.";
-}
+    } elseif ($email === "" || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
-if ($erro === "id") {
-    $mensagemErro = "Usuário inválido.";
-}
+        $mensagemErro = "Informe um e-mail válido.";
 
-if ($erro === "banco") {
-    $mensagemErro =
-        "Não foi possível realizar a operação. Tente novamente.";
-}
+    } elseif (strlen($senha) < 6) {
 
-try {
+        $mensagemErro =
+            "A senha deve possuir pelo menos 6 caracteres.";
 
-    $stmt = $pdo->query(
-        "SELECT id, nome, email, tipo, ativo
-         FROM usuarios
-         ORDER BY nome ASC"
-    );
+    } elseif (!in_array($tipo, ["admin", "vendedor", "cliente"], true)) {
 
-    $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $mensagemErro = "Tipo de usuário inválido.";
 
-} catch (PDOException $e) {
+    } else {
 
-    $usuarios = [];
+        try {
 
-    $mensagemErro =
-        "Não foi possível carregar os usuários.";
+            $stmt = $pdo->prepare(
+                "SELECT id
+                 FROM usuarios
+                 WHERE email = :email
+                 LIMIT 1"
+            );
+
+            $stmt->execute([
+                ":email" => $email
+            ]);
+
+            if ($stmt->fetch()) {
+
+                $mensagemErro =
+                    "Este e-mail já está cadastrado.";
+
+            } else {
+
+                $senhaHash = password_hash(
+                    $senha,
+                    PASSWORD_DEFAULT
+                );
+
+                $stmt = $pdo->prepare(
+                    "INSERT INTO usuarios
+                    (nome, email, senha, tipo, ativo)
+                    VALUES
+                    (:nome, :email, :senha, :tipo, 1)"
+                );
+
+                $stmt->execute([
+                    ":nome" => $nome,
+                    ":email" => $email,
+                    ":senha" => $senhaHash,
+                    ":tipo" => $tipo
+                ]);
+
+                header(
+                    "Location: index.php?sucesso=usuario_criado"
+                );
+
+                exit;
+            }
+
+        } catch (PDOException $e) {
+
+            $mensagemErro =
+                "Não foi possível cadastrar o usuário.";
+        }
+    }
 }
 
 ?>
@@ -78,10 +107,10 @@ try {
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Gerenciar Usuários - Art&Co</title>
+    <title>Novo Usuário - Art&Co</title>
 
     <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
         rel="stylesheet"
     >
 
@@ -94,167 +123,171 @@ try {
 
 <body>
 
-<div class="container py-5">
+<?php
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+$base = "../../";
 
-        <div>
+require_once "../../componentes/navbar.php";
 
-            <h1 class="fw-bold">
-                Usuários
-            </h1>
+?>
 
-            <p class="text-muted mb-0">
-                Gerencie os usuários do sistema.
-            </p>
+<main class="container py-5">
 
-        </div>
+    <div class="row justify-content-center">
 
-        <a
-            href="cadastrar.php"
-            class="btn btn-primary"
-        >
-            + Novo usuário
-        </a>
+        <div class="col-12 col-md-8 col-lg-6">
 
-    </div>
+            <div class="card shadow-sm border-0">
 
+                <div class="card-body p-4">
 
-    <?php if ($mensagemSucesso !== ""): ?>
+                    <h1 class="fw-bold mb-2">
+                        Novo usuário
+                    </h1>
 
-        <div class="alert alert-success">
-            <?= htmlspecialchars($mensagemSucesso) ?>
-        </div>
+                    <p class="text-muted mb-4">
+                        Cadastre um novo usuário no sistema.
+                    </p>
 
-    <?php endif; ?>
+                    <?php if ($mensagemErro !== ""): ?>
 
+                        <div class="alert alert-danger">
 
-    <?php if ($mensagemErro !== ""): ?>
+                            <?= htmlspecialchars($mensagemErro) ?>
 
-        <div class="alert alert-danger">
-            <?= htmlspecialchars($mensagemErro) ?>
-        </div>
+                        </div>
 
-    <?php endif; ?>
+                    <?php endif; ?>
 
+                    <form
+                        method="POST"
+                        action="cadastrar.php"
+                    >
 
-    <?php if (count($usuarios) === 0): ?>
+                        <div class="mb-3">
 
-        <div class="alert alert-info">
-            Nenhum usuário cadastrado.
-        </div>
+                            <label
+                                for="nome"
+                                class="form-label fw-semibold"
+                            >
+                                Nome
+                            </label>
 
-    <?php else: ?>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="nome"
+                                name="nome"
+                                value="<?= htmlspecialchars($nome) ?>"
+                                required
+                            >
 
-        <div class="card shadow-sm border-0">
+                        </div>
 
-            <div class="card-body">
+                        <div class="mb-3">
 
-                <div class="table-responsive">
+                            <label
+                                for="email"
+                                class="form-label fw-semibold"
+                            >
+                                E-mail
+                            </label>
 
-                    <table class="table table-hover align-middle">
+                            <input
+                                type="email"
+                                class="form-control"
+                                id="email"
+                                name="email"
+                                value="<?= htmlspecialchars($email) ?>"
+                                required
+                            >
 
-                        <thead>
+                        </div>
 
-                            <tr>
+                        <div class="mb-3">
 
-                                <th>ID</th>
-                                <th>Nome</th>
-                                <th>E-mail</th>
-                                <th>Tipo</th>
-                                <th>Status</th>
-                                <th>Ações</th>
+                            <label
+                                for="senha"
+                                class="form-label fw-semibold"
+                            >
+                                Senha
+                            </label>
 
-                            </tr>
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="senha"
+                                name="senha"
+                                minlength="6"
+                                required
+                            >
 
-                        </thead>
+                            <div class="form-text">
+                                A senha deve possuir pelo menos 6 caracteres.
+                            </div>
 
-                        <tbody>
+                        </div>
 
-                        <?php foreach ($usuarios as $usuario): ?>
+                        <div class="mb-4">
 
-                            <tr>
+                            <label
+                                for="tipo"
+                                class="form-label fw-semibold"
+                            >
+                                Tipo de usuário
+                            </label>
 
-                                <td>
-                                    <?= (int) $usuario["id"] ?>
-                                </td>
+                            <select
+                                class="form-select"
+                                id="tipo"
+                                name="tipo"
+                                required
+                            >
 
-                                <td>
-                                    <?= htmlspecialchars(
-                                        $usuario["nome"]
-                                    ) ?>
-                                </td>
+                                <option
+                                    value="cliente"
+                                    <?= $tipo === "cliente" ? "selected" : "" ?>
+                                >
+                                    Cliente
+                                </option>
 
-                                <td>
-                                    <?= htmlspecialchars(
-                                        $usuario["email"]
-                                    ) ?>
-                                </td>
+                                <option
+                                    value="vendedor"
+                                    <?= $tipo === "vendedor" ? "selected" : "" ?>
+                                >
+                                    Vendedor
+                                </option>
 
-                                <td>
-                                    <?= htmlspecialchars(
-                                        $usuario["tipo"]
-                                    ) ?>
-                                </td>
+                                <option
+                                    value="admin"
+                                    <?= $tipo === "admin" ? "selected" : "" ?>
+                                >
+                                    Administrador
+                                </option>
 
-                                <td>
+                            </select>
 
-                                    <?php if ((int) $usuario["ativo"] === 1): ?>
+                        </div>
 
-                                        <span class="badge bg-success">
-                                            Ativo
-                                        </span>
+                        <div class="d-flex gap-2">
 
-                                    <?php else: ?>
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                Cadastrar usuário
+                            </button>
 
-                                        <span class="badge bg-secondary">
-                                            Inativo
-                                        </span>
+                            <a
+                                href="index.php"
+                                class="btn btn-secondary"
+                            >
+                                Cancelar
+                            </a>
 
-                                    <?php endif; ?>
+                        </div>
 
-                                </td>
-
-                                <td>
-
-                                    <a
-                                        href="editar.php?id=<?= (int) $usuario["id"] ?>"
-                                        class="btn btn-sm btn-warning"
-                                    >
-                                        Editar
-                                    </a>
-
-                                    <form
-                                        action="excluir.php"
-                                        method="POST"
-                                        class="d-inline"
-                                        onsubmit="return confirm('Tem certeza que deseja excluir este usuário?');"
-                                    >
-
-                                        <input
-                                            type="hidden"
-                                            name="id"
-                                            value="<?= (int) $usuario["id"] ?>"
-                                        >
-
-                                        <button
-                                            type="submit"
-                                            class="btn btn-sm btn-danger"
-                                        >
-                                            Excluir
-                                        </button>
-
-                                    </form>
-
-                                </td>
-
-                            </tr>
-
-                        <?php endforeach; ?>
-
-                        </tbody>
-
-                    </table>
+                    </form>
 
                 </div>
 
@@ -262,21 +295,15 @@ try {
 
         </div>
 
-    <?php endif; ?>
-
-
-    <div class="mt-4">
-
-        <a
-            href="../index.php"
-            class="btn btn-secondary"
-        >
-            ← Voltar para administração
-        </a>
-
     </div>
 
-</div>
+</main>
+
+<?php
+
+require_once "../../componentes/footer.php";
+
+?>
 
 </body>
 

@@ -96,7 +96,7 @@ require_once "../componentes/navbar.php";
 </main>
 
 <?php
-require_once "componentes/footer.php";
+require_once "../componentes/footer.php";
 ?>
 
 </body>
