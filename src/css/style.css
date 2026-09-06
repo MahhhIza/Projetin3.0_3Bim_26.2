@@ -9,8 +9,9 @@
 .navbar-artco .container {
     display: flex;
     align-items: center;
-    flex-wrap: nowrap;
 }
+
+/* LOGO */
 
 .logo-artco {
     font-size: 27px;
@@ -26,16 +27,28 @@
 
     -webkit-background-clip: text;
     background-clip: text;
-
     color: transparent;
     -webkit-text-fill-color: transparent;
 }
 
-.menu-artco {
-    display: flex;
-    align-items: center;
-    width: 100%;
+/* BOTÃO DO MENU MOBILE */
+
+.navbar-artco .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.4);
+    padding: 6px 9px;
 }
+
+.navbar-artco .navbar-toggler:focus {
+    box-shadow: 0 0 0 0.2rem rgba(155, 0, 255, 0.25);
+}
+
+/* CONTEÚDO DO MENU */
+
+.menu-artco {
+    align-items: center;
+}
+
+/* LINKS PRINCIPAIS */
 
 .links-artco {
     display: flex;
@@ -56,6 +69,24 @@
 .links-artco .nav-link:hover {
     color: #ffffff;
 }
+
+/* DROPDOWN */
+
+.links-artco .dropdown-menu {
+    background-color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.links-artco .dropdown-item {
+    color: #202124;
+}
+
+.links-artco .dropdown-item:hover {
+    background-color: #f1f1f1;
+}
+
+/* PESQUISA */
 
 .pesquisa-artco {
     display: flex;
@@ -83,12 +114,16 @@
     opacity: 0.9;
 }
 
+/* ÁREA DO USUÁRIO */
+
 .usuario-navbar {
     display: flex;
     align-items: center;
     gap: 8px;
     white-space: nowrap;
 }
+
+/* BOTÃO CADASTRAR */
 
 .btn-cadastrar {
     background-color: #ffc400;
@@ -99,6 +134,8 @@
 .btn-cadastrar:hover {
     background-color: #e6b000;
 }
+
+/* LINHA COLORIDA */
 
 .linha-colorida {
     height: 4px;
@@ -112,11 +149,133 @@
     );
 }
 
+/* PREÇO DOS PRODUTOS */
+
 .preco-produto {
     font-size: 22px;
     font-weight: 700;
     font-family: Arial, sans-serif;
     color: #7b1fa2;
+}
+
+
+/* =========================================
+   RESPONSIVIDADE DA NAVBAR
+========================================= */
+
+@media (max-width: 991.98px) {
+
+    .navbar-artco .container {
+        flex-wrap: wrap;
+    }
+
+    .logo-artco {
+        margin-right: 0;
+    }
+
+    .menu-artco {
+        width: 100%;
+        padding-top: 15px;
+        padding-bottom: 8px;
+    }
+
+    /* LINKS */
+
+    .links-artco {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        margin-right: 0;
+    }
+
+    .links-artco .nav-link {
+        padding: 10px 0;
+    }
+
+    /* DROPDOWN */
+
+    .links-artco .dropdown {
+        width: 100%;
+    }
+
+    .links-artco .dropdown-menu {
+        position: static;
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    /* PESQUISA */
+
+    .pesquisa-artco {
+        width: 100%;
+        margin: 10px 0 15px 0;
+    }
+
+    .pesquisa-artco .form-control {
+        width: 100%;
+        margin-right: 8px;
+    }
+
+    /* USUÁRIO */
+
+    .usuario-navbar {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        padding-top: 5px;
+    }
+
+}
+
+
+/* =========================================
+   TELAS MUITO PEQUENAS
+========================================= */
+
+@media (max-width: 575.98px) {
+
+    .navbar-artco .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .logo-artco {
+        font-size: 25px;
+    }
+
+    .pesquisa-artco {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pesquisa-artco .form-control {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 8px;
+    }
+
+    .pesquisa-artco .btn-buscar {
+        width: 100%;
+    }
+
+    .usuario-navbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .usuario-navbar .btn {
+        width: 100%;
+    }
+
+    .usuario-navbar .text-white {
+        text-align: center;
+        margin-bottom: 4px;
+    }
+
 }
 
 /* =========================================

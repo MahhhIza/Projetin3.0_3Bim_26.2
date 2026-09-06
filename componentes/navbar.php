@@ -30,7 +30,6 @@ $tipoUsuario = $_SESSION["usuario_tipo"] ?? "usuario";
 $categorias = [];
 
 try {
-
     require_once $base . "config.php";
 
     $sqlCategorias = "SELECT id, nome
@@ -43,22 +42,19 @@ try {
     $categorias = $stmtCategorias->fetchAll();
 
 } catch (PDOException $e) {
-
     $categorias = [];
 }
-
 ?>
 
 <!-- =========================================
      NAVBAR ART&CO
 ========================================= -->
 
-<nav class="navbar navbar-artco">
+<nav class="navbar navbar-expand-lg navbar-dark navbar-artco">
 
     <div class="container">
 
         <!-- LOGO -->
-
         <a
             class="navbar-brand logo-artco"
             href="<?= $base ?>index.php"
@@ -66,17 +62,29 @@ try {
             Art&Co
         </a>
 
+        <!-- BOTÃO MENU MOBILE -->
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#menuArtco"
+            aria-controls="menuArtco"
+            aria-expanded="false"
+            aria-label="Abrir menu"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <div class="menu-artco">
+        <!-- CONTEÚDO DO MENU -->
+        <div
+            class="collapse navbar-collapse menu-artco"
+            id="menuArtco"
+        >
 
-            <!-- =========================================
-                 LINKS PRINCIPAIS
-            ========================================= -->
-
+            <!-- LINKS PRINCIPAIS -->
             <div class="links-artco">
 
                 <!-- INÍCIO -->
-
                 <a
                     class="nav-link"
                     href="<?= $base ?>index.php"
@@ -84,9 +92,7 @@ try {
                     Início
                 </a>
 
-
                 <!-- PRODUTOS -->
-
                 <a
                     class="nav-link"
                     href="<?= $base ?>produtos/produtos.php"
@@ -94,11 +100,7 @@ try {
                     Produtos
                 </a>
 
-
-                <!-- =========================================
-                     CATEGORIAS
-                ========================================= -->
-
+                <!-- CATEGORIAS -->
                 <div class="dropdown">
 
                     <a
@@ -118,14 +120,12 @@ try {
                             <?php foreach ($categorias as $categoria): ?>
 
                                 <li>
-
                                     <a
                                         class="dropdown-item"
                                         href="<?= $base ?>produtos/produtos.php?categoria=<?= $categoria["id"] ?>"
                                     >
                                         <?= htmlspecialchars($categoria["nome"]) ?>
                                     </a>
-
                                 </li>
 
                             <?php endforeach; ?>
@@ -133,11 +133,9 @@ try {
                         <?php else: ?>
 
                             <li>
-
                                 <span class="dropdown-item-text text-muted">
                                     Nenhuma categoria cadastrada.
                                 </span>
-
                             </li>
 
                         <?php endif; ?>
@@ -148,11 +146,7 @@ try {
 
             </div>
 
-
-            <!-- =========================================
-                 PESQUISA
-            ========================================= -->
-
+            <!-- PESQUISA -->
             <form
                 class="pesquisa-artco"
                 action="<?= $base ?>produtos/produtos.php"
@@ -177,15 +171,10 @@ try {
 
             </form>
 
-
-            <!-- =========================================
-                 USUÁRIO
-            ========================================= -->
-
+            <!-- USUÁRIO -->
             <?php if (!$usuarioLogado): ?>
 
                 <!-- VISITANTE -->
-
                 <div class="usuario-navbar">
 
                     <a
@@ -204,25 +193,19 @@ try {
 
                 </div>
 
-
             <?php else: ?>
 
                 <!-- USUÁRIO LOGADO -->
-
                 <div class="usuario-navbar">
 
                     <span class="text-white">
-
                         Olá,
                         <?= htmlspecialchars($nomeUsuario) ?>
-
                     </span>
-
 
                     <?php if ($tipoUsuario === "usuario"): ?>
 
                         <!-- USUÁRIO COMUM -->
-
                         <a
                             href="<?= $base ?>compras.php"
                             class="btn btn-outline-light btn-sm"
@@ -230,14 +213,12 @@ try {
                             Compras
                         </a>
 
-
                     <?php elseif (
                         $tipoUsuario === "vendedor"
                         || $tipoUsuario === "admin"
                     ): ?>
 
                         <!-- VENDEDOR / ADMIN -->
-
                         <a
                             href="<?= $base ?>painel.php"
                             class="btn btn-outline-light btn-sm"
@@ -247,9 +228,7 @@ try {
 
                     <?php endif; ?>
 
-
                     <!-- SAIR -->
-
                     <a
                         href="<?= $base ?>logout.php"
                         class="btn btn-outline-light btn-sm"
@@ -266,7 +245,6 @@ try {
     </div>
 
 </nav>
-
 
 <!-- =========================================
      LINHA COLORIDA
