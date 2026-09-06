@@ -270,9 +270,166 @@ async function buscarProdutos(): Promise<void> {
                 "0"
             );
 
-            exibirRanking([]);
+            function exibirRanking(
+    produtos: ProdutoAnalitico[]
+): void {
 
-            exibirEstoqueCritico([]);
+    const elemento =
+        document.getElementById("rankingProdutos");
+
+    if (!elemento) {
+        return;
+    }
+
+    const ranking: ProdutoRanking[] =
+        produtos
+            .filter(
+                (produto) =>
+                    produto.quantidade_vendida > 0
+            )
+            .map(
+                (produto) => ({
+                    nome: produto.produto,
+                    quantidade:
+                        produto.quantidade_vendida
+                })
+            )
+            .sort(
+                (a, b) =>
+                    b.quantidade - a.quantidade
+            )
+            .slice(0, 3);
+
+    elemento.replaceChildren();
+
+    if (ranking.length === 0) {
+
+        const mensagem =
+            document.createElement("p");
+
+        mensagem.className =
+            "text-muted mb-0";
+
+        mensagem.textContent =
+            "Nenhuma venda registrada.";
+
+        elemento.appendChild(mensagem);
+
+        return;
+    }
+
+    ranking.forEach(
+        (produto, indice) => {
+
+            const linha =
+                document.createElement("div");
+
+            linha.className =
+                "d-flex justify-content-between " +
+                "align-items-center mb-2";
+
+            const nome =
+                document.createElement("span");
+
+            const destaque =
+                document.createElement("strong");
+
+            destaque.textContent =
+                `${indice + 1}º`;
+
+            nome.appendChild(destaque);
+
+            nome.appendChild(
+                document.createTextNode(
+                    ` ${produto.nome}`
+                )
+            );
+
+            const badge =
+                document.createElement("span");
+
+            badge.className =
+                "badge bg-primary";
+
+            badge.textContent =
+                `${produto.quantidade} vendido(s)`;
+
+            linha.appendChild(nome);
+            linha.appendChild(badge);
+
+            elemento.appendChild(linha);
+        }
+    );
+}
+
+
+function exibirEstoqueCritico(
+    produtos: ProdutoAnalitico[]
+): void {
+
+    const elemento =
+        document.getElementById("estoqueCritico");
+
+    if (!elemento) {
+        return;
+    }
+
+    const produtosCriticos =
+        produtos.filter(
+            (produto) =>
+                produto.estoque <= 10
+        );
+
+    elemento.replaceChildren();
+
+    if (produtosCriticos.length === 0) {
+
+        const mensagem =
+            document.createElement("p");
+
+        mensagem.className =
+            "text-muted mb-0";
+
+        mensagem.textContent =
+            "Nenhum produto com estoque crítico.";
+
+        elemento.appendChild(mensagem);
+
+        return;
+    }
+
+    produtosCriticos.forEach(
+        (produto) => {
+
+            const linha =
+                document.createElement("div");
+
+            linha.className =
+                "d-flex justify-content-between " +
+                "align-items-center mb-2";
+
+            const nome =
+                document.createElement("span");
+
+            nome.textContent =
+                produto.produto;
+
+            const badge =
+                document.createElement("span");
+
+            badge.className =
+                "badge bg-danger";
+
+            badge.textContent =
+                `${produto.estoque} unidade(s)`;
+
+            linha.appendChild(nome);
+            linha.appendChild(badge);
+
+            elemento.appendChild(linha);
+        }
+    );
+}
 
             return;
         }
