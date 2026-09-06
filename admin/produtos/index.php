@@ -5,6 +5,36 @@ session_start();
 require_once "../../config.php";
 require_once "../../protecao/acesso.php";
 
+$sucesso = $_GET["sucesso"] ?? "";
+$erro = $_GET["erro"] ?? "";
+
+$mensagemSucesso = "";
+$mensagemErro = "";
+
+if ($sucesso === "produto_excluido") {
+    $mensagemSucesso = "Produto excluído com sucesso.";
+}
+
+if ($erro === "produto_vendido") {
+    $mensagemErro =
+        "Este produto não pode ser excluído porque já foi utilizado em uma venda.";
+}
+
+if ($erro === "nao_encontrado") {
+    $mensagemErro =
+        "Produto não encontrado.";
+}
+
+if ($erro === "banco") {
+    $mensagemErro =
+        "Não foi possível excluir o produto. Tente novamente.";
+}
+
+if ($erro === "id") {
+    $mensagemErro =
+        "Produto inválido.";
+}
+
 exigirPerfil(["admin"]);
 
 $produtos = [];
@@ -99,6 +129,23 @@ require_once "../../componentes/navbar.php";
 
     </div>
 
+    <?php if ($mensagemSucesso !== ""): ?>
+
+    <div class="alert alert-success">
+        <?= htmlspecialchars($mensagemSucesso) ?>
+    </div>
+
+<?php endif; ?>
+
+
+<?php if ($mensagemErro !== ""): ?>
+
+    <div class="alert alert-danger">
+        <?= htmlspecialchars($mensagemErro) ?>
+    </div>
+
+<?php endif; ?>
+
     <?php if (count($produtos) > 0): ?>
 
         <div class="card shadow-sm border-0">
@@ -188,14 +235,29 @@ require_once "../../componentes/navbar.php";
 
                                     <td>
 
-                                        <a
-                                            href="editar.php?id=<?= $produto["id"] ?>"
-                                            class="btn btn-sm btn-outline-primary"
-                                        >
-                                            Editar
-                                        </a>
-
-                                    </td>
+                                        <a href="editar.php?id=<?= $produto["id"] ?>"
+                                        class="btn btn-sm btn-warning">
+                                        Editar
+                                    </a>
+                                    
+                                    <form action="excluir.php"
+                                    method="POST"
+                                    class="d-inline"
+                                    onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
+                                    <input
+                                    type="hidden"
+                                    name="id"
+                                    value="<?= (int) $produto["id"] ?>"
+                                    >
+                                    
+                                    <button
+                                    type="submit"
+                                    class="btn btn-sm btn-danger">
+                                    Excluir
+                                </button>
+                            </form>
+                        
+                        </td>
 
                                 </tr>
 
