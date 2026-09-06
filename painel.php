@@ -241,6 +241,67 @@ require_once "componentes/navbar.php";
 
 </div>
 
+<!-- ANÁLISES DA DASHBOARD -->
+
+<div class="row g-4 mt-1">
+
+    <!-- RANKING -->
+    <div class="col-12 col-lg-6">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h5 class="card-title fw-bold">
+                    🏆 Top 3 produtos mais vendidos
+                </h5>
+
+                <p class="text-muted">
+                    Ranking calculado dinamicamente pela dashboard.
+                </p>
+
+                <div id="rankingProdutos">
+                    <p class="text-muted mb-0">
+                        Carregando...
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ESTOQUE CRÍTICO -->
+    <div class="col-12 col-lg-6">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h5 class="card-title fw-bold">
+                    ⚠️ Estoque crítico
+                </h5>
+
+                <p class="text-muted">
+                    Produtos com 10 unidades ou menos.
+                </p>
+
+                <div id="estoqueCritico">
+                    <p class="text-muted mb-0">
+                        Carregando...
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 <!-- MENSAGEM DA DASHBOARD -->
 <div
     id="mensagemDashboard"
