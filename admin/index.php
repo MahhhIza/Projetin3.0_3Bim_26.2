@@ -55,7 +55,7 @@ require_once "../componentes/navbar.php";
                     </p>
 
                     <a
-                        href="usuarios.php"
+                        href="usuarios/index.php"
                         class="btn btn-primary"
                     >
                         Gerenciar
@@ -63,6 +63,33 @@ require_once "../componentes/navbar.php";
                 </div>
             </div>
         </div>
+
+        <div class="col-md-4">
+
+    <div class="card shadow-sm h-100">
+
+        <div class="card-body">
+
+            <h5 class="card-title fw-bold">
+                Categorias
+            </h5>
+
+            <p class="card-text text-muted">
+                Cadastre, edite e exclua categorias de produtos.
+            </p>
+
+            <a
+                href="categorias/index.php"
+                class="btn btn-primary"
+            >
+                Gerenciar categorias
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
 
     </div>
 
