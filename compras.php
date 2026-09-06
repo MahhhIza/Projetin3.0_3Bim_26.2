@@ -14,13 +14,78 @@ if (!isset($_SESSION["usuario_id"])) {
 
 $usuarioId = $_SESSION["usuario_id"];
 
+/*
+ * Quantidade de compras por página.
+ */
+$comprasPorPagina = 6;
+
+/*
+ * Página atual.
+ */
+$paginaAtual = filter_input(
+    INPUT_GET,
+    "pagina",
+    FILTER_VALIDATE_INT
+);
+
+if (
+    $paginaAtual === false ||
+    $paginaAtual === null ||
+    $paginaAtual < 1
+) {
+    $paginaAtual = 1;
+}
+
 $compras = [];
+$totalCompras = 0;
+$totalPaginas = 1;
 
 try {
 
     /*
-     * Busca somente as compras
-     * pertencentes ao usuário logado.
+     * =========================================
+     * TOTAL DE COMPRAS DO USUÁRIO
+     * =========================================
+     */
+    $sqlTotal = "
+        SELECT COUNT(*)
+        FROM vendas
+        WHERE usuario_id = ?
+    ";
+
+    $stmtTotal = $pdo->prepare($sqlTotal);
+    $stmtTotal->execute([$usuarioId]);
+
+    $totalCompras = (int) $stmtTotal->fetchColumn();
+
+    /*
+     * Calcula o total de páginas.
+     */
+    $totalPaginas = max(
+        1,
+        (int) ceil(
+            $totalCompras / $comprasPorPagina
+        )
+    );
+
+    /*
+     * Impede acesso a uma página inexistente.
+     */
+    if ($paginaAtual > $totalPaginas) {
+        $paginaAtual = $totalPaginas;
+    }
+
+    /*
+     * Calcula o deslocamento.
+     */
+    $offset = (
+        $paginaAtual - 1
+    ) * $comprasPorPagina;
+
+    /*
+     * =========================================
+     * BUSCA AS COMPRAS DA PÁGINA
+     * =========================================
      */
     $sql = "
         SELECT
@@ -28,15 +93,23 @@ try {
             v.data_venda,
             v.total,
             COUNT(iv.id) AS quantidade_itens
+
         FROM vendas v
+
         INNER JOIN itens_venda iv
             ON iv.venda_id = v.id
+
         WHERE v.usuario_id = ?
+
         GROUP BY
             v.id,
             v.data_venda,
             v.total
+
         ORDER BY v.data_venda DESC
+
+        LIMIT $comprasPorPagina
+        OFFSET $offset
     ";
 
     $stmt = $pdo->prepare($sql);
@@ -47,6 +120,9 @@ try {
 } catch (PDOException $e) {
 
     $compras = [];
+    $totalCompras = 0;
+    $totalPaginas = 1;
+    $paginaAtual = 1;
 
 }
 
@@ -244,6 +320,88 @@ require_once "componentes/navbar.php";
             <?php endforeach; ?>
 
         </div>
+
+        <?php if ($totalPaginas > 1): ?>
+
+            <nav
+                class="d-flex justify-content-center mt-5"
+                aria-label="Navegação do histórico de compras"
+            >
+
+                <ul class="pagination">
+
+                    <!-- Página anterior -->
+                    <li
+                        class="page-item
+                        <?= $paginaAtual <= 1 ? "disabled" : "" ?>"
+                    >
+
+                        <a
+                            class="page-link"
+                            href="?pagina=<?= $paginaAtual - 1 ?>"
+                        >
+                            ← Anterior
+                        </a>
+
+                    </li>
+
+
+                    <!-- Números das páginas -->
+                    <?php for (
+                        $pagina = 1;
+                        $pagina <= $totalPaginas;
+                        $pagina++
+                    ): ?>
+
+                        <li
+                            class="page-item
+                            <?= $pagina === $paginaAtual ? "active" : "" ?>"
+                        >
+
+                            <a
+                                class="page-link"
+                                href="?pagina=<?= $pagina ?>"
+                            >
+                                <?= $pagina ?>
+                            </a>
+
+                        </li>
+
+                    <?php endfor; ?>
+
+
+                    <!-- Próxima página -->
+                    <li
+                        class="page-item
+                        <?= $paginaAtual >= $totalPaginas ? "disabled" : "" ?>"
+                    >
+
+                        <a
+                            class="page-link"
+                            href="?pagina=<?= $paginaAtual + 1 ?>"
+                        >
+                            Próxima →
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+
+            <p class="text-center text-muted mt-2">
+
+                Página <?= $paginaAtual ?>
+                de <?= $totalPaginas ?>
+
+                •
+
+                <?= $totalCompras ?> compra(s)
+
+            </p>
+
+        <?php endif; ?>
 
 
     <?php else: ?>

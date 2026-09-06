@@ -37,9 +37,93 @@ if ($erro === "id") {
 
 exigirPerfil(["admin"]);
 
+
+/*
+ * =========================================
+ * PAGINAÇÃO
+ * =========================================
+ */
+
+$produtosPorPagina = 6;
+
+$paginaAtual = filter_input(
+    INPUT_GET,
+    "pagina",
+    FILTER_VALIDATE_INT
+);
+
+if (
+    $paginaAtual === false ||
+    $paginaAtual === null ||
+    $paginaAtual < 1
+) {
+    $paginaAtual = 1;
+}
+
 $produtos = [];
 
+$totalProdutos = 0;
+$totalPaginas = 1;
+
+
 try {
+
+    /*
+     * =========================================
+     * TOTAL DE PRODUTOS
+     * =========================================
+     */
+
+    $sqlTotal = "
+        SELECT COUNT(*)
+        FROM produtos
+    ";
+
+    $stmtTotal = $pdo->query($sqlTotal);
+
+    $totalProdutos = (int) $stmtTotal->fetchColumn();
+
+
+    /*
+     * =========================================
+     * TOTAL DE PÁGINAS
+     * =========================================
+     */
+
+    $totalPaginas = max(
+        1,
+        (int) ceil(
+            $totalProdutos / $produtosPorPagina
+        )
+    );
+
+
+    /*
+     * Se a página informada não existir,
+     * volta para a última página.
+     */
+
+    if ($paginaAtual > $totalPaginas) {
+        $paginaAtual = $totalPaginas;
+    }
+
+
+    /*
+     * =========================================
+     * OFFSET
+     * =========================================
+     */
+
+    $offset =
+        ($paginaAtual - 1) *
+        $produtosPorPagina;
+
+
+    /*
+     * =========================================
+     * PRODUTOS DA PÁGINA
+     * =========================================
+     */
 
     $sql = "
         SELECT
@@ -49,26 +133,45 @@ try {
             p.estoque,
             p.ativo,
             c.nome AS categoria
+
         FROM produtos p
+
         INNER JOIN categorias c
             ON p.categoria_id = c.id
+
         ORDER BY p.id DESC
+
+        LIMIT $produtosPorPagina
+        OFFSET $offset
     ";
 
     $stmt = $pdo->prepare($sql);
+
     $stmt->execute();
 
-    $produtos = $stmt->fetchAll();
+    $produtos =
+        $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 } catch (PDOException $e) {
 
     $produtos = [];
 
+    $totalProdutos = 0;
+
+    $totalPaginas = 1;
+
+    $paginaAtual = 1;
+
+    $mensagemErro =
+        "Não foi possível carregar os produtos.";
 }
 
 ?>
 
+
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
@@ -94,7 +197,9 @@ try {
 
 </head>
 
+
 <body>
+
 
 <?php
 
@@ -104,7 +209,13 @@ require_once "../../componentes/navbar.php";
 
 ?>
 
+
 <main class="container py-5">
+
+
+    <!-- =========================================
+         CABEÇALHO
+         ========================================= -->
 
     <div class="d-flex justify-content-between align-items-center mb-4">
 
@@ -120,6 +231,7 @@ require_once "../../componentes/navbar.php";
 
         </div>
 
+
         <a
             href="cadastrar.php"
             class="btn btn-primary"
@@ -129,32 +241,49 @@ require_once "../../componentes/navbar.php";
 
     </div>
 
+
+    <!-- =========================================
+         MENSAGENS
+         ========================================= -->
+
     <?php if ($mensagemSucesso !== ""): ?>
 
-    <div class="alert alert-success">
-        <?= htmlspecialchars($mensagemSucesso) ?>
-    </div>
+        <div class="alert alert-success">
 
-<?php endif; ?>
+            <?= htmlspecialchars($mensagemSucesso) ?>
+
+        </div>
+
+    <?php endif; ?>
 
 
-<?php if ($mensagemErro !== ""): ?>
+    <?php if ($mensagemErro !== ""): ?>
 
-    <div class="alert alert-danger">
-        <?= htmlspecialchars($mensagemErro) ?>
-    </div>
+        <div class="alert alert-danger">
 
-<?php endif; ?>
+            <?= htmlspecialchars($mensagemErro) ?>
+
+        </div>
+
+    <?php endif; ?>
+
+
+    <!-- =========================================
+         LISTA DE PRODUTOS
+         ========================================= -->
 
     <?php if (count($produtos) > 0): ?>
+
 
         <div class="card shadow-sm border-0">
 
             <div class="card-body">
 
+
                 <div class="table-responsive">
 
                     <table class="table align-middle">
+
 
                         <thead>
 
@@ -176,92 +305,131 @@ require_once "../../componentes/navbar.php";
 
                         </thead>
 
+
                         <tbody>
 
-                            <?php foreach ($produtos as $produto): ?>
 
-                                <tr>
+                        <?php foreach ($produtos as $produto): ?>
 
-                                    <td>
 
-                                        <strong>
-                                            <?= htmlspecialchars($produto["nome"]) ?>
-                                        </strong>
+                            <tr>
 
-                                    </td>
 
-                                    <td>
+                                <td>
 
-                                        <?= htmlspecialchars($produto["categoria"]) ?>
+                                    <strong>
 
-                                    </td>
-
-                                    <td>
-
-                                        R$
-
-                                        <?= number_format(
-                                            $produto["preco"],
-                                            2,
-                                            ",",
-                                            "."
+                                        <?= htmlspecialchars(
+                                            $produto["nome"]
                                         ) ?>
 
-                                    </td>
+                                    </strong>
 
-                                    <td>
+                                </td>
 
-                                        <?= $produto["estoque"] ?>
 
-                                    </td>
+                                <td>
 
-                                    <td>
+                                    <?= htmlspecialchars(
+                                        $produto["categoria"]
+                                    ) ?>
 
-                                        <?php if ($produto["ativo"]): ?>
+                                </td>
 
-                                            <span class="badge bg-success">
-                                                Ativo
-                                            </span>
 
-                                        <?php else: ?>
+                                <td>
 
-                                            <span class="badge bg-secondary">
-                                                Inativo
-                                            </span>
+                                    R$
 
-                                        <?php endif; ?>
+                                    <?= number_format(
+                                        $produto["preco"],
+                                        2,
+                                        ",",
+                                        "."
+                                    ) ?>
 
-                                    </td>
+                                </td>
 
-                                    <td>
 
-                                        <a href="editar.php?id=<?= $produto["id"] ?>"
-                                        class="btn btn-sm btn-warning">
+                                <td>
+
+                                    <?= (int) $produto["estoque"] ?>
+
+                                </td>
+
+
+                                <td>
+
+
+                                    <?php if ($produto["ativo"]): ?>
+
+                                        <span class="badge bg-success">
+
+                                            Ativo
+
+                                        </span>
+
+                                    <?php else: ?>
+
+                                        <span class="badge bg-secondary">
+
+                                            Inativo
+
+                                        </span>
+
+                                    <?php endif; ?>
+
+
+                                </td>
+
+
+                                <td>
+
+
+                                    <!-- EDITAR -->
+
+                                    <a
+                                        href="editar.php?id=<?= (int) $produto["id"] ?>"
+                                        class="btn btn-sm btn-warning"
+                                    >
                                         Editar
                                     </a>
-                                    
-                                    <form action="excluir.php"
-                                    method="POST"
-                                    class="d-inline"
-                                    onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
-                                    <input
-                                    type="hidden"
-                                    name="id"
-                                    value="<?= (int) $produto["id"] ?>"
+
+
+                                    <!-- EXCLUIR -->
+
+                                    <form
+                                        action="excluir.php"
+                                        method="POST"
+                                        class="d-inline"
+                                        onsubmit="return confirm('Tem certeza que deseja excluir este produto?');"
                                     >
-                                    
-                                    <button
-                                    type="submit"
-                                    class="btn btn-sm btn-danger">
-                                    Excluir
-                                </button>
-                            </form>
-                        
-                        </td>
 
-                                </tr>
+                                        <input
+                                            type="hidden"
+                                            name="id"
+                                            value="<?= (int) $produto["id"] ?>"
+                                        >
 
-                            <?php endforeach; ?>
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm btn-danger"
+                                        >
+                                            Excluir
+                                        </button>
+
+                                    </form>
+
+
+                                </td>
+
+
+                            </tr>
+
+
+                        <?php endforeach; ?>
+
 
                         </tbody>
 
@@ -269,11 +437,114 @@ require_once "../../componentes/navbar.php";
 
                 </div>
 
+
             </div>
 
         </div>
 
+
+        <!-- =========================================
+             PAGINAÇÃO
+             ========================================= -->
+
+        <?php if ($totalPaginas > 1): ?>
+
+
+            <nav
+                class="d-flex justify-content-center mt-4"
+                aria-label="Navegação dos produtos"
+            >
+
+                <ul class="pagination">
+
+
+                    <!-- ANTERIOR -->
+
+                    <li
+                        class="page-item
+                        <?= $paginaAtual <= 1 ? "disabled" : "" ?>"
+                    >
+
+                        <a
+                            class="page-link"
+                            href="?pagina=<?= $paginaAtual - 1 ?>"
+                        >
+                            ← Anterior
+                        </a>
+
+                    </li>
+
+
+                    <!-- NÚMEROS DAS PÁGINAS -->
+
+                    <?php for (
+                        $pagina = 1;
+                        $pagina <= $totalPaginas;
+                        $pagina++
+                    ): ?>
+
+
+                        <li
+                            class="page-item
+                            <?= $pagina === $paginaAtual ? "active" : "" ?>"
+                        >
+
+                            <a
+                                class="page-link"
+                                href="?pagina=<?= $pagina ?>"
+                            >
+                                <?= $pagina ?>
+                            </a>
+
+                        </li>
+
+
+                    <?php endfor; ?>
+
+
+                    <!-- PRÓXIMA -->
+
+                    <li
+                        class="page-item
+                        <?= $paginaAtual >= $totalPaginas ? "disabled" : "" ?>"
+                    >
+
+                        <a
+                            class="page-link"
+                            href="?pagina=<?= $paginaAtual + 1 ?>"
+                        >
+                            Próxima →
+                        </a>
+
+                    </li>
+
+
+                </ul>
+
+            </nav>
+
+
+            <p class="text-center text-muted mt-2">
+
+                Página <?= $paginaAtual ?>
+                de <?= $totalPaginas ?>
+
+                •
+
+                <?= $totalProdutos ?> produto(s)
+
+            </p>
+
+
+        <?php endif; ?>
+
+
     <?php else: ?>
+
+
+        <!-- =========================================
+             NENHUM PRODUTO
+             ========================================= -->
 
         <div class="alert alert-info text-center">
 
@@ -281,17 +552,24 @@ require_once "../../componentes/navbar.php";
 
         </div>
 
+
     <?php endif; ?>
+
 
 </main>
 
+
 <?php
-require_once "componentes/footer.php";
+
+require_once "../../componentes/footer.php";
+
 ?>
+
 
 <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
 ></script>
+
 
 </body>
 
