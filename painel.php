@@ -378,6 +378,27 @@ require_once "componentes/navbar.php";
 
 <?php endif; ?>
 
+<div class="d-flex justify-content-center align-items-center gap-3 mt-4">
+    <button
+        type="button"
+        id="btnPaginaAnterior"
+        class="btn btn-outline-primary"
+    >
+        ← Anterior
+    </button>
+
+    <span id="paginaAtual" class="fw-semibold">
+        Página 1
+    </span>
+
+    <button
+        type="button"
+        id="btnProximaPagina"
+        class="btn btn-outline-primary"
+    >
+        Próxima →
+    </button>
+</div>
 
     </main>
 

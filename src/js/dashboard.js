@@ -1,3 +1,10 @@
+const PRODUTOS_POR_PAGINA = 10;
+const LIMITE_BUSCA = PRODUTOS_POR_PAGINA + 1;
+let paginaAtual = 1;
+/*
+
+* VALIDAÇÃO DO PRODUTO
+  */
 function ehProdutoAnalitico(valor) {
     if (typeof valor !== "object" ||
         valor === null) {
@@ -12,22 +19,67 @@ function ehProdutoAnalitico(valor) {
         typeof produto.quantidade_vendida === "number" &&
         typeof produto.faturamento === "number");
 }
+/*
+
+* VALIDAÇÃO DA LISTA DE PRODUTOS
+  */
 function ehListaProdutos(valor) {
     return (Array.isArray(valor) &&
         valor.every(ehProdutoAnalitico));
 }
+/*
+
+* ATUALIZA TEXTO DE UM ELEMENTO
+  */
 function atualizarTexto(id, texto) {
     const elemento = document.getElementById(id);
     if (elemento) {
         elemento.textContent = texto;
     }
 }
+/*
+
+* FORMATA VALORES EM REAL
+  */
 function formatarMoeda(valor) {
     return valor.toLocaleString("pt-BR", {
         style: "currency",
         currency: "BRL"
     });
 }
+/*
+
+* ATUALIZA INDICADOR DA PÁGINAÇÃO
+  */
+function atualizarPaginacao() {
+    const elemento = document.getElementById("paginaAtual");
+    if (!elemento) {
+        return;
+    }
+    elemento.textContent =
+        `Página ${paginaAtual}`;
+}
+/*
+
+* ATUALIZA ESTADO DOS BOTÕES
+  */
+function atualizarEstadoPaginacao(existeProximaPagina) {
+    const botaoAnterior = document.getElementById("btnPaginaAnterior");
+    const botaoProxima = document.getElementById("btnProximaPagina");
+    if (!botaoAnterior || !botaoProxima) {
+        return;
+    }
+    botaoAnterior.disabled =
+        paginaAtual === 1;
+    botaoProxima.disabled =
+        !existeProximaPagina;
+}
+/*
+
+* EXIBE RANKING DOS PRODUTOS
+*
+* FILTER + MAP + SORT + SLICE
+  */
 function exibirRanking(produtos) {
     const elemento = document.getElementById("rankingProdutos");
     if (!elemento) {
@@ -41,66 +93,107 @@ function exibirRanking(produtos) {
     }))
         .sort((a, b) => b.quantidade - a.quantidade)
         .slice(0, 3);
+    elemento.replaceChildren();
     if (ranking.length === 0) {
-        elemento.innerHTML =
-            "<p class='text-muted mb-0'>" +
-                "Nenhuma venda registrada." +
-                "</p>";
+        const mensagem = document.createElement("p");
+        mensagem.className =
+            "text-muted mb-0";
+        mensagem.textContent =
+            "Nenhuma venda registrada.";
+        elemento.appendChild(mensagem);
         return;
     }
-    elemento.innerHTML =
-        ranking
-            .map((produto, indice) => `
-                    <div class="d-flex justify-content-between
-                                align-items-center mb-2">
-
-                        <span>
-                            <strong>${indice + 1}º</strong>
-                            ${produto.nome}
-                        </span>
-
-                        <span class="badge bg-primary">
-                            ${produto.quantidade} vendido(s)
-                        </span>
-
-                    </div>
-                `)
-            .join("");
+    ranking.forEach((produto, indice) => {
+        const linha = document.createElement("div");
+        linha.className =
+            "d-flex justify-content-between " +
+                "align-items-center mb-2";
+        const nome = document.createElement("span");
+        const destaque = document.createElement("strong");
+        destaque.textContent =
+            `${indice + 1}º`;
+        nome.appendChild(destaque);
+        nome.appendChild(document.createTextNode(` ${produto.nome}`));
+        const badge = document.createElement("span");
+        badge.className =
+            "badge bg-primary";
+        badge.textContent =
+            `${produto.quantidade} vendido(s)`;
+        linha.appendChild(nome);
+        linha.appendChild(badge);
+        elemento.appendChild(linha);
+    });
 }
+/*
+
+* EXIBE PRODUTOS COM ESTOQUE CRÍTICO
+*
+* FILTER
+  */
 function exibirEstoqueCritico(produtos) {
     const elemento = document.getElementById("estoqueCritico");
     if (!elemento) {
         return;
     }
     const produtosCriticos = produtos.filter((produto) => produto.estoque <= 10);
+    elemento.replaceChildren();
     if (produtosCriticos.length === 0) {
-        elemento.innerHTML =
-            "<p class='text-muted mb-0'>" +
-                "Nenhum produto com estoque crítico." +
-                "</p>";
+        const mensagem = document.createElement("p");
+        mensagem.className =
+            "text-muted mb-0";
+        mensagem.textContent =
+            "Nenhum produto com estoque crítico.";
+        elemento.appendChild(mensagem);
         return;
     }
-    elemento.innerHTML =
-        produtosCriticos
-            .map((produto) => `
-                    <div class="d-flex justify-content-between
-                                align-items-center mb-2">
-
-                        <span>
-                            ${produto.produto}
-                        </span>
-
-                        <span class="badge bg-danger">
-                            ${produto.estoque} unidade(s)
-                        </span>
-
-                    </div>
-                `)
-            .join("");
+    produtosCriticos.forEach((produto) => {
+        const linha = document.createElement("div");
+        linha.className =
+            "d-flex justify-content-between " +
+                "align-items-center mb-2";
+        const nome = document.createElement("span");
+        nome.textContent =
+            produto.produto;
+        const badge = document.createElement("span");
+        badge.className =
+            "badge bg-danger";
+        badge.textContent =
+            `${produto.estoque} unidade(s)`;
+        linha.appendChild(nome);
+        linha.appendChild(badge);
+        elemento.appendChild(linha);
+    });
 }
+/*
+
+* ATUALIZA CARDS COM BANCO VAZIO
+  */
+function limparDashboard() {
+    atualizarTexto("faturamentoTotal", "R$ 0,00");
+    atualizarTexto("quantidadeTotal", "0");
+    atualizarTexto("totalProdutos", "0");
+    atualizarTexto("estoqueTotal", "0");
+    exibirRanking([]);
+    exibirEstoqueCritico([]);
+}
+/*
+
+* BUSCA OS PRODUTOS NA API
+*
+* FETCH + ASYNC/AWAIT + TRY/CATCH
+  */
 async function buscarProdutos() {
     try {
-        const resposta = await fetch("api/produtos.php");
+        const offset = (paginaAtual - 1) *
+            PRODUTOS_POR_PAGINA;
+        /*
+         * Buscamos 11 registros.
+         *
+         * Os primeiros 10 aparecem na página.
+         * O 11º serve apenas para saber
+         * se existe uma próxima página.
+         */
+        const resposta = await fetch(`api/produtos.php?limite=${LIMITE_BUSCA}&offset=${offset}`);
         if (!resposta.ok) {
             throw new Error("Erro ao carregar os produtos.");
         }
@@ -108,7 +201,29 @@ async function buscarProdutos() {
         if (!ehListaProdutos(dados)) {
             throw new Error("Formato de dados inválido.");
         }
-        const produtos = dados;
+        /*
+         * Se o usuário avançar para uma página
+         * que não existe, volta automaticamente.
+         */
+        if (dados.length === 0 &&
+            paginaAtual > 1) {
+            paginaAtual--;
+            atualizarPaginacao();
+            await buscarProdutos();
+            return;
+        }
+        /*
+         * Os dados exibidos são somente
+         * os 10 produtos da página.
+         */
+        const produtos = dados.slice(0, PRODUTOS_POR_PAGINA);
+        /*
+         * Existe próxima página se a API
+         * retornou o 11º registro.
+         */
+        const existeProximaPagina = dados.length >
+            PRODUTOS_POR_PAGINA;
+        atualizarEstadoPaginacao(existeProximaPagina);
         const mensagem = document.getElementById("mensagemDashboard");
         /*
          * BANCO VAZIO
@@ -118,91 +233,15 @@ async function buscarProdutos() {
                 mensagem.textContent =
                     "Nenhum dado registrado.";
                 mensagem.classList.remove("d-none");
+                mensagem.classList.remove("alert-danger");
+                mensagem.classList.add("alert-info");
             }
-            atualizarTexto("faturamentoTotal", "R$ 0,00");
-            atualizarTexto("quantidadeTotal", "0");
-            atualizarTexto("totalProdutos", "0");
-            atualizarTexto("estoqueTotal", "0");
-            function exibirRanking(produtos) {
-                const elemento = document.getElementById("rankingProdutos");
-                if (!elemento) {
-                    return;
-                }
-                const ranking = produtos
-                    .filter((produto) => produto.quantidade_vendida > 0)
-                    .map((produto) => ({
-                    nome: produto.produto,
-                    quantidade: produto.quantidade_vendida
-                }))
-                    .sort((a, b) => b.quantidade - a.quantidade)
-                    .slice(0, 3);
-                elemento.replaceChildren();
-                if (ranking.length === 0) {
-                    const mensagem = document.createElement("p");
-                    mensagem.className =
-                        "text-muted mb-0";
-                    mensagem.textContent =
-                        "Nenhuma venda registrada.";
-                    elemento.appendChild(mensagem);
-                    return;
-                }
-                ranking.forEach((produto, indice) => {
-                    const linha = document.createElement("div");
-                    linha.className =
-                        "d-flex justify-content-between " +
-                            "align-items-center mb-2";
-                    const nome = document.createElement("span");
-                    const destaque = document.createElement("strong");
-                    destaque.textContent =
-                        `${indice + 1}º`;
-                    nome.appendChild(destaque);
-                    nome.appendChild(document.createTextNode(` ${produto.nome}`));
-                    const badge = document.createElement("span");
-                    badge.className =
-                        "badge bg-primary";
-                    badge.textContent =
-                        `${produto.quantidade} vendido(s)`;
-                    linha.appendChild(nome);
-                    linha.appendChild(badge);
-                    elemento.appendChild(linha);
-                });
-            }
-            function exibirEstoqueCritico(produtos) {
-                const elemento = document.getElementById("estoqueCritico");
-                if (!elemento) {
-                    return;
-                }
-                const produtosCriticos = produtos.filter((produto) => produto.estoque <= 10);
-                elemento.replaceChildren();
-                if (produtosCriticos.length === 0) {
-                    const mensagem = document.createElement("p");
-                    mensagem.className =
-                        "text-muted mb-0";
-                    mensagem.textContent =
-                        "Nenhum produto com estoque crítico.";
-                    elemento.appendChild(mensagem);
-                    return;
-                }
-                produtosCriticos.forEach((produto) => {
-                    const linha = document.createElement("div");
-                    linha.className =
-                        "d-flex justify-content-between " +
-                            "align-items-center mb-2";
-                    const nome = document.createElement("span");
-                    nome.textContent =
-                        produto.produto;
-                    const badge = document.createElement("span");
-                    badge.className =
-                        "badge bg-danger";
-                    badge.textContent =
-                        `${produto.estoque} unidade(s)`;
-                    linha.appendChild(nome);
-                    linha.appendChild(badge);
-                    elemento.appendChild(linha);
-                });
-            }
+            limparDashboard();
             return;
         }
+        /*
+         * ESCONDE MENSAGEM DE BANCO VAZIO
+         */
         if (mensagem) {
             mensagem.classList.add("d-none");
         }
@@ -251,7 +290,7 @@ async function buscarProdutos() {
         /*
          * FILTER + MAP + SORT
          *
-         * Ranking de produtos
+         * Ranking dos produtos
          */
         exibirRanking(produtos);
         /*
@@ -274,5 +313,46 @@ async function buscarProdutos() {
         }
     }
 }
-buscarProdutos();
+/*
+
+* CONFIGURA OS BOTÕES DE PAGINAÇÃO
+  */
+function configurarPaginacao() {
+    const botaoAnterior = document.getElementById("btnPaginaAnterior");
+    const botaoProxima = document.getElementById("btnProximaPagina");
+    if (!botaoAnterior || !botaoProxima) {
+        return;
+    }
+    /*
+  
+    * BOTÃO ANTERIOR
+      */
+    botaoAnterior.addEventListener("click", () => {
+        if (paginaAtual > 1) {
+            paginaAtual--;
+            atualizarPaginacao();
+            void buscarProdutos();
+        }
+    });
+    /*
+  
+    * BOTÃO PRÓXIMA
+      */
+    botaoProxima.addEventListener("click", () => {
+        const botao = botaoProxima;
+        if (botao.disabled) {
+            return;
+        }
+        paginaAtual++;
+        atualizarPaginacao();
+        void buscarProdutos();
+    });
+}
+/*
+
+* INICIALIZAÇÃO DA DASHBOARD
+  */
+configurarPaginacao();
+atualizarPaginacao();
+void buscarProdutos();
 export {};
