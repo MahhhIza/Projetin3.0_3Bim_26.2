@@ -4,71 +4,155 @@ session_start();
 
 require_once "../config.php";
 
+/*
+ * Quantidade de produtos por página.
+ */
+$produtosPorPagina = 6;
 
 /*
- * Verifica se o usuário escolheu uma categoria.
+ * Página atual.
  */
+$paginaAtual = filter_input(
+    INPUT_GET,
+    "pagina",
+    FILTER_VALIDATE_INT
+);
 
-$categoriaSelecionada = $_GET["categoria"] ?? null;
+if ($paginaAtual === false || $paginaAtual === null || $paginaAtual < 1) {
+    $paginaAtual = 1;
+}
 
 /*
- * Verifica se o usuário realizou uma busca.
+ * Categoria selecionada.
  */
+$categoriaSelecionada = filter_input(
+    INPUT_GET,
+    "categoria",
+    FILTER_VALIDATE_INT
+);
 
+if (
+    $categoriaSelecionada === false ||
+    $categoriaSelecionada === null ||
+    $categoriaSelecionada < 1
+) {
+    $categoriaSelecionada = null;
+}
+
+/*
+ * Busca realizada pelo usuário.
+ */
 $busca = trim($_GET["busca"] ?? "");
 
 /*
- * Busca os produtos.
+ * Parâmetros utilizados nos filtros.
  */
+$parametros = [];
+
+/*
+ * Monta os filtros.
+ */
+$filtros = "WHERE p.ativo = TRUE";
+
+/*
+ * Filtro por categoria.
+ */
+if ($categoriaSelecionada !== null) {
+
+    $filtros .= " AND c.id = ?";
+    $parametros[] = $categoriaSelecionada;
+
+}
+
+/*
+ * Filtro por pesquisa.
+ */
+if ($busca !== "") {
+
+    $filtros .= " AND (
+        p.nome LIKE ?
+        OR p.descricao LIKE ?
+    )";
+
+    $parametros[] = "%" . $busca . "%";
+    $parametros[] = "%" . $busca . "%";
+
+}
 
 try {
 
-    $sql = "SELECT
-                p.id,
-                p.nome,
-                p.descricao,
-                p.preco,
-                p.estoque,
-                c.nome AS categoria
+    /*
+     * =========================================
+     * TOTAL DE PRODUTOS
+     * =========================================
+     *
+     * Descobrimos quantos produtos existem
+     * depois dos filtros.
+     */
+    $sqlTotal = "
+        SELECT COUNT(*)
+        FROM produtos p
+        INNER JOIN categorias c
+            ON p.categoria_id = c.id
+        $filtros
+    ";
 
-            FROM produtos p
+    $stmtTotal = $pdo->prepare($sqlTotal);
+    $stmtTotal->execute($parametros);
 
-            INNER JOIN categorias c
-                ON p.categoria_id = c.id
-
-            WHERE p.ativo = TRUE";
-
-    $parametros = [];
+    $totalProdutos = (int) $stmtTotal->fetchColumn();
 
     /*
-     * Filtro por categoria
+     * Calcula o total de páginas.
      */
-    if ($categoriaSelecionada !== null) {
+    $totalPaginas = max(
+        1,
+        (int) ceil($totalProdutos / $produtosPorPagina)
+    );
 
-        $sql .= " AND c.id = ?";
-        $parametros[] = $categoriaSelecionada;
-
+    /*
+     * Se a página informada não existir,
+     * volta para a última página válida.
+     */
+    if ($paginaAtual > $totalPaginas) {
+        $paginaAtual = $totalPaginas;
     }
 
     /*
-     * Filtro por pesquisa
+     * Calcula o OFFSET.
      */
-    if ($busca !== "") {
+    $offset = (
+        $paginaAtual - 1
+    ) * $produtosPorPagina;
 
-        $sql .= " AND (
-                    p.nome LIKE ?
-                    OR p.descricao LIKE ?
-                  )";
+    /*
+     * =========================================
+     * BUSCA OS PRODUTOS DA PÁGINA
+     * =========================================
+     */
+    $sql = "
+        SELECT
+            p.id,
+            p.nome,
+            p.descricao,
+            p.preco,
+            p.estoque,
+            c.nome AS categoria
 
-        $parametros[] = "%" . $busca . "%";
-        $parametros[] = "%" . $busca . "%";
+        FROM produtos p
 
-    }
+        INNER JOIN categorias c
+            ON p.categoria_id = c.id
 
-    $sql .= " ORDER BY p.nome ASC";
+        $filtros
+
+        ORDER BY p.nome ASC
+
+        LIMIT $produtosPorPagina
+        OFFSET $offset
+    ";
 
     $stmt = $pdo->prepare($sql);
-
     $stmt->execute($parametros);
 
     $produtos = $stmt->fetchAll();
@@ -76,8 +160,12 @@ try {
 } catch (PDOException $e) {
 
     $produtos = [];
+    $totalProdutos = 0;
+    $totalPaginas = 1;
+    $paginaAtual = 1;
 
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -403,10 +491,109 @@ try {
 
         </div>
 
+        <?php if ($totalPaginas > 1): ?>
+
+    <nav
+        class="d-flex justify-content-center mt-5"
+        aria-label="Navegação de páginas"
+    >
+
+        <ul class="pagination">
+
+            <!-- Página anterior -->
+            <li
+                class="page-item
+                <?= $paginaAtual <= 1 ? "disabled" : "" ?>"
+            >
+
+                <a
+                    class="page-link"
+                    href="?pagina=<?= $paginaAtual - 1 ?>
+                    <?php if ($categoriaSelecionada !== null): ?>
+                        &categoria=<?= $categoriaSelecionada ?>
+                    <?php endif; ?>
+                    <?php if ($busca !== ""): ?>
+                        &busca=<?= urlencode($busca) ?>
+                    <?php endif; ?>"
+                >
+                    ← Anterior
+                </a>
+
+            </li>
+
+
+            <!-- Número das páginas -->
+            <?php for (
+                $pagina = 1;
+                $pagina <= $totalPaginas;
+                $pagina++
+            ): ?>
+
+                <li
+                    class="page-item
+                    <?= $pagina === $paginaAtual ? "active" : "" ?>"
+                >
+
+                    <a
+                        class="page-link"
+                        href="?pagina=<?= $pagina ?>
+                        <?php if ($categoriaSelecionada !== null): ?>
+                            &categoria=<?= $categoriaSelecionada ?>
+                        <?php endif; ?>
+                        <?php if ($busca !== ""): ?>
+                            &busca=<?= urlencode($busca) ?>
+                        <?php endif; ?>"
+                    >
+                        <?= $pagina ?>
+                    </a>
+
+                </li>
+
+            <?php endfor; ?>
+
+
+            <!-- Próxima página -->
+            <li
+                class="page-item
+                <?= $paginaAtual >= $totalPaginas ? "disabled" : "" ?>"
+            >
+
+                <a
+                    class="page-link"
+                    href="?pagina=<?= $paginaAtual + 1 ?>
+                    <?php if ($categoriaSelecionada !== null): ?>
+                        &categoria=<?= $categoriaSelecionada ?>
+                    <?php endif; ?>
+                    <?php if ($busca !== ""): ?>
+                        &busca=<?= urlencode($busca) ?>
+                    <?php endif; ?>"
+                >
+                    Próxima →
+                </a>
+
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+    <p class="text-center text-muted mt-2">
+
+        Página <?= $paginaAtual ?>
+        de <?= $totalPaginas ?>
+
+        •
+        <?= $totalProdutos ?> produto(s)
+
+    </p>
+
+<?php endif; ?>
+
     </main>
 
     <?php
-    require_once "componentes/footer.php";
+    require_once "../componentes/footer.php";
     ?>
 
     <script
