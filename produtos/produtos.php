@@ -7,7 +7,7 @@ require_once "../config.php";
 /*
  * Quantidade de produtos por página.
  */
-$produtosPorPagina = 6;
+$produtosPorPagina = 8;
 
 /*
  * Página atual.
@@ -18,7 +18,11 @@ $paginaAtual = filter_input(
     FILTER_VALIDATE_INT
 );
 
-if ($paginaAtual === false || $paginaAtual === null || $paginaAtual < 1) {
+if (
+    $paginaAtual === false ||
+    $paginaAtual === null ||
+    $paginaAtual < 1
+) {
     $paginaAtual = 1;
 }
 
@@ -60,8 +64,8 @@ $filtros = "WHERE p.ativo = TRUE";
 if ($categoriaSelecionada !== null) {
 
     $filtros .= " AND c.id = ?";
-    $parametros[] = $categoriaSelecionada;
 
+    $parametros[] = $categoriaSelecionada;
 }
 
 /*
@@ -76,7 +80,6 @@ if ($busca !== "") {
 
     $parametros[] = "%" . $busca . "%";
     $parametros[] = "%" . $busca . "%";
-
 }
 
 try {
@@ -85,10 +88,8 @@ try {
      * =========================================
      * TOTAL DE PRODUTOS
      * =========================================
-     *
-     * Descobrimos quantos produtos existem
-     * depois dos filtros.
      */
+
     $sqlTotal = "
         SELECT COUNT(*)
         FROM produtos p
@@ -98,6 +99,7 @@ try {
     ";
 
     $stmtTotal = $pdo->prepare($sqlTotal);
+
     $stmtTotal->execute($parametros);
 
     $totalProdutos = (int) $stmtTotal->fetchColumn();
@@ -107,7 +109,9 @@ try {
      */
     $totalPaginas = max(
         1,
-        (int) ceil($totalProdutos / $produtosPorPagina)
+        (int) ceil(
+            $totalProdutos / $produtosPorPagina
+        )
     );
 
     /*
@@ -115,23 +119,26 @@ try {
      * volta para a última página válida.
      */
     if ($paginaAtual > $totalPaginas) {
+
         $paginaAtual = $totalPaginas;
     }
 
     /*
      * Calcula o OFFSET.
      */
-    $offset = (
-        $paginaAtual - 1
-    ) * $produtosPorPagina;
+    $offset =
+        ($paginaAtual - 1)
+        * $produtosPorPagina;
 
     /*
      * =========================================
      * BUSCA OS PRODUTOS DA PÁGINA
      * =========================================
      */
+
     $sql = "
         SELECT
+
             p.id,
             p.nome,
             p.descricao,
@@ -153,6 +160,7 @@ try {
     ";
 
     $stmt = $pdo->prepare($sql);
+
     $stmt->execute($parametros);
 
     $produtos = $stmt->fetchAll();
@@ -160,10 +168,12 @@ try {
 } catch (PDOException $e) {
 
     $produtos = [];
-    $totalProdutos = 0;
-    $totalPaginas = 1;
-    $paginaAtual = 1;
 
+    $totalProdutos = 0;
+
+    $totalPaginas = 1;
+
+    $paginaAtual = 1;
 }
 
 ?>
@@ -183,134 +193,675 @@ try {
 
     <title>Produtos - Art&Co</title>
 
-
     <!-- Bootstrap -->
-
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
         rel="stylesheet"
     >
 
+    <!-- CSS principal -->
     <link
-    rel="stylesheet"
-    href="../src/css/style.css"
+        rel="stylesheet"
+        href="../src/css/style.css"
     >
 
     <style>
 
-        body {
+        /*
+        =========================================
+        FUNDO GERAL DA PÁGINA
+        =========================================
 
-            background-color: #f8f9fa;
+        Um único fundo escuro para toda a página.
+        As manchas coloridas são criadas com
+        gradientes suaves.
+        */
+
+        body.pagina-produtos {
+
+            min-height: 100vh;
+
+            margin: 0;
+
+            background-color: #11131c;
+
+            background-image:
+
+                radial-gradient(
+                    ellipse at 10% 20%,
+                    rgba(143, 0, 255, 0.16),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    ellipse at 85% 15%,
+                    rgba(0, 201, 167, 0.14),
+                    transparent 28%
+                ),
+
+                radial-gradient(
+                    ellipse at 70% 50%,
+                    rgba(38, 94, 255, 0.10),
+                    transparent 32%
+                ),
+
+                radial-gradient(
+                    ellipse at 15% 75%,
+                    rgba(255, 0, 180, 0.08),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    ellipse at 90% 85%,
+                    rgba(255, 193, 7, 0.08),
+                    transparent 25%
+                );
+
+            background-attachment: fixed;
 
         }
 
 
-        /* =========================================
-           CABEÇALHO
-        ========================================= */
+        /*
+        =========================================
+        CABEÇALHO DA PÁGINA
+        =========================================
+        */
 
         .cabecalho-produtos {
 
-            padding: 45px 0 30px;
+            position: relative;
 
-            text-align: center;
+            padding: 55px 0 35px;
+
+            background: transparent;
+
+            text-align: left;
+
+            overflow: hidden;
 
         }
 
 
+        /*
+        Mancha suave atrás do título.
+        Ela não é uma caixa branca.
+        */
+
+        .cabecalho-produtos::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: -100px;
+
+            left: -150px;
+
+            width: 650px;
+
+            height: 350px;
+
+            background:
+
+                radial-gradient(
+                    ellipse,
+                    rgba(255, 255, 255, 0.18) 0%,
+                    rgba(255, 255, 255, 0.08) 40%,
+                    transparent 72%
+                );
+
+            filter: blur(45px);
+
+            pointer-events: none;
+
+        }
+
+
+        .cabecalho-produtos .container {
+
+            position: relative;
+
+            z-index: 2;
+
+        }
+
+
+        /*
+        =========================================
+        TÍTULO
+        =========================================
+        */
+
         .cabecalho-produtos h1 {
 
-            font-weight: bold;
+            margin-bottom: 8px;
+
+            font-size: 2.8rem;
+
+            font-weight: 800;
+
+            color: #ffffff;
+
+            letter-spacing: -0.5px;
 
         }
 
 
         .cabecalho-produtos p {
 
-            color: #6c757d;
+            margin-bottom: 0;
+
+            color: #aeb6c8;
+
+            font-size: 1rem;
 
         }
 
 
-        /* =========================================
-           CARD DO PRODUTO
-        ========================================= */
+        /*
+        =========================================
+        ÁREA DOS PRODUTOS
+        =========================================
+        */
+
+        main.container {
+
+            position: relative;
+
+            z-index: 2;
+
+            background: transparent;
+
+        }
+
+
+        /*
+        =========================================
+        CARD DO PRODUTO
+        =========================================
+        */
 
         .card-produto {
 
-            height: 100%;
+            height: auto;
 
-            border: none;
+            overflow: hidden;
 
-            border-radius: 12px;
+            border: 1px solid rgba(
+                255,
+                255,
+                255,
+                0.12
+            );
+
+            border-radius: 14px;
+
+            background-color: #ffffff;
 
             box-shadow:
-                0 3px 10px rgba(0, 0, 0, 0.08);
 
-            transition: transform 0.2s;
+                0 8px 25px
+                rgba(0, 0, 0, 0.25);
+
+            transition:
+
+                transform 0.25s ease,
+
+                box-shadow 0.25s ease;
 
         }
 
+
+        /*
+        =========================================
+        EFEITO AO PASSAR O MOUSE
+        =========================================
+        */
 
         .card-produto:hover {
 
-            transform: translateY(-4px);
+            transform: translateY(-5px);
+
+            box-shadow:
+
+                0 14px 30px
+                rgba(0, 0, 0, 0.35);
 
         }
 
 
-        .produto-icone {
+        /*
+        =========================================
+        ÁREA DA IMAGEM
+        =========================================
+        */
 
-            font-size: 55px;
+        .produto-imagem {
 
-            text-align: center;
+            width: 100%;
 
-            padding: 25px 10px 10px;
+            height: 235px;
+
+            overflow: hidden;
+
+            background-color: #ffffff;
+
+            border-radius:
+                14px 14px 0 0;
 
         }
 
+
+        .produto-imagem img {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+
+        }
+
+
+        /*
+        =========================================
+        CORPO DO CARD
+        =========================================
+        */
+
+        .card-produto .card-body {
+
+            display: flex;
+
+            flex-direction: column;
+
+            padding: 18px;
+
+        }
+
+
+        /*
+        =========================================
+        CATEGORIA
+        =========================================
+        */
+
+        .card-produto .badge {
+
+            display: inline-block;
+
+            width: fit-content;
+
+            padding: 0;
+
+            margin-bottom: 7px;
+
+            background-color:
+                transparent !important;
+
+            color:
+                #8a45e8 !important;
+
+            font-size: 0.85rem;
+
+            font-weight: 700;
+
+        }
+
+
+        /*
+        =========================================
+        NOME DO PRODUTO
+        =========================================
+        */
+
+        .card-produto .card-title {
+
+            margin-bottom: 7px;
+
+            color: #182033;
+
+            font-size: 1.05rem;
+
+            font-weight: 700;
+
+            line-height: 1.35;
+
+        }
+
+
+        /*
+        =========================================
+        DESCRIÇÃO
+        =========================================
+        */
+
+        .card-produto .card-text {
+
+            min-height: 42px;
+
+            margin-bottom: 8px;
+
+            color: #6f7785;
+
+            font-size: 0.88rem;
+
+            line-height: 1.5;
+
+        }
+
+
+        /*
+        =========================================
+        PREÇO
+        =========================================
+        */
 
         .preco-produto {
 
-            font-size: 22px;
+            margin-top: 8px;
 
-            font-weight: bold;
+            font-size: 1.55rem;
 
-            color: #7b1fa2;
+            font-weight: 800;
+
+            color: #8b20c4;
 
         }
 
+
+        /*
+        =========================================
+        ESTOQUE
+        =========================================
+        */
 
         .estoque-produto {
 
-            font-size: 14px;
+            display: flex;
 
-            color: #6c757d;
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 10px;
+
+            color: #07945a;
+
+            font-size: 0.88rem;
+
+            font-weight: 600;
 
         }
 
-        .produto-imagem {
+
+        /*
+        =========================================
+        BOLINHA DO ESTOQUE
+        =========================================
+        */
+
+        .estoque-produto::before {
+
+            content: "✓";
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            width: 20px;
+
+            height: 20px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            background-color: #07945a;
+
+            color: #ffffff;
+
+            font-size: 0.72rem;
+
+            font-weight: bold;
+
+        }
+
+
+        /*
+        =========================================
+        BOTÃO VER PRODUTO
+        =========================================
+        */
+
+        .btn-ver-produto {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
             width: 100%;
-            height: 220px;
-            overflow: hidden;
-            border-radius: 12px 12px 0 0;
+
+            min-height: 42px;
+
+            margin-top: 15px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background:
+
+                linear-gradient(
+                    90deg,
+                    #8f00ff,
+                    #00c9a7
+                );
+
+            color: #ffffff;
+
+            font-weight: 700;
+
+            text-decoration: none;
+
+            transition:
+
+                transform 0.2s ease,
+
+                box-shadow 0.2s ease;
+
         }
 
-        .produto-imagem img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            filter: blur(0.3px);
+
+        .btn-ver-produto:hover {
+
+            color: #ffffff;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+
+                0 5px 15px
+                rgba(0, 0, 0, 0.18);
+
         }
 
+
+        /*
+        =========================================
+        PAGINAÇÃO
+        =========================================
+        */
+
+        .pagination {
+
+            gap: 8px;
+
+        }
+
+
+        .pagination .page-link {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-width: 42px;
+
+            height: 42px;
+
+            border:
+                1px solid #e0e3e8;
+
+            border-radius: 50%;
+
+            background-color: #ffffff;
+
+            color: #333b4d;
+
+            font-weight: 600;
+
+            box-shadow:
+
+                0 3px 8px
+                rgba(0, 0, 0, 0.07);
+
+            transition:
+
+                all 0.2s ease;
+
+        }
+
+
+        .pagination .page-link:hover {
+
+            background:
+
+                linear-gradient(
+                    90deg,
+                    #8f00ff,
+                    #00c9a7
+                );
+
+            border-color: transparent;
+
+            color: #ffffff;
+
+            transform: translateY(-2px);
+
+        }
+
+
+        .pagination
+        .page-item.active
+        .page-link {
+
+            background:
+
+                linear-gradient(
+                    90deg,
+                    #8f00ff,
+                    #00c9a7
+                );
+
+            border-color: transparent;
+
+            color: #ffffff;
+
+        }
+
+
+        /*
+        =========================================
+        TEXTO DA PAGINAÇÃO
+        =========================================
+        */
+
+        .pagina-produtos
+        .text-muted {
+
+            color:
+                #aeb6c8 !important;
+
+        }
+
+
+        /*
+        =========================================
+        MENSAGEM DE NENHUM PRODUTO
+        =========================================
+        */
+
+        .pagina-produtos .alert {
+
+            border: none;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.20);
+
+        }
+
+
+        /*
+        =========================================
+        RESPONSIVIDADE
+        =========================================
+        */
+
+        @media (max-width: 991.98px) {
+
+            .produto-imagem {
+
+                height: 220px;
+
+            }
+
+        }
+
+
+        @media (max-width: 575.98px) {
+
+            .cabecalho-produtos {
+
+                padding:
+                    40px 0 30px;
+
+            }
+
+
+            .cabecalho-produtos h1 {
+
+                font-size: 2.2rem;
+
+            }
+
+
+            .produto-imagem {
+
+                height: 230px;
+
+            }
+
+        }
 
     </style>
 
 </head>
 
 
-<body>
+<body class="pagina-produtos">
 
 
     <!-- =========================================
@@ -318,9 +869,13 @@ try {
     ========================================= -->
 
     <?php
+
     $base = "../";
+
     require_once "../componentes/navbar.php";
+
     ?>
+
 
     <!-- =========================================
          CABEÇALHO DA PÁGINA
@@ -332,25 +887,29 @@ try {
 
             <h1>
 
-    <?php if ($busca !== ""): ?>
+                <?php if ($busca !== ""): ?>
 
-        Resultados para:
-        "<?= htmlspecialchars($busca) ?>" 🔎
+                    Resultados para:
+                    "<?= htmlspecialchars($busca) ?>" 🔎
 
-    <?php elseif ($categoriaSelecionada !== null): ?>
+                <?php elseif ($categoriaSelecionada !== null): ?>
 
-        Produtos da categoria 🎨
+                    Produtos da categoria
 
-    <?php else: ?>
+                <?php else: ?>
 
-        Nossos Produtos 🎨
+                    Nossos Produtos
 
-    <?php endif; ?>
+                <?php endif; ?>
 
-</h1>
+            </h1>
+
 
             <p>
-                Encontre os materiais perfeitos para suas criações.
+
+                Encontre os materiais perfeitos
+                para suas criações.
+
             </p>
 
         </div>
@@ -372,45 +931,64 @@ try {
 
                 <?php foreach ($produtos as $produto): ?>
 
-
-                    <div class="col-12 col-md-6 col-lg-4">
+                    <div class="col-12 col-sm-6 col-lg-3">
 
                         <div class="card card-produto">
 
 
-                            <!-- Ícone temporário -->
+                            <!-- Imagem -->
 
                             <div class="produto-imagem">
+
                                 <img
                                     src="../src/img/produto-padrao.jpg"
-                                    alt="<?= htmlspecialchars($produto["nome"]) ?>"
+                                    alt="<?= htmlspecialchars(
+                                        $produto["nome"]
+                                    ) ?>"
                                 >
+
                             </div>
 
+
+                            <!-- Corpo do card -->
 
                             <div class="card-body">
 
 
-                                <span class="badge bg-secondary mb-2">
+                                <!-- Categoria -->
 
-                                    <?= htmlspecialchars($produto["categoria"]) ?>
+                                <span class="badge">
+
+                                    <?= htmlspecialchars(
+                                        $produto["categoria"]
+                                    ) ?>
 
                                 </span>
 
 
+                                <!-- Nome -->
+
                                 <h5 class="card-title">
 
-                                    <?= htmlspecialchars($produto["nome"]) ?>
+                                    <?= htmlspecialchars(
+                                        $produto["nome"]
+                                    ) ?>
 
                                 </h5>
 
 
-                                <p class="card-text text-muted">
+                                <!-- Descrição -->
 
-                                    <?= htmlspecialchars($produto["descricao"]) ?>
+                                <p class="card-text">
+
+                                    <?= htmlspecialchars(
+                                        $produto["descricao"]
+                                    ) ?>
 
                                 </p>
 
+
+                                <!-- Preço -->
 
                                 <div class="preco-produto">
 
@@ -426,21 +1004,29 @@ try {
                                 </div>
 
 
-                                <div class="estoque-produto mt-2">
+                                <!-- Estoque -->
+
+                                <div class="estoque-produto">
 
                                     Estoque:
+
                                     <?= $produto["estoque"] ?>
+
                                     unidades
 
                                 </div>
 
 
+                                <!-- Botão -->
+
                                 <a
-    href="produto.php?id=<?= $produto['id'] ?>"
-    class="btn btn-primary w-100 mt-3"
->
-    Ver produto
-</a>
+                                    href="produto.php?id=<?= $produto["id"] ?>"
+                                    class="btn-ver-produto"
+                                >
+
+                                    🛒&nbsp; Ver produto
+
+                                </a>
 
 
                             </div>
@@ -449,152 +1035,205 @@ try {
 
                     </div>
 
-
                 <?php endforeach; ?>
 
 
             <?php else: ?>
 
-    <div class="col-12">
 
-        <div class="alert alert-info text-center">
+                <div class="col-12">
 
-            <?php if ($busca !== ""): ?>
+                    <div class="alert alert-info text-center">
 
-                <strong>
-                    Nenhum produto encontrado.
-                </strong>
+                        <?php if ($busca !== ""): ?>
 
-                <br>
+                            <strong>
 
-                Não encontramos produtos para
-                "<?= htmlspecialchars($busca) ?>".
+                                Nenhum produto encontrado.
 
-            <?php else: ?>
+                            </strong>
 
-                <strong>
-                    Nenhum produto cadastrado.
-                </strong>
+                            <br>
 
-                <br>
+                            Não encontramos produtos para
 
-                No momento não existem produtos disponíveis.
+                            "<?= htmlspecialchars($busca) ?>".
+
+
+                        <?php else: ?>
+
+                            <strong>
+
+                                Nenhum produto cadastrado.
+
+                            </strong>
+
+                            <br>
+
+                            No momento não existem
+                            produtos disponíveis.
+
+                        <?php endif; ?>
+
+                    </div>
+
+                </div>
+
 
             <?php endif; ?>
 
-        </div>
-
-    </div>
-
-<?php endif; ?>
-
 
         </div>
+
 
         <?php if ($totalPaginas > 1): ?>
 
-    <nav
-        class="d-flex justify-content-center mt-5"
-        aria-label="Navegação de páginas"
-    >
 
-        <ul class="pagination">
+            <!-- =========================================
+                 PAGINAÇÃO
+            ========================================= -->
 
-            <!-- Página anterior -->
-            <li
-                class="page-item
-                <?= $paginaAtual <= 1 ? "disabled" : "" ?>"
+            <nav
+                class="d-flex justify-content-center mt-5"
+                aria-label="Navegação de páginas"
             >
 
-                <a
-                    class="page-link"
-                    href="?pagina=<?= $paginaAtual - 1 ?>
-                    <?php if ($categoriaSelecionada !== null): ?>
-                        &categoria=<?= $categoriaSelecionada ?>
-                    <?php endif; ?>
-                    <?php if ($busca !== ""): ?>
-                        &busca=<?= urlencode($busca) ?>
-                    <?php endif; ?>"
-                >
-                    ← Anterior
-                </a>
-
-            </li>
+                <ul class="pagination">
 
 
-            <!-- Número das páginas -->
-            <?php for (
-                $pagina = 1;
-                $pagina <= $totalPaginas;
-                $pagina++
-            ): ?>
+                    <!-- Página anterior -->
 
-                <li
-                    class="page-item
-                    <?= $pagina === $paginaAtual ? "active" : "" ?>"
-                >
-
-                    <a
-                        class="page-link"
-                        href="?pagina=<?= $pagina ?>
-                        <?php if ($categoriaSelecionada !== null): ?>
-                            &categoria=<?= $categoriaSelecionada ?>
-                        <?php endif; ?>
-                        <?php if ($busca !== ""): ?>
-                            &busca=<?= urlencode($busca) ?>
-                        <?php endif; ?>"
+                    <li
+                        class="page-item
+                        <?= $paginaAtual <= 1
+                            ? "disabled"
+                            : "" ?>"
                     >
-                        <?= $pagina ?>
-                    </a>
 
-                </li>
+                        <a
+                            class="page-link"
+                            href="?pagina=<?= $paginaAtual - 1 ?><?php
+                                if (
+                                    $categoriaSelecionada !== null
+                                ):
+                            ?>&categoria=<?= $categoriaSelecionada ?><?php
+                                endif;
 
-            <?php endfor; ?>
+                                if ($busca !== ""):
+                            ?>&busca=<?= urlencode($busca) ?><?php
+                                endif;
+                            ?>"
+                        >
 
+                            ←
 
-            <!-- Próxima página -->
-            <li
-                class="page-item
-                <?= $paginaAtual >= $totalPaginas ? "disabled" : "" ?>"
-            >
+                        </a>
 
-                <a
-                    class="page-link"
-                    href="?pagina=<?= $paginaAtual + 1 ?>
-                    <?php if ($categoriaSelecionada !== null): ?>
-                        &categoria=<?= $categoriaSelecionada ?>
-                    <?php endif; ?>
-                    <?php if ($busca !== ""): ?>
-                        &busca=<?= urlencode($busca) ?>
-                    <?php endif; ?>"
-                >
-                    Próxima →
-                </a>
-
-            </li>
-
-        </ul>
-
-    </nav>
+                    </li>
 
 
-    <p class="text-center text-muted mt-2">
+                    <!-- Número das páginas -->
 
-        Página <?= $paginaAtual ?>
-        de <?= $totalPaginas ?>
+                    <?php for (
+                        $pagina = 1;
+                        $pagina <= $totalPaginas;
+                        $pagina++
+                    ): ?>
 
-        •
-        <?= $totalProdutos ?> produto(s)
+                        <li
+                            class="page-item
+                            <?= $pagina === $paginaAtual
+                                ? "active"
+                                : "" ?>"
+                        >
 
-    </p>
+                            <a
+                                class="page-link"
+                                href="?pagina=<?= $pagina ?><?php
+                                    if (
+                                        $categoriaSelecionada !== null
+                                    ):
+                                ?>&categoria=<?= $categoriaSelecionada ?><?php
+                                    endif;
 
-<?php endif; ?>
+                                    if ($busca !== ""):
+                                ?>&busca=<?= urlencode($busca) ?><?php
+                                    endif;
+                                ?>"
+                            >
+
+                                <?= $pagina ?>
+
+                            </a>
+
+                        </li>
+
+                    <?php endfor; ?>
+
+
+                    <!-- Próxima página -->
+
+                    <li
+                        class="page-item
+                        <?= $paginaAtual >= $totalPaginas
+                            ? "disabled"
+                            : "" ?>"
+                    >
+
+                        <a
+                            class="page-link"
+                            href="?pagina=<?= $paginaAtual + 1 ?><?php
+                                if (
+                                    $categoriaSelecionada !== null
+                                ):
+                            ?>&categoria=<?= $categoriaSelecionada ?><?php
+                                endif;
+
+                                if ($busca !== ""):
+                            ?>&busca=<?= urlencode($busca) ?><?php
+                                endif;
+                            ?>"
+                        >
+
+                            →
+
+                        </a>
+
+                    </li>
+
+
+                </ul>
+
+            </nav>
+
+
+            <p class="text-center text-muted mt-2">
+
+                Página <?= $paginaAtual ?>
+
+                de <?= $totalPaginas ?>
+
+                •
+
+                <?= $totalProdutos ?>
+
+                produto(s)
+
+            </p>
+
+
+        <?php endif; ?>
+
 
     </main>
 
+
     <?php
+
     require_once "../componentes/footer.php";
+
     ?>
+
 
     <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
