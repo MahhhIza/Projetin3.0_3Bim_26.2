@@ -209,61 +209,6 @@ try {
 
         /*
         =========================================
-        FUNDO GERAL DA PÁGINA
-        =========================================
-
-        Um único fundo escuro para toda a página.
-        As manchas coloridas são criadas com
-        gradientes suaves.
-        */
-
-        body.pagina-produtos {
-
-            min-height: 100vh;
-
-            margin: 0;
-
-            background-color: #11131c;
-
-            background-image:
-
-                radial-gradient(
-                    ellipse at 10% 20%,
-                    rgba(143, 0, 255, 0.16),
-                    transparent 30%
-                ),
-
-                radial-gradient(
-                    ellipse at 85% 15%,
-                    rgba(0, 201, 167, 0.14),
-                    transparent 28%
-                ),
-
-                radial-gradient(
-                    ellipse at 70% 50%,
-                    rgba(38, 94, 255, 0.10),
-                    transparent 32%
-                ),
-
-                radial-gradient(
-                    ellipse at 15% 75%,
-                    rgba(255, 0, 180, 0.08),
-                    transparent 30%
-                ),
-
-                radial-gradient(
-                    ellipse at 90% 85%,
-                    rgba(255, 193, 7, 0.08),
-                    transparent 25%
-                );
-
-            background-attachment: fixed;
-
-        }
-
-
-        /*
-        =========================================
         CABEÇALHO DA PÁGINA
         =========================================
         */
@@ -861,7 +806,7 @@ try {
 </head>
 
 
-<body class="pagina-produtos">
+<body>
 
 
     <!-- =========================================
@@ -885,7 +830,7 @@ try {
 
         <div class="container">
 
-            <h1>
+            <h1 class="titulo-pagina">
 
                 <?php if ($busca !== ""): ?>
 

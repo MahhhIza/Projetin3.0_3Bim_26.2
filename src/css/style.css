@@ -1,3 +1,21 @@
+:root {
+
+    --artco-fundo: #f8f9fa;
+
+    --artco-roxo: #8f00ff;
+
+    --artco-verde: #00c9a7;
+
+    --artco-azul: #265eff;
+
+    --artco-rosa: #ff00b4;
+
+    --artco-amarelo: #ffc107;
+
+    --artco-titulo: #182033;
+
+}
+
 /* =========================================
    NAVBAR ART&CO
 ========================================= */
@@ -316,461 +334,71 @@
 .footer-link:hover {
     color: #ffffff;
 }
-/* =========================================
-   CATÁLOGO DE PRODUTOS
-========================================= */
 
-.pagina-produtos {
+/*
+=========================================
+FUNDO GLOBAL DO ART&CO
+=========================================
+*/
+
+body {
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
     min-height: 100vh;
-    background-color: #171b27;
-    color: #ffffff;
-}
 
-/* CABEÇALHO */
-
-.cabecalho-produtos {
-    position: relative;
-    min-height: 190px;
-    padding: 38px 0 30px;
-    overflow: hidden;
-    background-color: #171b27;
-}
-
-.cabecalho-produtos::before {
-    content: "";
-    position: absolute;
-    width: 620px;
-    height: 300px;
-    left: -80px;
-    top: -70px;
-    background: rgba(255, 255, 255, 0.96);
-    border-radius: 48% 52% 58% 42%;
-    filter: blur(1px);
-    transform: rotate(-5deg);
-}
-
-.cabecalho-produtos::after {
-    content: "";
-    position: absolute;
-    width: 500px;
-    height: 250px;
-    right: -80px;
-    top: -90px;
-    background:
-        radial-gradient(circle at 20% 50%, rgba(0, 184, 148, 0.55), transparent 34%),
-        radial-gradient(circle at 55% 45%, rgba(155, 0, 255, 0.55), transparent 35%),
-        radial-gradient(circle at 82% 55%, rgba(255, 196, 0, 0.5), transparent 30%);
-    filter: blur(22px);
-}
-
-.cabecalho-mancha {
-    position: absolute;
-    width: 260px;
-    height: 130px;
-    right: 22%;
-    bottom: -60px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
-    filter: blur(28px);
-}
-
-.cabecalho-conteudo {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    gap: 22px;
-}
-
-.icone-cabecalho {
-    width: 58px;
-    height: 58px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #9b00ff, #7b1fa2);
-    color: #ffffff;
-    font-size: 29px;
-    box-shadow: 0 8px 20px rgba(123, 31, 162, 0.25);
-}
-
-.cabecalho-produtos h1 {
     margin: 0;
-    color: #172033;
-    font-size: clamp(2rem, 4vw, 2.6rem);
+
+    background-color: #f8f9fa;
+
+    background-image:
+
+        radial-gradient(
+            ellipse at 10% 20%,
+            rgba(143, 0, 255, 0.16),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            ellipse at 85% 15%,
+            rgba(0, 201, 167, 0.14),
+            transparent 28%
+        ),
+
+        radial-gradient(
+            ellipse at 70% 50%,
+            rgba(38, 94, 255, 0.10),
+            transparent 32%
+        ),
+
+        radial-gradient(
+            ellipse at 15% 75%,
+            rgba(255, 0, 180, 0.08),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            ellipse at 90% 85%,
+            rgba(255, 193, 7, 0.08),
+            transparent 25%
+        );
+
+    background-attachment: fixed;
+
+}
+
+.titulo-pagina {
+    color: var(--artco-titulo);
+    font-size: 2.8rem;
     font-weight: 800;
     letter-spacing: -0.5px;
-}
-
-.cabecalho-produtos p {
-    margin: 4px 0 0;
-    color: #657084;
-    font-size: 1rem;
-}
-
-/* FILTROS */
-
-.filtros-produtos {
-    position: relative;
-    z-index: 3;
-    margin-top: -1px;
-    padding: 25px 0 10px;
-    background-color: #171b27;
-}
-
-.filtro-select,
-.campo-busca-produtos .form-control {
-    min-height: 48px;
-    border: 1px solid #dfe3ea;
-    border-radius: 11px;
-    background-color: #ffffff;
-    color: #293144;
-    box-shadow: 0 3px 12px rgba(24, 31, 46, 0.04);
-}
-
-.filtro-select:focus,
-.campo-busca-produtos .form-control:focus {
-    border-color: #9b00ff;
-    box-shadow: 0 0 0 0.2rem rgba(155, 0, 255, 0.12);
-}
-
-.campo-busca-produtos {
-    position: relative;
-}
-
-.campo-busca-produtos > i {
-    position: absolute;
-    z-index: 2;
-    top: 50%;
-    left: 15px;
-    transform: translateY(-50%);
-    color: #8791a4;
-}
-
-.campo-busca-produtos .form-control {
-    padding-left: 42px;
-}
-
-.btn-buscar-produtos {
-    min-height: 48px;
-    padding: 0 25px;
-    border: none;
-    border-radius: 11px;
-    background: linear-gradient(90deg, #9b00ff, #00b894);
-    color: #ffffff;
-    font-weight: 700;
-    box-shadow: 0 5px 14px rgba(76, 55, 180, 0.18);
-}
-
-.btn-buscar-produtos:hover {
-    color: #ffffff;
-    opacity: 0.92;
-    transform: translateY(-1px);
-}
-
-/* ÁREA DOS PRODUTOS */
-
-.catalogo-produtos {
-    padding-top: 15px;
-    background-color: #171b27;
-}
-
-.card-produto {
-    height: 100%;
-    overflow: hidden;
-    border: 1px solid #e4e6eb;
-    border-radius: 13px;
-    background-color: #ffffff;
-    box-shadow: 0 5px 18px rgba(22, 28, 40, 0.07);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card-produto:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 28px rgba(22, 28, 40, 0.12);
-}
-
-.produto-imagem {
-    position: relative;
-    width: 100%;
-    height: 210px;
-    overflow: hidden;
-    background-color: #ffffff;
-}
-
-.produto-imagem img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    transition: transform 0.25s ease;
-}
-
-.card-produto:hover .produto-imagem img {
-    transform: scale(1.025);
-}
-
-.card-produto .card-body {
-    padding: 15px 17px 17px;
-}
-
-.categoria-produto {
-    display: inline-block;
-    margin-bottom: 7px;
-    color: #8b45e6;
-    font-size: 0.83rem;
-    font-weight: 700;
-}
-
-.card-produto .card-title {
-    min-height: 45px;
-    margin-bottom: 6px;
-    color: #1c2434;
-    font-size: 1rem;
-    font-weight: 700;
-    line-height: 1.35;
-}
-
-.descricao-produto {
-    display: -webkit-box;
-    min-height: 38px;
-    margin-bottom: 8px;
-    overflow: hidden;
-    color: #7a8392;
-    font-size: 0.82rem;
-    line-height: 1.45;
-    -webkit-box-orient: vertical;
-}
-
-.card-produto .preco-produto {
-    margin-top: 2px;
-    color: #8b22bd;
-    font-size: 1.55rem;
-    font-weight: 800;
-    line-height: 1.2;
-}
-
-.estoque-produto {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 26px;
-    font-size: 0.82rem;
-    font-weight: 600;
-}
-
-.estoque-disponivel {
-    color: #008f68;
-}
-
-.estoque-esgotado {
-    color: #dc3545;
-}
-
-.estoque-disponivel i,
-.estoque-esgotado i {
-    font-size: 1rem;
-}
-
-/* SELO ESGOTADO */
-
-.selo-esgotado {
-    position: absolute;
-    z-index: 2;
-    top: 50%;
-    left: 50%;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 25px;
-    border-radius: 7px;
-    background-color: #e51f27;
-    color: #ffffff;
-    font-size: 1.25rem;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-    box-shadow: 0 6px 16px rgba(180, 25, 35, 0.3);
-    transform: translate(-50%, -50%) rotate(-9deg);
-}
-
-.btn-ver-produto {
-    min-height: 41px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-    border: none;
-    border-radius: 11px;
-    background: linear-gradient(90deg, #9b00ff, #00b894);
-    color: #ffffff;
-    font-size: 0.9rem;
-    font-weight: 700;
-    box-shadow: 0 5px 12px rgba(76, 55, 180, 0.15);
-    transition: transform 0.2s ease, opacity 0.2s ease;
-}
-
-.btn-ver-produto i {
-    font-size: 1.05rem;
-}
-
-.btn-ver-produto:hover {
-    color: #ffffff;
-    opacity: 0.92;
-    transform: translateY(-1px);
-}
-
-/* ESTADO SEM PRODUTOS */
-
-.nenhum-produto {
-    padding: 55px 25px;
-    border: 1px solid #e1e5eb;
-    border-radius: 14px;
-    background-color: #ffffff;
-    text-align: center;
-    box-shadow: 0 5px 18px rgba(22, 28, 40, 0.05);
-}
-
-.nenhum-produto > i {
-    color: #8b22bd;
-    font-size: 3rem;
-}
-
-.nenhum-produto h4 {
-    margin-top: 15px;
-    color: #1c2434;
-    font-weight: 700;
-}
-
-.nenhum-produto p {
-    color: #747d8d;
-}
-
-.nenhum-produto .btn-ver-produto {
-    width: auto;
-    padding: 0 20px;
-}
-
-/* PAGINAÇÃO */
-
-.paginacao-produtos {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 42px;
-}
-
-.pagina-numero,
-.pagina-navegacao {
-    width: 38px;
-    height: 38px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #dfe3ea;
-    border-radius: 50%;
-    background-color: #ffffff;
-    color: #3c4556;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(22, 28, 40, 0.04);
-    transition: all 0.2s ease;
-}
-
-.pagina-numero:hover,
-.pagina-navegacao:hover:not(.disabled) {
-    border-color: #9b00ff;
-    color: #7b1fa2;
-    transform: translateY(-1px);
-}
-
-.pagina-numero.ativa {
-    border-color: transparent;
-    background: linear-gradient(135deg, #9b00ff, #00b894);
-    color: #ffffff;
-    box-shadow: 0 5px 13px rgba(93, 45, 180, 0.22);
-}
-
-.pagina-navegacao.disabled {
-    cursor: default;
-    opacity: 0.45;
-}
-
-.texto-paginacao {
-    margin-top: 10px;
-    color: #bfc4d0;
-    font-size: 0.82rem;
-    text-align: center;
-}
-
-/* RESPONSIVIDADE DO CATÁLOGO */
-
-@media (max-width: 991.98px) {
-
-    .cabecalho-produtos {
-        min-height: 175px;
-    }
-
-    .cabecalho-produtos::before {
-        width: 520px;
-    }
-
-    .produto-imagem {
-        height: 230px;
-    }
-
-}
-
-@media (max-width: 575.98px) {
-
-    .cabecalho-produtos {
-        min-height: 165px;
-        padding: 30px 0 25px;
-    }
-
-    .cabecalho-conteudo {
-        gap: 13px;
-    }
-
-    .icone-cabecalho {
-        width: 48px;
-        height: 48px;
-        font-size: 23px;
-    }
-
-    .cabecalho-produtos h1 {
-        font-size: 1.75rem;
-    }
-
-    .cabecalho-produtos p {
-        font-size: 0.88rem;
-    }
-
-    .filtros-produtos {
-        padding-top: 20px;
-    }
-
-    .produto-imagem {
-        height: 235px;
-    }
-
-    .selo-esgotado {
-        padding: 9px 19px;
-        font-size: 1.05rem;
-    }
-
-    .paginacao-produtos {
-        gap: 5px;
-    }
-
-    .pagina-numero,
-    .pagina-navegacao {
-        width: 35px;
-        height: 35px;
-    }
-
 }

@@ -41,10 +41,6 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
            IDENTIDADE VISUAL ART&CO
         ============================== */
 
-        body {
-            background-color: #f8f9fa;
-        }
-
         .navbar-artco {
             background-color: #202124;
         }
