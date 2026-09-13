@@ -171,17 +171,19 @@ require_once "../../componentes/navbar.php";
 
 <main class="container py-5">
 
-    <div class="row justify-content-center">
+    <div class="formulario-pagina">
 
-        <div class="col-12 col-lg-8">
+        <div class="formulario-cabecalho">
 
-            <div class="card shadow-sm border-0">
+    <h1 class="titulo-pagina">
+        Editar produto
+    </h1>
 
-                <div class="card-body p-4">
+    <p class="subtitulo-pagina">
+        Atualize os dados do produto.
+    </p>
 
-                    <h1 class="fw-bold mb-4">
-                        ✏️ Editar produto
-                    </h1>
+</div>
 
                     <?php if ($mensagem !== ""): ?>
 
@@ -197,7 +199,7 @@ require_once "../../componentes/navbar.php";
 
                             <label
                                 for="nome"
-                                class="form-label"
+                                class="form-label formulario-label"
                             >
                                 Nome do produto
                             </label>
@@ -217,7 +219,7 @@ require_once "../../componentes/navbar.php";
 
                             <label
                                 for="descricao"
-                                class="form-label"
+                                class="form-label formulario-label"
                             >
                                 Descrição
                             </label>
@@ -238,7 +240,7 @@ require_once "../../componentes/navbar.php";
 
                                 <label
                                     for="preco"
-                                    class="form-label"
+                                    class="form-label formulario-label"
                                 >
                                     Preço
                                 </label>
@@ -260,7 +262,7 @@ require_once "../../componentes/navbar.php";
 
                                 <label
                                     for="estoque"
-                                    class="form-label"
+                                    class="form-label formulario-label"
                                 >
                                     Estoque
                                 </label>
@@ -283,7 +285,7 @@ require_once "../../componentes/navbar.php";
 
                             <label
                                 for="categoria_id"
-                                class="form-label"
+                                class="form-label formulario-label"
                             >
                                 Categoria
                             </label>

@@ -89,17 +89,25 @@ try {
 
 <body>
 
+<?php
+
+$base = "../../";
+
+require_once "../../componentes/navbar.php";
+
+?>
+
 <div class="container py-5">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
 
-            <h1 class="fw-bold">
+            <h1 class="titulo-pagina">
                 Categorias
             </h1>
 
-            <p class="text-muted mb-0">
+            <p class="subtitulo-pagina">
                 Gerencie as categorias dos produtos.
             </p>
 
@@ -246,6 +254,8 @@ try {
     </div>
 
 </div>
+
+<?php require_once "../../componentes/footer.php"; ?>
 
 </body>
 

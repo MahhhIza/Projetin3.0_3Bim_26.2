@@ -149,17 +149,17 @@ require_once "../../componentes/navbar.php";
 
 <main class="container py-5">
 
-    <div class="row justify-content-center">
+    <div class="formulario-pagina">
 
-        <div class="col-12 col-lg-8">
+        <div class="formulario-cabecalho">
 
-            <div class="card shadow-sm border-0">
+            <h1 class="titulo-pagina">
+                Cadastrar produto
+            </h1>
 
-                <div class="card-body p-4">
-
-                    <h1 class="fw-bold mb-4">
-                        Cadastrar produto
-                    </h1>
+            <p class="subtitulo-pagina">
+                Cadastre um novo produto no catálogo.
+            </p>
 
                     <?php if ($mensagem !== ""): ?>
 

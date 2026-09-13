@@ -133,21 +133,18 @@ require_once "../../componentes/navbar.php";
 
 <main class="container py-5">
 
-    <div class="row justify-content-center">
+    <div class="formulario-pagina">
 
-        <div class="col-12 col-md-8 col-lg-6">
+        <div class="formulario-cabecalho">
 
-            <div class="card shadow-sm border-0">
+            <h1 class="titulo-pagina">
+                Novo usuário
+            </h1>
 
-                <div class="card-body p-4">
+            <p class="subtitulo-pagina">
+                Cadastre um novo usuário no sistema.
+            </p>
 
-                    <h1 class="fw-bold mb-2">
-                        Novo usuário
-                    </h1>
-
-                    <p class="text-muted mb-4">
-                        Cadastre um novo usuário no sistema.
-                    </p>
 
                     <?php if ($mensagemErro !== ""): ?>
 
@@ -168,7 +165,7 @@ require_once "../../componentes/navbar.php";
 
                             <label
                                 for="nome"
-                                class="form-label fw-semibold"
+                                class="form-label formulario-label"
                             >
                                 Nome
                             </label>
@@ -188,7 +185,7 @@ require_once "../../componentes/navbar.php";
 
                             <label
                                 for="email"
-                                class="form-label fw-semibold"
+                                class="form-label formulario-label"
                             >
                                 E-mail
                             </label>
@@ -208,7 +205,7 @@ require_once "../../componentes/navbar.php";
 
                             <label
                                 for="senha"
-                                class="form-label fw-semibold"
+                                class="form-label formulario-label"
                             >
                                 Senha
                             </label>
@@ -232,7 +229,7 @@ require_once "../../componentes/navbar.php";
 
                             <label
                                 for="tipo"
-                                class="form-label fw-semibold"
+                                class="form-label formulario-label"
                             >
                                 Tipo de usuário
                             </label>

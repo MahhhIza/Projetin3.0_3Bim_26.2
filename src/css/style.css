@@ -1,19 +1,12 @@
 :root {
-
     --artco-fundo: #f8f9fa;
-
     --artco-roxo: #8f00ff;
-
     --artco-verde: #00c9a7;
-
     --artco-azul: #265eff;
-
     --artco-rosa: #ff00b4;
-
     --artco-amarelo: #ffc107;
-
-    --artco-titulo: #182033;
-
+    --artco-titulo: #ca4f08;
+    --artco-subtitulo: #6f7785;
 }
 
 /* =========================================
@@ -353,6 +346,10 @@ body {
     h6 {
         font-family: Arial, Helvetica, sans-serif;
     }
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
 
     min-height: 100vh;
 
@@ -401,4 +398,87 @@ body {
     font-size: 2.8rem;
     font-weight: 800;
     letter-spacing: -0.5px;
+    margin-bottom: 8px;
+    text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.20);
+}
+
+.subtitulo-pagina {
+    color: var(--artco-subtitulo);
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+        .pagination {
+            gap: 8px;
+        }
+
+        .pagination .page-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 42px;
+            height: 42px;
+            border:
+                1px solid #e0e3e8;
+            border-radius: 50%;
+            background-color: #ffffff;
+            color: #333b4d;
+            font-weight: 600;
+            box-shadow:
+                0 3px 8px
+                rgba(0, 0, 0, 0.07);
+            transition:
+                all 0.2s ease;
+        }
+
+        .pagination .page-link:hover {
+            background:
+                linear-gradient(
+                    90deg,
+                    #8f00ff,
+                    #00c9a7
+                );
+            border-color: transparent;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .pagination
+        .page-item.active
+        .page-link {
+            background:
+                linear-gradient(
+                    90deg,
+                    #8f00ff,
+                    #00c9a7
+                );
+            border-color: transparent;
+            color: #ffffff;
+        }
+
+        main {
+    flex: 1;
+}
+
+.formulario-pagina {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.formulario-cabecalho {
+    margin-bottom: 28px;
+}
+
+.formulario-card {
+    border: 1px solid #d5d5d5;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.10);
+}
+
+.formulario-card .card-body {
+    padding: 28px;
+}
+
+.formulario-label {
+    font-weight: 600;
 }

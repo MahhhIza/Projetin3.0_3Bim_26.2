@@ -121,28 +121,20 @@ $base = "";
 require_once "componentes/navbar.php";
 ?>
 
-
-    <!-- ==========================================
-         CONTEÚDO
-    =========================================== -->
-
     <main class="container py-5">
 
 
         <div class="mb-4">
 
-            <h1 class="fw-bold">
-                Bem-vindo à Art&Co 🎨
+            <h1 class="titulo-pagina">
+                Bem-vindo à Art&Co
             </h1>
 
-            <p class="text-muted">
+            <p class="subtitulo-pagina">
                 Materiais artísticos para transformar suas ideias em arte.
             </p>
 
         </div>
-
-
-        <!-- CARDS -->
 
         <!-- DASHBOARD -->
 <div class="row g-4">
@@ -152,7 +144,7 @@ require_once "componentes/navbar.php";
         <div class="card shadow-sm h-100">
             <div class="card-body">
                 <h5 class="card-title">
-                    💰 Faturamento
+                    Faturamento
                 </h5>
 
                 <p
@@ -174,7 +166,7 @@ require_once "componentes/navbar.php";
         <div class="card shadow-sm h-100">
             <div class="card-body">
                 <h5 class="card-title">
-                    📦 Vendas
+                    Vendas
                 </h5>
 
                 <p
@@ -196,7 +188,7 @@ require_once "componentes/navbar.php";
         <div class="card shadow-sm h-100">
             <div class="card-body">
                 <h5 class="card-title">
-                    🎨 Produtos
+                    Produtos
                 </h5>
 
                 <p
@@ -218,7 +210,7 @@ require_once "componentes/navbar.php";
         <div class="card shadow-sm h-100">
             <div class="card-body">
                 <h5 class="card-title">
-                    🏷️ Estoque
+                    Estoque
                 </h5>
 
                 <p
@@ -249,7 +241,7 @@ require_once "componentes/navbar.php";
             <div class="card-body">
 
                 <h5 class="card-title fw-bold">
-                    🏆 Top 3 produtos mais vendidos
+                    Top 3 produtos mais vendidos
                 </h5>
 
                 <p class="text-muted">
@@ -277,7 +269,7 @@ require_once "componentes/navbar.php";
             <div class="card-body">
 
                 <h5 class="card-title fw-bold">
-                    ⚠️ Estoque crítico
+                    Estoque crítico
                 </h5>
 
                 <p class="text-muted">
@@ -311,7 +303,7 @@ require_once "componentes/navbar.php";
         <div class="card-body">
 
             <h3 class="fw-bold mb-3">
-                ⚙️ Gerenciamento
+                Gerenciamento
             </h3>
 
             <p class="text-muted">
@@ -338,10 +330,10 @@ require_once "componentes/navbar.php";
 
                 <!-- MINHAS COMPRAS -->
                 <a
-                    href="finalizar.php"
+                    href="compras.php"
                     class="btn btn-success"
                 >
-                    🛍️ Minhas compras
+                    Minhas compras
                 </a>
 
             </div>
@@ -363,7 +355,7 @@ require_once "componentes/navbar.php";
             </p>
 
             <a
-                href="finalizar.php"
+                href="compras.php"
                 class="btn btn-success"
             >
                 Ver minhas compras

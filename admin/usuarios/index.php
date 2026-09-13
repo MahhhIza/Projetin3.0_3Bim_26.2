@@ -212,11 +212,11 @@ require_once "../../componentes/navbar.php";
 
         <div>
 
-            <h1 class="fw-bold">
+            <h1 class="titulo-pagina">
                 Usuários
             </h1>
 
-            <p class="text-muted mb-0">
+            <p class="subtitulo-pagina">
                 Gerencie os usuários do sistema.
             </p>
 

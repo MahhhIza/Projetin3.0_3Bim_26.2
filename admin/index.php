@@ -36,11 +36,11 @@ require_once "../componentes/navbar.php";
 
 <main class="container py-5">
 
-    <h1 class="fw-bold mb-2">
-        👑 Administração Art&Co
+    <h1 class="titulo-pagina">
+        Administração Art&Co
     </h1>
 
-    <p class="text-muted mb-5">
+    <p class="subtitulo-pagina">
         Gerenciamento do sistema.
     </p>
 
@@ -49,7 +49,9 @@ require_once "../componentes/navbar.php";
         <div class="col-12 col-md-6 col-lg-3">
             <div class="card shadow-sm h-100">
                 <div class="card-body">
-                    <h5>👥 Usuários</h5>
+                    <h5 class="card-title fw-bold">
+                        Usuários
+                    </h5>
                     <p class="text-muted">
                         Gerencie os usuários cadastrados.
                     </p>

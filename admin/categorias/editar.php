@@ -119,15 +119,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <body>
 
-<div class="container py-5">
+<?php
 
-    <div class="card shadow-sm border-0">
+$base = "../../";
 
-        <div class="card-body">
+require_once "../../componentes/navbar.php";
 
-            <h1 class="fw-bold mb-4">
-                Editar Categoria
+?>
+
+<main class="container py-5">
+
+    <div class="formulario-pagina">
+
+        <div class="formulario-cabecalho">
+
+            <h1 class="titulo-pagina">
+                Editar categoria
             </h1>
+
+            <p class="subtitulo-pagina">
+                Atualize os dados da categoria.
+            </p>
 
 
             <?php if ($erro !== ""): ?>
@@ -145,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                     <label
                         for="nome"
-                        class="form-label"
+                        class="form-label formulario-label"
                     >
                         Nome
                     </label>
@@ -169,7 +181,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                     <label
                         for="descricao"
-                        class="form-label"
+                        class="form-label formulario-label"
                     >
                         Descrição
                     </label>
@@ -206,7 +218,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     </div>
 
-</div>
+</main>
+
+<?php require_once "../../componentes/footer.php"; ?>
 
 </body>
 
