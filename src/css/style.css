@@ -536,3 +536,143 @@ body {
     border-color: #999;
     color: #333;
 }
+
+.card-dashboard {
+
+    border: 1px solid #e5e5e5;
+
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+
+    transition: all 0.25s ease;
+
+    height: 100%;
+}
+
+.card-dashboard:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.10);
+}
+
+.card-dashboard .card-body {
+
+    padding: 22px;
+}
+
+.card-dashboard h6 {
+
+    color: #555;
+
+    font-size: 0.95rem;
+
+    font-weight: 600;
+
+    margin-bottom: 12px;
+}
+
+.card-dashboard-valor {
+
+    font-size: 2rem;
+
+    font-weight: 800;
+
+    margin-bottom: 10px;
+}
+
+.card-dashboard-texto {
+
+    color: #6f7785;
+
+    font-size: 0.9rem;
+}
+
+
+/* Cores */
+
+.valor-faturamento {
+
+    color: #07945a;
+}
+
+.valor-vendas {
+
+    color: #2563eb;
+}
+
+.valor-produtos {
+
+    color: #182033;
+}
+
+.valor-estoque {
+
+    color: #d97706;
+}
+
+
+/* Cards grandes */
+
+.card-painel {
+
+    border: 1px solid #e5e5e5;
+
+    border-radius: 14px;
+
+    background-color: #ffffff;
+
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+
+    transition: all 0.25s ease;
+}
+
+.card-painel:hover {
+
+    box-shadow: 0 8px 20px rgba(0,0,0,0.10);
+}
+
+.card-painel .card-body {
+
+    padding: 24px;
+}
+
+
+/* Ranking */
+
+.ranking-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 8px 0;
+
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.ranking-item:last-child {
+
+    border-bottom: none;
+}
+
+
+/* Área gerenciamento */
+
+.gerenciamento-box {
+
+    border: 1px solid #e5e5e5;
+
+    border-radius: 14px;
+
+    background-color: #ffffff;
+
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+
+    padding: 30px;
+}

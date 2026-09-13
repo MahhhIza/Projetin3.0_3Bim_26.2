@@ -68,7 +68,7 @@
                     onmouseover="this.style.color='#ffffff'"
                     onmouseout="this.style.color='#bfc0c2'"
                 >
-                    Mais informações
+                    Contate por e-mail
                 </a>
 
                 <p class="mb-0 mt-3">

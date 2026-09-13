@@ -209,15 +209,15 @@ require_once "componentes/navbar.php";
      CABEÇALHO
 ========================================= -->
 
-<section class="cabecalho-compras">
+<section class="container py-5">
 
     <div class="container">
 
-        <h1>
-            🛍️ Minhas compras
+        <h1 class="titulo-pagina">
+            Minhas compras
         </h1>
 
-        <p class="text-muted">
+        <p class="subtitulo-pagina">
             Confira o histórico das compras realizadas na Art&Co.
         </p>
 

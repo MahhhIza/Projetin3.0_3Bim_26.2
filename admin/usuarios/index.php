@@ -206,8 +206,6 @@ require_once "../../componentes/navbar.php";
 
 <main class="container py-5">
 
-    <!-- CABEÇALHO -->
-
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
