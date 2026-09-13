@@ -207,7 +207,7 @@ require_once "../../componentes/navbar.php";
 
                 <a
                     href="index.php"
-                    class="btn btn-cancelar"
+                    class="btn btn-secundary"
                 >
                     Cancelar
                 </a>

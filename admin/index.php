@@ -95,6 +95,12 @@ require_once "../componentes/navbar.php";
 
     </div>
 
+    <div class="mt-4">
+    <a href="../painel.php" class="btn btn-voltar">
+        Voltar ao painel
+    </a>
+</div>
+
 </main>
 
 <?php

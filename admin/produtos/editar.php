@@ -339,14 +339,14 @@ require_once "../../componentes/navbar.php";
 
                             <a
                                 href="index.php"
-                                class="btn btn-outline-secondary"
+                                class="btn btn-secundary"
                             >
                                 ← Voltar
                             </a>
 
                             <button
                                 type="submit"
-                                class="btn btn-primary"
+                                class="btn btn-artco"
                             >
                                 Salvar alterações
                             </button>

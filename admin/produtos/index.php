@@ -550,6 +550,12 @@ require_once "../../componentes/navbar.php";
 
     <?php endif; ?>
 
+    <div class="text-center mt-4">
+    <a href="../../painel.php" class="btn btn-voltar">
+        Voltar ao painel
+    </a>
+</div>
+
 
 </main>
 

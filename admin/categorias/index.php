@@ -246,7 +246,7 @@ require_once "../../componentes/navbar.php";
 
         <a
             href="../index.php"
-            class="btn btn-secondary"
+            class="btn btn-voltar"
         >
             ← Voltar para administração
         </a>
