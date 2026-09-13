@@ -482,3 +482,62 @@ body {
 .formulario-label {
     font-weight: 600;
 }
+
+.btn-artco {
+    background-color: var(--artco-titulo);
+    color: #fff;
+    border: 1px solid var(--artco-titulo);
+    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-artco:hover {
+    background-color: #6f1aa3;
+    color: #fff;
+    border-color: #6f1aa3;
+    transform: translateY(-1px);
+}
+
+.btn-artco:focus {
+    box-shadow: 0 0 0 0.2rem rgba(139, 32, 196, 0.2);
+}
+
+.btn-confirmar {
+    background-color: #8f00ff;
+    border: 1px solid #8f00ff;
+    color: #fff;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 7px;
+    transition: all 0.2s ease;
+}
+
+.btn-confirmar:hover {
+    background-color: #7600d6;
+    border-color: #7600d6;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.btn-confirmar:focus {
+    box-shadow: 0 0 0 0.15rem rgba(143, 0, 255, 0.18);
+}
+
+.btn-cancelar {
+    background-color: #6c757d;
+    border: 1px solid #6c757d;
+    color: #fff;
+    font-weight: 600;
+    padding: 9px 18px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-cancelar:hover {
+    background-color: #565e64;
+    border-color: #565e64;
+    color: #fff;
+    transform: translateY(-1px);
+}

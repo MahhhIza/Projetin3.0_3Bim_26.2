@@ -58,7 +58,7 @@ require_once "../componentes/navbar.php";
 
                     <a
                         href="usuarios/index.php"
-                        class="btn btn-primary"
+                        class="btn btn-artco"
                     >
                         Gerenciar
                     </a>
@@ -82,7 +82,7 @@ require_once "../componentes/navbar.php";
 
             <a
                 href="categorias/index.php"
-                class="btn btn-primary"
+                class="btn btn-artco"
             >
                 Gerenciar categorias
             </a>

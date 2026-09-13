@@ -200,14 +200,14 @@ require_once "../../componentes/navbar.php";
 
                 <button
                     type="submit"
-                    class="btn btn-primary"
+                    class="btn btn-artco"
                 >
                     Salvar alterações
                 </button>
 
                 <a
                     href="index.php"
-                    class="btn btn-secondary"
+                    class="btn btn-cancelar"
                 >
                     Cancelar
                 </a>
