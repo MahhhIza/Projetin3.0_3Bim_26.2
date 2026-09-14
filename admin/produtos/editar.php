@@ -15,13 +15,9 @@ if (!$id || !is_numeric($id)) {
 }
 
 $id = (int) $id;
-
 $mensagem = "";
 $produto = null;
 
-/*
- * Busca o produto
- */
 $sql = "
     SELECT
         id,
@@ -47,9 +43,6 @@ if (!$produto) {
     exit;
 }
 
-/*
- * Busca as categorias
- */
 $sqlCategorias = "
     SELECT id, nome
     FROM categorias
@@ -58,14 +51,9 @@ $sqlCategorias = "
 
 $stmtCategorias = $pdo->prepare($sqlCategorias);
 $stmtCategorias->execute();
-
 $categorias = $stmtCategorias->fetchAll();
 
-/*
- * Atualiza o produto
- */
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
     $nome = trim($_POST["nome"] ?? "");
     $descricao = trim($_POST["descricao"] ?? "");
     $preco = $_POST["preco"] ?? "";
@@ -80,13 +68,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $estoque === "" ||
         $categoriaId === ""
     ) {
-
         $mensagem = "Preencha todos os campos.";
-
     } else {
-
         try {
-
             $sql = "
                 UPDATE produtos
                 SET
@@ -100,7 +84,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ";
 
             $stmt = $pdo->prepare($sql);
-
             $stmt->execute([
                 ":nome" => $nome,
                 ":descricao" => $descricao,
@@ -113,16 +96,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             header("Location: index.php");
             exit;
-
         } catch (PDOException $e) {
-
             $mensagem = "Erro ao atualizar o produto.";
         }
     }
 
-    /*
-     * Atualiza os valores exibidos no formulário
-     */
     $produto["nome"] = $nome;
     $produto["descricao"] = $descricao;
     $produto["preco"] = $preco;
@@ -135,18 +113,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
-
     <title>Editar Produto - Art&Co</title>
 
+    <!-- DW - Uso do Framework Bootstrap no Desenvolvimento do Layout -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -156,7 +131,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         rel="stylesheet"
         href="../../src/css/style.css"
     >
-
 </head>
 
 <body>
@@ -164,17 +138,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <?php
 
 $base = "../../";
-
 require_once "../../componentes/navbar.php";
 
 ?>
 
 <main class="container py-5">
-
     <div class="formulario-pagina">
-
         <div class="formulario-cabecalho">
-
             <h1 class="titulo-pagina">
                 Editar produto
             </h1>
@@ -182,26 +152,24 @@ require_once "../../componentes/navbar.php";
             <p class="subtitulo-pagina">
                 Atualize os dados do produto.
             </p>
-
         </div>
 
         <div class="formulario-card">
-
             <div class="card-body">
 
                 <?php if ($mensagem !== ""): ?>
-
                     <div class="alert alert-warning">
                         <?= htmlspecialchars($mensagem) ?>
                     </div>
-
                 <?php endif; ?>
 
+                <!-- DW - CRUD de Produtos -->
                 <form method="POST">
-
                     <div class="mb-3">
-
-                        <label for="nome" class="formulario-label">
+                        <label
+                            for="nome"
+                            class="formulario-label"
+                        >
                             Nome do produto
                         </label>
 
@@ -213,12 +181,13 @@ require_once "../../componentes/navbar.php";
                             value="<?= htmlspecialchars($produto["nome"]) ?>"
                             required
                         >
-
                     </div>
 
                     <div class="mb-3">
-
-                        <label for="descricao" class="formulario-label">
+                        <label
+                            for="descricao"
+                            class="formulario-label"
+                        >
                             Descrição
                         </label>
 
@@ -229,14 +198,14 @@ require_once "../../componentes/navbar.php";
                             rows="4"
                             required
                         ><?= htmlspecialchars($produto["descricao"]) ?></textarea>
-
                     </div>
 
                     <div class="row">
-
                         <div class="col-md-6 mb-3">
-
-                            <label for="preco" class="formulario-label">
+                            <label
+                                for="preco"
+                                class="formulario-label"
+                            >
                                 Preço
                             </label>
 
@@ -250,12 +219,13 @@ require_once "../../componentes/navbar.php";
                                 value="<?= htmlspecialchars($produto["preco"]) ?>"
                                 required
                             >
-
                         </div>
 
                         <div class="col-md-6 mb-3">
-
-                            <label for="estoque" class="formulario-label">
+                            <label
+                                for="estoque"
+                                class="formulario-label"
+                            >
                                 Estoque
                             </label>
 
@@ -268,14 +238,14 @@ require_once "../../componentes/navbar.php";
                                 value="<?= htmlspecialchars($produto["estoque"]) ?>"
                                 required
                             >
-
                         </div>
-
                     </div>
 
                     <div class="mb-3">
-
-                        <label for="categoria_id" class="formulario-label">
+                        <label
+                            for="categoria_id"
+                            class="formulario-label"
+                        >
                             Categoria
                         </label>
 
@@ -285,28 +255,22 @@ require_once "../../componentes/navbar.php";
                             class="form-select"
                             required
                         >
-
                             <option value="">
                                 Selecione uma categoria
                             </option>
 
                             <?php foreach ($categorias as $categoria): ?>
-
                                 <option
                                     value="<?= $categoria["id"] ?>"
                                     <?= $produto["categoria_id"] == $categoria["id"] ? "selected" : "" ?>
                                 >
                                     <?= htmlspecialchars($categoria["nome"]) ?>
                                 </option>
-
                             <?php endforeach; ?>
-
                         </select>
-
                     </div>
 
                     <div class="form-check mb-4">
-
                         <input
                             type="checkbox"
                             id="ativo"
@@ -315,14 +279,15 @@ require_once "../../componentes/navbar.php";
                             <?= $produto["ativo"] ? "checked" : "" ?>
                         >
 
-                        <label for="ativo" class="form-check-label">
+                        <label
+                            for="ativo"
+                            class="form-check-label"
+                        >
                             Produto ativo
                         </label>
-
                     </div>
 
                     <div class="d-flex justify-content-between">
-
                         <a
                             href="index.php"
                             class="btn btn-voltar"
@@ -336,17 +301,12 @@ require_once "../../componentes/navbar.php";
                         >
                             Salvar alterações
                         </button>
-
                     </div>
-
                 </form>
 
             </div>
-
         </div>
-
     </div>
-
 </main>
 
 <?php

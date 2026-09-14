@@ -8,39 +8,26 @@ require_once "../../protecao/acesso.php";
 exigirPerfil(["admin"]);
 
 $mensagemErro = "";
-
 $nome = "";
 $email = "";
 $tipo = "cliente";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
     $nome = trim($_POST["nome"] ?? "");
     $email = trim($_POST["email"] ?? "");
     $senha = $_POST["senha"] ?? "";
     $tipo = $_POST["tipo"] ?? "cliente";
 
     if ($nome === "") {
-
         $mensagemErro = "Informe o nome do usuário.";
-
     } elseif ($email === "" || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-
         $mensagemErro = "Informe um e-mail válido.";
-
     } elseif (strlen($senha) < 6) {
-
-        $mensagemErro =
-            "A senha deve possuir pelo menos 6 caracteres.";
-
+        $mensagemErro = "A senha deve possuir pelo menos 6 caracteres.";
     } elseif (!in_array($tipo, ["admin", "vendedor", "cliente"], true)) {
-
         $mensagemErro = "Tipo de usuário inválido.";
-
     } else {
-
         try {
-
             $stmt = $pdo->prepare(
                 "SELECT id
                  FROM usuarios
@@ -53,12 +40,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             ]);
 
             if ($stmt->fetch()) {
-
-                $mensagemErro =
-                    "Este e-mail já está cadastrado.";
-
+                $mensagemErro = "Este e-mail já está cadastrado.";
             } else {
-
                 $senhaHash = password_hash(
                     $senha,
                     PASSWORD_DEFAULT
@@ -78,17 +61,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     ":tipo" => $tipo
                 ]);
 
-                header(
-                    "Location: index.php?sucesso=usuario_criado"
-                );
-
+                header("Location: index.php?sucesso=usuario_criado");
                 exit;
             }
-
         } catch (PDOException $e) {
-
-            $mensagemErro =
-                "Não foi possível cadastrar o usuário.";
+            $mensagemErro = "Não foi possível cadastrar o usuário.";
         }
     }
 }
@@ -99,7 +76,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -109,6 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <title>Novo Usuário - Art&Co</title>
 
+    <!-- DW - Uso do Framework Bootstrap no Desenvolvimento do Layout -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -118,23 +95,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         rel="stylesheet"
         href="../../src/css/style.css"
     >
-
 </head>
 
 <body>
 
 <?php
-
 $base = "../../";
-
 require_once "../../componentes/navbar.php";
-
 ?>
 
 <main class="container py-5">
-
     <div class="formulario-pagina">
-
         <div class="formulario-cabecalho">
             <h1 class="titulo-pagina">
                 Novo usuário
@@ -146,24 +117,21 @@ require_once "../../componentes/navbar.php";
         </div>
 
         <div class="formulario-card">
-
             <div class="card-body">
 
                 <?php if ($mensagemErro !== ""): ?>
-
                     <div class="alert alert-danger">
                         <?= htmlspecialchars($mensagemErro) ?>
                     </div>
-
                 <?php endif; ?>
 
+                <!-- DW - CRUD de Usuários -->
                 <form
                     method="POST"
                     action="cadastrar.php"
                 >
 
                     <div class="mb-3">
-
                         <label
                             for="nome"
                             class="formulario-label"
@@ -179,11 +147,9 @@ require_once "../../componentes/navbar.php";
                             value="<?= htmlspecialchars($nome) ?>"
                             required
                         >
-
                     </div>
 
                     <div class="mb-3">
-
                         <label
                             for="email"
                             class="formulario-label"
@@ -199,11 +165,9 @@ require_once "../../componentes/navbar.php";
                             value="<?= htmlspecialchars($email) ?>"
                             required
                         >
-
                     </div>
 
                     <div class="mb-3">
-
                         <label
                             for="senha"
                             class="formulario-label"
@@ -223,11 +187,9 @@ require_once "../../componentes/navbar.php";
                         <div class="form-text">
                             A senha deve possuir pelo menos 6 caracteres.
                         </div>
-
                     </div>
 
                     <div class="mb-4">
-
                         <label
                             for="tipo"
                             class="formulario-label"
@@ -241,7 +203,6 @@ require_once "../../componentes/navbar.php";
                             name="tipo"
                             required
                         >
-
                             <option
                                 value="cliente"
                                 <?= $tipo === "cliente" ? "selected" : "" ?>
@@ -262,13 +223,10 @@ require_once "../../componentes/navbar.php";
                             >
                                 Administrador
                             </option>
-
                         </select>
-
                     </div>
 
                     <div class="d-flex justify-content-between">
-
                         <a
                             href="index.php"
                             class="btn btn-voltar"
@@ -282,25 +240,17 @@ require_once "../../componentes/navbar.php";
                         >
                             Cadastrar usuário
                         </button>
-
                     </div>
 
                 </form>
-
             </div>
-
         </div>
-
     </div>
-
 </main>
 
 <?php
-
 require_once "../../componentes/footer.php";
-
 ?>
 
 </body>
-
 </html>

@@ -1,38 +1,24 @@
 <?php
-
 session_start();
 
 require_once "config.php";
 
-/*
- * Apenas usuários logados podem acessar.
- */
+// BD - SELECT / COUNT
 if (!isset($_SESSION["usuario_id"])) {
     header("Location: login.php");
     exit;
 }
 
 $usuarioId = $_SESSION["usuario_id"];
-
-/*
- * Quantidade de compras por página.
- */
 $comprasPorPagina = 6;
 
-/*
- * Página atual.
- */
 $paginaAtual = filter_input(
     INPUT_GET,
     "pagina",
     FILTER_VALIDATE_INT
 );
 
-if (
-    $paginaAtual === false ||
-    $paginaAtual === null ||
-    $paginaAtual < 1
-) {
+if ($paginaAtual === false || $paginaAtual === null || $paginaAtual < 1) {
     $paginaAtual = 1;
 }
 
@@ -41,12 +27,7 @@ $totalCompras = 0;
 $totalPaginas = 1;
 
 try {
-
-    /*
-     * =========================================
-     * TOTAL DE COMPRAS DO USUÁRIO
-     * =========================================
-     */
+    // BD - SELECT / COUNT
     $sqlTotal = "
         SELECT COUNT(*)
         FROM vendas
@@ -55,94 +36,61 @@ try {
 
     $stmtTotal = $pdo->prepare($sqlTotal);
     $stmtTotal->execute([$usuarioId]);
-
     $totalCompras = (int) $stmtTotal->fetchColumn();
 
-    /*
-     * Calcula o total de páginas.
-     */
     $totalPaginas = max(
         1,
-        (int) ceil(
-            $totalCompras / $comprasPorPagina
-        )
+        (int) ceil($totalCompras / $comprasPorPagina)
     );
 
-    /*
-     * Impede acesso a uma página inexistente.
-     */
     if ($paginaAtual > $totalPaginas) {
         $paginaAtual = $totalPaginas;
     }
 
-    /*
-     * Calcula o deslocamento.
-     */
-    $offset = (
-        $paginaAtual - 1
-    ) * $comprasPorPagina;
+    $offset = ($paginaAtual - 1) * $comprasPorPagina;
 
-    /*
-     * =========================================
-     * BUSCA AS COMPRAS DA PÁGINA
-     * =========================================
-     */
+    // BD - SELECT / JOIN / GROUP BY
     $sql = "
         SELECT
             v.id,
             v.data_venda,
             v.total,
             COUNT(iv.id) AS quantidade_itens
-
         FROM vendas v
-
         INNER JOIN itens_venda iv
             ON iv.venda_id = v.id
-
         WHERE v.usuario_id = ?
-
         GROUP BY
             v.id,
             v.data_venda,
             v.total
-
         ORDER BY v.data_venda DESC
-
         LIMIT $comprasPorPagina
         OFFSET $offset
     ";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$usuarioId]);
-
     $compras = $stmt->fetchAll();
-
 } catch (PDOException $e) {
-
     $compras = [];
     $totalCompras = 0;
     $totalPaginas = 1;
     $paginaAtual = 1;
-
 }
-
 ?>
 
 <!DOCTYPE html>
-
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
-
     <title>Minhas compras - Art&Co</title>
 
+    <!-- DW - Bootstrap -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -154,7 +102,6 @@ try {
     >
 
     <style>
-
         body {
             background-color: #f8f9fa;
         }
@@ -170,8 +117,7 @@ try {
         .card-compra {
             border: none;
             border-radius: 12px;
-            box-shadow:
-                0 3px 10px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
             transition: transform 0.2s;
         }
 
@@ -189,30 +135,18 @@ try {
             font-weight: bold;
             color: #7b1fa2;
         }
-
     </style>
-
 </head>
 
 <body>
 
 <?php
-
 $base = "";
-
 require_once "componentes/navbar.php";
-
 ?>
 
-
-<!-- =========================================
-     CABEÇALHO
-========================================= -->
-
 <section class="container py-5">
-
     <div class="container">
-
         <h1 class="titulo-pagina">
             Minhas compras
         </h1>
@@ -220,194 +154,130 @@ require_once "componentes/navbar.php";
         <p class="subtitulo-pagina">
             Confira o histórico das compras realizadas na Art&Co.
         </p>
-
     </div>
-
 </section>
 
-
-<!-- =========================================
-     COMPRAS
-========================================= -->
-
 <main class="container pb-5">
-
     <?php if (count($compras) > 0): ?>
 
+        <!-- DW - Bootstrap / Card -->
         <div class="row g-4">
-
             <?php foreach ($compras as $compra): ?>
-
                 <div class="col-12 col-md-6">
-
                     <div class="card card-compra h-100">
-
                         <div class="card-body p-4">
-
                             <div class="d-flex justify-content-between align-items-start">
-
                                 <div>
-
                                     <div class="numero-compra">
-
                                         Compra #<?= $compra["id"] ?>
-
                                     </div>
 
                                     <small class="text-muted">
-
                                         <?= date(
                                             "d/m/Y H:i",
                                             strtotime($compra["data_venda"])
                                         ) ?>
-
                                     </small>
-
                                 </div>
 
                                 <span class="badge bg-success">
-
                                     Concluída
-
                                 </span>
-
                             </div>
-
 
                             <hr>
 
-
                             <p class="mb-2">
-
                                 <strong>
                                     <?= $compra["quantidade_itens"] ?>
                                 </strong>
-
                                 item(ns)
-
                             </p>
 
-
                             <div class="valor-compra">
-
                                 R$
-
                                 <?= number_format(
                                     $compra["total"],
                                     2,
                                     ",",
                                     "."
                                 ) ?>
-
                             </div>
-
 
                             <a
                                 href="compra.php?id=<?= $compra["id"] ?>"
                                 class="btn btn-outline-primary w-100 mt-3"
                             >
-
                                 Ver detalhes
-
                             </a>
-
                         </div>
-
                     </div>
-
                 </div>
-
             <?php endforeach; ?>
-
         </div>
 
         <?php if ($totalPaginas > 1): ?>
 
+            <!-- DW - Bootstrap / Pagination -->
             <nav
                 class="d-flex justify-content-center mt-5"
                 aria-label="Navegação do histórico de compras"
             >
-
                 <ul class="pagination">
-
-                    <!-- Página anterior -->
                     <li
-                        class="page-item
-                        <?= $paginaAtual <= 1 ? "disabled" : "" ?>"
+                        class="page-item <?= $paginaAtual <= 1 ? "disabled" : "" ?>"
                     >
-
                         <a
                             class="page-link"
                             href="?pagina=<?= $paginaAtual - 1 ?>"
                         >
                             ← Anterior
                         </a>
-
                     </li>
 
-
-                    <!-- Números das páginas -->
                     <?php for (
                         $pagina = 1;
                         $pagina <= $totalPaginas;
                         $pagina++
                     ): ?>
-
                         <li
-                            class="page-item
-                            <?= $pagina === $paginaAtual ? "active" : "" ?>"
+                            class="page-item <?= $pagina === $paginaAtual ? "active" : "" ?>"
                         >
-
                             <a
                                 class="page-link"
                                 href="?pagina=<?= $pagina ?>"
                             >
                                 <?= $pagina ?>
                             </a>
-
                         </li>
-
                     <?php endfor; ?>
 
-
-                    <!-- Próxima página -->
                     <li
-                        class="page-item
-                        <?= $paginaAtual >= $totalPaginas ? "disabled" : "" ?>"
+                        class="page-item <?= $paginaAtual >= $totalPaginas ? "disabled" : "" ?>"
                     >
-
                         <a
                             class="page-link"
                             href="?pagina=<?= $paginaAtual + 1 ?>"
                         >
                             Próxima →
                         </a>
-
                     </li>
-
                 </ul>
-
             </nav>
 
-
             <p class="text-center text-muted mt-2">
-
                 Página <?= $paginaAtual ?>
                 de <?= $totalPaginas ?>
-
                 •
-
                 <?= $totalCompras ?> compra(s)
-
             </p>
 
         <?php endif; ?>
 
-
     <?php else: ?>
 
+        <!-- DW - Bootstrap / Alert -->
         <div class="alert alert-info text-center">
-
             <h5 class="fw-bold">
                 Você ainda não realizou nenhuma compra.
             </h5>
@@ -421,25 +291,19 @@ require_once "componentes/navbar.php";
                 href="produtos/produtos.php"
                 class="btn btn-primary"
             >
-
                 Ver produtos
-
             </a>
-
         </div>
 
     <?php endif; ?>
-
 </main>
 
-<?php
-require_once "componentes/footer.php";
-?>
+<?php require_once "componentes/footer.php"; ?>
 
+<!-- DW - Bootstrap JavaScript -->
 <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
 ></script>
 
 </body>
-
 </html>

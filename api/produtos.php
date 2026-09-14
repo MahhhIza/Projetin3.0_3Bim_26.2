@@ -5,16 +5,8 @@ require_once "../config.php";
 header("Content-Type: application/json; charset=UTF-8");
 
 try {
-
-    /*
-     * BUSCA
-     */
     $busca = trim($_GET["busca"] ?? "");
 
-
-    /*
-     * CATEGORIA
-     */
     $categoria = filter_input(
         INPUT_GET,
         "categoria",
@@ -25,10 +17,6 @@ try {
         $categoria = null;
     }
 
-
-    /*
-     * LIMITE
-     */
     $limite = filter_input(
         INPUT_GET,
         "limite",
@@ -47,10 +35,6 @@ try {
         $limite = 100;
     }
 
-
-    /*
-     * OFFSET
-     */
     $offset = filter_input(
         INPUT_GET,
         "offset",
@@ -61,10 +45,7 @@ try {
         $offset = 0;
     }
 
-
-    /*
-     * STORED PROCEDURE
-     */
+    // BD - Stored Procedures otimizadas para busca, filtros e paginação
     $sql = "
         CALL sp_produtos_dashboard(
             :busca,
@@ -83,15 +64,12 @@ try {
     );
 
     if ($categoria === null) {
-
         $stmt->bindValue(
             ":categoria",
             null,
             PDO::PARAM_NULL
         );
-
     } else {
-
         $stmt->bindValue(
             ":categoria",
             $categoria,
@@ -113,33 +91,22 @@ try {
 
     $stmt->execute();
 
-
-    /*
-     * RESULTADO
-     *
-     * Normalizamos os tipos para garantir que
-     * o JSON entregue números para o TypeScript.
-     */
     $produtosBanco = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $produtos = array_map(
         function (array $produto): array {
-
             return [
                 "id" => (int) $produto["id"],
                 "produto" => (string) $produto["produto"],
                 "categoria" => (string) $produto["categoria"],
                 "preco" => (float) $produto["preco"],
                 "estoque" => (int) $produto["estoque"],
-                "quantidade_vendida" =>
-                    (int) $produto["quantidade_vendida"],
-                "faturamento" =>
-                    (float) $produto["faturamento"]
+                "quantidade_vendida" => (int) $produto["quantidade_vendida"],
+                "faturamento" => (float) $produto["faturamento"]
             ];
         },
         $produtosBanco
     );
-
 
     echo json_encode(
         $produtos,
@@ -147,12 +114,8 @@ try {
         JSON_UNESCAPED_SLASHES
     );
 
-
-    /* Libera o cursor da Stored Procedure. */
     $stmt->closeCursor();
-
 } catch (PDOException $e) {
-
     http_response_code(500);
 
     echo json_encode([

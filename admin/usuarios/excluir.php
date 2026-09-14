@@ -23,7 +23,6 @@ if ($id === false || $id === null || $id < 1) {
     exit;
 }
 
-
 // Impede que o administrador exclua a própria conta
 if (
     isset($_SESSION["usuario_id"]) &&
@@ -36,7 +35,6 @@ if (
 
     exit;
 }
-
 
 try {
 
@@ -63,7 +61,6 @@ try {
 
         exit;
     }
-
 
     // Exclui o usuário
     $stmt = $pdo->prepare(

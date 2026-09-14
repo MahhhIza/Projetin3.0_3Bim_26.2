@@ -11,7 +11,6 @@ $mensagem = "";
 $tipoMensagem = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
     $nome = trim($_POST["nome"] ?? "");
     $descricao = trim($_POST["descricao"] ?? "");
     $preco = trim($_POST["preco"] ?? "");
@@ -25,24 +24,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $estoque === "" ||
         $categoriaId === ""
     ) {
-
         $mensagem = "Preencha todos os campos.";
         $tipoMensagem = "danger";
-
     } elseif (!is_numeric($preco) || $preco < 0) {
-
         $mensagem = "Informe um preço válido.";
         $tipoMensagem = "danger";
-
     } elseif (!is_numeric($estoque) || $estoque < 0) {
-
         $mensagem = "Informe um estoque válido.";
         $tipoMensagem = "danger";
-
     } else {
-
         try {
-
             $sql = "
                 INSERT INTO produtos
                 (
@@ -76,23 +67,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $mensagem = "Produto cadastrado com sucesso!";
             $tipoMensagem = "success";
-
         } catch (PDOException $e) {
-
             $mensagem = "Erro ao cadastrar o produto.";
             $tipoMensagem = "danger";
         }
     }
 }
 
-/*
- * Busca as categorias para o formulário.
- */
-
 $categorias = [];
 
 try {
-
     $sql = "
         SELECT id, nome
         FROM categorias
@@ -101,11 +85,8 @@ try {
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
-
     $categorias = $stmt->fetchAll();
-
 } catch (PDOException $e) {
-
     $categorias = [];
 }
 
@@ -113,9 +94,7 @@ try {
 
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -125,6 +104,7 @@ try {
 
     <title>Cadastrar Produto - Art&Co</title>
 
+    <!-- DW - Uso do Framework Bootstrap no Desenvolvimento do Layout -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -134,7 +114,6 @@ try {
         rel="stylesheet"
         href="../../src/css/style.css"
     >
-
 </head>
 
 <body>
@@ -142,15 +121,12 @@ try {
 <?php
 
 $base = "../../";
-
 require_once "../../componentes/navbar.php";
 
 ?>
 
 <main class="container py-5">
-
     <div class="formulario-pagina">
-
         <div class="formulario-cabecalho">
             <h1 class="titulo-pagina">
                 Cadastrar produto
@@ -162,7 +138,6 @@ require_once "../../componentes/navbar.php";
         </div>
 
         <div class="formulario-card">
-
             <div class="card-body">
 
                 <?php if ($mensagem !== ""): ?>
@@ -172,17 +147,15 @@ require_once "../../componentes/navbar.php";
                 <?php endif; ?>
 
                 <?php if (count($categorias) === 0): ?>
-
                     <div class="alert alert-warning">
                         Nenhuma categoria cadastrada.
                         <br>
                         Cadastre uma categoria antes de criar um produto.
                     </div>
-
                 <?php else: ?>
 
+                    <!-- DW - CRUD de Produtos -->
                     <form method="POST">
-
                         <div class="mb-3">
                             <label
                                 for="nome"
@@ -218,7 +191,6 @@ require_once "../../componentes/navbar.php";
                         </div>
 
                         <div class="row">
-
                             <div class="col-md-6 mb-3">
                                 <label
                                     for="preco"
@@ -255,7 +227,6 @@ require_once "../../componentes/navbar.php";
                                     required
                                 >
                             </div>
-
                         </div>
 
                         <div class="mb-4">
@@ -277,20 +248,16 @@ require_once "../../componentes/navbar.php";
                                 </option>
 
                                 <?php foreach ($categorias as $categoria): ?>
-
                                     <option
                                         value="<?= $categoria["id"] ?>"
                                     >
                                         <?= htmlspecialchars($categoria["nome"]) ?>
                                     </option>
-
                                 <?php endforeach; ?>
-
                             </select>
                         </div>
 
                         <div class="d-flex justify-content-between">
-
                             <a
                                 href="index.php"
                                 class="btn btn-voltar"
@@ -304,19 +271,14 @@ require_once "../../componentes/navbar.php";
                             >
                                 Cadastrar produto
                             </button>
-
                         </div>
-
                     </form>
 
                 <?php endif; ?>
 
             </div>
-
         </div>
-
     </div>
-
 </main>
 
 <?php
@@ -328,5 +290,4 @@ require_once "../../componentes/footer.php";
 ></script>
 
 </body>
-
 </html>

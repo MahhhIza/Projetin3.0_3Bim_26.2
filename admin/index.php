@@ -16,6 +16,7 @@ exigirPerfil(["admin"]);
 
     <title>Administração - Art&Co</title>
 
+    <!-- DW - Uso do Framework Bootstrap no Desenvolvimento do Layout -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -52,6 +53,7 @@ require_once "../componentes/navbar.php";
                     <h5 class="card-title fw-bold">
                         Usuários
                     </h5>
+
                     <p class="text-muted">
                         Gerencie os usuários cadastrados.
                     </p>
@@ -67,39 +69,33 @@ require_once "../componentes/navbar.php";
         </div>
 
         <div class="col-md-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">
+                        Categorias
+                    </h5>
 
-    <div class="card shadow-sm h-100">
+                    <p class="card-text text-muted">
+                        Cadastre, edite e exclua categorias de produtos.
+                    </p>
 
-        <div class="card-body">
-
-            <h5 class="card-title fw-bold">
-                Categorias
-            </h5>
-
-            <p class="card-text text-muted">
-                Cadastre, edite e exclua categorias de produtos.
-            </p>
-
-            <a
-                href="categorias/index.php"
-                class="btn btn-artco"
-            >
-                Gerenciar categorias
-            </a>
-
+                    <a
+                        href="categorias/index.php"
+                        class="btn btn-artco"
+                    >
+                        Gerenciar categorias
+                    </a>
+                </div>
+            </div>
         </div>
 
     </div>
 
-</div>
-
-    </div>
-
     <div class="mt-4">
-    <a href="../painel.php" class="btn btn-voltar">
-        Voltar ao painel
-    </a>
-</div>
+        <a href="../painel.php" class="btn btn-voltar">
+            Voltar ao painel
+        </a>
+    </div>
 
 </main>
 

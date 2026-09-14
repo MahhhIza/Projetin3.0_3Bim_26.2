@@ -9,10 +9,6 @@
     --artco-subtitulo: #6f7785;
 }
 
-/* =========================================
-   NAVBAR ART&CO
-========================================= */
-
 .navbar-artco {
     background-color: #202124;
 }
@@ -21,8 +17,6 @@
     display: flex;
     align-items: center;
 }
-
-/* LOGO */
 
 .logo-artco {
     font-size: 27px;
@@ -42,8 +36,6 @@
     -webkit-text-fill-color: transparent;
 }
 
-/* BOTÃO DO MENU MOBILE */
-
 .navbar-artco .navbar-toggler {
     border-color: rgba(255, 255, 255, 0.4);
     padding: 6px 9px;
@@ -53,13 +45,9 @@
     box-shadow: 0 0 0 0.2rem rgba(155, 0, 255, 0.25);
 }
 
-/* CONTEÚDO DO MENU */
-
 .menu-artco {
     align-items: center;
 }
-
-/* LINKS PRINCIPAIS */
 
 .links-artco {
     display: flex;
@@ -81,8 +69,6 @@
     color: #ffffff;
 }
 
-/* DROPDOWN */
-
 .links-artco .dropdown-menu {
     background-color: #ffffff;
     border: none;
@@ -96,8 +82,6 @@
 .links-artco .dropdown-item:hover {
     background-color: #f1f1f1;
 }
-
-/* PESQUISA */
 
 .pesquisa-artco {
     display: flex;
@@ -125,16 +109,12 @@
     opacity: 0.9;
 }
 
-/* ÁREA DO USUÁRIO */
-
 .usuario-navbar {
     display: flex;
     align-items: center;
     gap: 8px;
     white-space: nowrap;
 }
-
-/* BOTÃO CADASTRAR */
 
 .btn-cadastrar {
     background-color: #ffc400;
@@ -145,8 +125,6 @@
 .btn-cadastrar:hover {
     background-color: #e6b000;
 }
-
-/* LINHA COLORIDA */
 
 .linha-colorida {
     height: 4px;
@@ -160,19 +138,12 @@
     );
 }
 
-/* PREÇO DOS PRODUTOS */
-
 .preco-produto {
     font-size: 22px;
     font-weight: 700;
     font-family: Arial, sans-serif;
     color: #7b1fa2;
 }
-
-
-/* =========================================
-   RESPONSIVIDADE DA NAVBAR
-========================================= */
 
 @media (max-width: 991.98px) {
 
@@ -190,8 +161,6 @@
         padding-bottom: 8px;
     }
 
-    /* LINKS */
-
     .links-artco {
         width: 100%;
         display: flex;
@@ -205,8 +174,6 @@
         padding: 10px 0;
     }
 
-    /* DROPDOWN */
-
     .links-artco .dropdown {
         width: 100%;
     }
@@ -216,8 +183,6 @@
         width: 100%;
         margin-bottom: 8px;
     }
-
-    /* PESQUISA */
 
     .pesquisa-artco {
         width: 100%;
@@ -229,8 +194,6 @@
         margin-right: 8px;
     }
 
-    /* USUÁRIO */
-
     .usuario-navbar {
         width: 100%;
         display: flex;
@@ -241,11 +204,6 @@
     }
 
 }
-
-
-/* =========================================
-   TELAS MUITO PEQUENAS
-========================================= */
 
 @media (max-width: 575.98px) {
 
@@ -289,10 +247,6 @@
 
 }
 
-/* =========================================
-   FOOTER ART&CO
-========================================= */
-
 .footer-artco {
     background-color: #202124;
     color: #bfc0c2;
@@ -327,12 +281,6 @@
 .footer-link:hover {
     color: #ffffff;
 }
-
-/*
-=========================================
-FUNDO GLOBAL DO ART&CO
-=========================================
-*/
 
 body {
 
@@ -408,53 +356,53 @@ body {
     margin-bottom: 20px;
 }
 
-        .pagination {
-            gap: 8px;
-        }
+.pagination {
+    gap: 8px;
+}
 
-        .pagination .page-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 42px;
-            height: 42px;
-            border:
-                1px solid #e0e3e8;
-            border-radius: 50%;
-            background-color: #ffffff;
-            color: #333b4d;
-            font-weight: 600;
-            box-shadow:
-                0 3px 8px
-                rgba(0, 0, 0, 0.07);
-            transition:
-                all 0.2s ease;
-        }
+.pagination .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    height: 42px;
+    border:
+        1px solid #e0e3e8;
+    border-radius: 50%;
+    background-color: #ffffff;
+    color: #333b4d;
+    font-weight: 600;
+    box-shadow:
+        0 3px 8px
+        rgba(0, 0, 0, 0.07);
+    transition:
+        all 0.2s ease;
+}
 
-        .pagination .page-link:hover {
-            background:
-                linear-gradient(
-                    90deg,
-                    #8f00ff,
-                    #00c9a7
-                );
-            border-color: transparent;
-            color: #ffffff;
-            transform: translateY(-2px);
-        }
+.pagination .page-link:hover {
+    background:
+        linear-gradient(
+            90deg,
+            #8f00ff,
+            #00c9a7
+        );
+    border-color: transparent;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
 
-        .pagination
-        .page-item.active
-        .page-link {
-            background:
-                linear-gradient(
-                    90deg,
-                    #8f00ff,
-                    #00c9a7
-                );
-            border-color: transparent;
-            color: #ffffff;
-        }
+.pagination
+.page-item.active
+.page-link {
+    background:
+    linear-gradient(
+        90deg,
+        #8f00ff,
+        #00c9a7
+        );
+        border-color: transparent;
+        color: #ffffff;
+    }
 
         main {
     flex: 1;
@@ -591,9 +539,6 @@ body {
     font-size: 0.9rem;
 }
 
-
-/* Cores */
-
 .valor-faturamento {
 
     color: #07945a;
@@ -613,9 +558,6 @@ body {
 
     color: #d97706;
 }
-
-
-/* Cards grandes */
 
 .card-painel {
 
@@ -640,9 +582,6 @@ body {
     padding: 24px;
 }
 
-
-/* Ranking */
-
 .ranking-item {
 
     display: flex;
@@ -661,9 +600,6 @@ body {
     border-bottom: none;
 }
 
-
-/* Área gerenciamento */
-
 .gerenciamento-box {
 
     border: 1px solid #e5e5e5;
@@ -675,4 +611,15 @@ body {
     box-shadow: 0 3px 10px rgba(0,0,0,0.06);
 
     padding: 30px;
+}
+
+.link-cad-log {
+    color: inherit;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.link-cad-log:hover {
+    color: var(--artco-roxo);
 }

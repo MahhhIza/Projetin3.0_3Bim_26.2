@@ -46,12 +46,6 @@ if ($erro === "banco") {
         "Não foi possível realizar a operação. Tente novamente.";
 }
 
-/*
- * =========================================
- * PAGINAÇÃO
- * =========================================
- */
-
 $usuariosPorPagina = 6;
 
 $paginaAtual = filter_input(
@@ -60,73 +54,35 @@ $paginaAtual = filter_input(
     FILTER_VALIDATE_INT
 );
 
-if (
-    $paginaAtual === false ||
-    $paginaAtual === null ||
-    $paginaAtual < 1
-) {
+if ($paginaAtual === false || $paginaAtual === null || $paginaAtual < 1) {
     $paginaAtual = 1;
 }
 
 $usuarios = [];
-
 $totalUsuarios = 0;
 $totalPaginas = 1;
 
 try {
-
-    /*
-     * =========================================
-     * TOTAL DE USUÁRIOS
-     * =========================================
-     */
-
     $sqlTotal = "
         SELECT COUNT(*)
         FROM usuarios
     ";
 
     $stmtTotal = $pdo->query($sqlTotal);
-
     $totalUsuarios = (int) $stmtTotal->fetchColumn();
-
-    /*
-     * =========================================
-     * TOTAL DE PÁGINAS
-     * =========================================
-     */
 
     $totalPaginas = max(
         1,
-        (int) ceil(
-            $totalUsuarios / $usuariosPorPagina
-        )
+        (int) ceil($totalUsuarios / $usuariosPorPagina)
     );
-
-    /*
-     * Se a página informada não existir,
-     * volta para a última página.
-     */
 
     if ($paginaAtual > $totalPaginas) {
         $paginaAtual = $totalPaginas;
     }
 
-    /*
-     * =========================================
-     * OFFSET
-     * =========================================
-     */
-
     $offset =
         ($paginaAtual - 1) *
         $usuariosPorPagina;
-
-    /*
-     * =========================================
-     * USUÁRIOS DA PÁGINA
-     * =========================================
-     */
 
     $sql = "
         SELECT
@@ -135,32 +91,21 @@ try {
             email,
             tipo,
             ativo
-
         FROM usuarios
-
         ORDER BY nome ASC
-
         LIMIT $usuariosPorPagina
         OFFSET $offset
     ";
 
     $stmt = $pdo->prepare($sql);
-
     $stmt->execute();
 
-    $usuarios =
-        $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+    $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-
     $usuarios = [];
-
     $totalUsuarios = 0;
-
     $totalPaginas = 1;
-
     $paginaAtual = 1;
-
     $mensagemErro =
         "Não foi possível carregar os usuários.";
 }
@@ -168,11 +113,9 @@ try {
 ?>
 
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -182,6 +125,7 @@ try {
 
     <title>Gerenciar Usuários - Art&Co</title>
 
+    <!-- DW - Uso do Framework Bootstrap no Desenvolvimento do Layout -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -191,25 +135,19 @@ try {
         rel="stylesheet"
         href="../../src/css/style.css"
     >
-
 </head>
 
 <body>
 
 <?php
-
 $base = "../../";
-
 require_once "../../componentes/navbar.php";
-
 ?>
 
 <main class="container py-5">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-
         <div>
-
             <h1 class="titulo-pagina">
                 Usuários
             </h1>
@@ -217,7 +155,6 @@ require_once "../../componentes/navbar.php";
             <p class="subtitulo-pagina">
                 Gerencie os usuários do sistema.
             </p>
-
         </div>
 
         <a
@@ -226,37 +163,25 @@ require_once "../../componentes/navbar.php";
         >
             + Novo usuário
         </a>
-
     </div>
 
-    <!-- MENSAGENS -->
-
     <?php if ($mensagemSucesso !== ""): ?>
-
+        <!-- DW - Regras de exclusão com mensagens claras ao usuário -->
         <div class="alert alert-success">
-
             <?= htmlspecialchars($mensagemSucesso) ?>
-
         </div>
-
     <?php endif; ?>
 
     <?php if ($mensagemErro !== ""): ?>
-
+        <!-- DW - Regras de exclusão com mensagens claras ao usuário -->
         <div class="alert alert-danger">
-
             <?= htmlspecialchars($mensagemErro) ?>
-
         </div>
-
     <?php endif; ?>
-
-    <!-- LISTA DE USUÁRIOS -->
 
     <?php if (count($usuarios) > 0): ?>
 
         <div class="card shadow-sm border-0">
-
             <div class="card-body">
 
                 <div class="table-responsive">
@@ -264,18 +189,14 @@ require_once "../../componentes/navbar.php";
                     <table class="table table-hover align-middle">
 
                         <thead>
-
                             <tr>
-
                                 <th>ID</th>
                                 <th>Nome</th>
                                 <th>E-mail</th>
                                 <th>Tipo</th>
                                 <th>Status</th>
                                 <th>Ações</th>
-
                             </tr>
-
                         </thead>
 
                         <tbody>
@@ -289,27 +210,21 @@ require_once "../../componentes/navbar.php";
                                 </td>
 
                                 <td>
-
                                     <?= htmlspecialchars(
                                         $usuario["nome"]
                                     ) ?>
-
                                 </td>
 
                                 <td>
-
                                     <?= htmlspecialchars(
                                         $usuario["email"]
                                     ) ?>
-
                                 </td>
 
                                 <td>
-
                                     <?= htmlspecialchars(
                                         $usuario["tipo"]
                                     ) ?>
-
                                 </td>
 
                                 <td>
@@ -376,10 +291,7 @@ require_once "../../componentes/navbar.php";
                 </div>
 
             </div>
-
         </div>
-
-        <!-- PAGINAÇÃO -->
 
         <?php if ($totalPaginas > 1): ?>
 
@@ -389,8 +301,6 @@ require_once "../../componentes/navbar.php";
             >
 
                 <ul class="pagination">
-
-                    <!-- ANTERIOR -->
 
                     <li
                         class="page-item
@@ -405,8 +315,6 @@ require_once "../../componentes/navbar.php";
                         </a>
 
                     </li>
-
-                    <!-- NÚMEROS DAS PÁGINAS -->
 
                     <?php for (
                         $pagina = 1;
@@ -430,8 +338,6 @@ require_once "../../componentes/navbar.php";
 
                     <?php endfor; ?>
 
-                    <!-- PRÓXIMA -->
-
                     <li
                         class="page-item
                         <?= $paginaAtual >= $totalPaginas ? "disabled" : "" ?>"
@@ -451,14 +357,10 @@ require_once "../../componentes/navbar.php";
             </nav>
 
             <p class="text-center text-muted mt-2">
-
                 Página <?= $paginaAtual ?>
                 de <?= $totalPaginas ?>
-
                 •
-
                 <?= $totalUsuarios ?> usuário(s)
-
             </p>
 
         <?php endif; ?>
@@ -466,14 +368,10 @@ require_once "../../componentes/navbar.php";
     <?php else: ?>
 
         <div class="alert alert-info text-center">
-
             Nenhum usuário cadastrado.
-
         </div>
 
     <?php endif; ?>
-
-    <!-- VOLTAR -->
 
     <div class="mt-4">
 
@@ -489,9 +387,7 @@ require_once "../../componentes/navbar.php";
 </main>
 
 <?php
-
 require_once "../../componentes/footer.php";
-
 ?>
 
 <script
@@ -499,5 +395,4 @@ require_once "../../componentes/footer.php";
 ></script>
 
 </body>
-
 </html>

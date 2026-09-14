@@ -12,7 +12,6 @@ $id = filter_input(
 );
 
 if ($id === false || $id === null || $id < 1) {
-
     header("Location: index.php?erro=id");
     exit;
 }
@@ -20,7 +19,6 @@ if ($id === false || $id === null || $id < 1) {
 $erro = "";
 
 try {
-
     $stmt = $pdo->prepare(
         "SELECT id, nome, descricao
          FROM categorias
@@ -34,31 +32,22 @@ try {
     $categoria = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$categoria) {
-
         header("Location: index.php?erro=nao_encontrada");
         exit;
     }
-
 } catch (PDOException $e) {
-
     header("Location: index.php?erro=banco");
     exit;
 }
 
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
     $nome = trim($_POST["nome"] ?? "");
     $descricao = trim($_POST["descricao"] ?? "");
 
     if ($nome === "") {
-
         $erro = "Informe o nome da categoria.";
-
     } else {
-
         try {
-
             $stmt = $pdo->prepare(
                 "UPDATE categorias
                  SET nome = :nome,
@@ -75,13 +64,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             header(
                 "Location: index.php?sucesso=categoria_editada"
             );
-
             exit;
-
         } catch (PDOException $e) {
-
-            $erro =
-                "Não foi possível atualizar a categoria.";
+            $erro = "Não foi possível atualizar a categoria.";
         }
     }
 
@@ -95,9 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -105,6 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <title>Editar Categoria - Art&Co</title>
 
+    <!-- DW - Uso do Framework Bootstrap no Desenvolvimento do Layout -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -114,17 +98,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         rel="stylesheet"
         href="../../src/css/style.css"
     >
-
 </head>
 
 <body>
 
 <?php
-
 $base = "../../";
-
 require_once "../../componentes/navbar.php";
-
 ?>
 
 <main class="container py-5">
@@ -142,21 +122,18 @@ require_once "../../componentes/navbar.php";
         </div>
 
         <div class="formulario-card">
-
             <div class="card-body">
 
                 <?php if ($erro !== ""): ?>
-
                     <div class="alert alert-danger">
                         <?= htmlspecialchars($erro) ?>
                     </div>
-
                 <?php endif; ?>
 
+                <!-- DW - CRUD de Categorias -->
                 <form method="POST">
 
                     <div class="mb-3">
-
                         <label
                             for="nome"
                             class="formulario-label"
@@ -175,11 +152,9 @@ require_once "../../componentes/navbar.php";
                                 $categoria["nome"]
                             ) ?>"
                         >
-
                     </div>
 
                     <div class="mb-4">
-
                         <label
                             for="descricao"
                             class="formulario-label"
@@ -195,7 +170,6 @@ require_once "../../componentes/navbar.php";
                         ><?= htmlspecialchars(
                             $categoria["descricao"] ?? ""
                         ) ?></textarea>
-
                     </div>
 
                     <div class="d-flex justify-content-between">
@@ -219,7 +193,6 @@ require_once "../../componentes/navbar.php";
                 </form>
 
             </div>
-
         </div>
 
     </div>
@@ -229,5 +202,4 @@ require_once "../../componentes/navbar.php";
 <?php require_once "../../componentes/footer.php"; ?>
 
 </body>
-
 </html>

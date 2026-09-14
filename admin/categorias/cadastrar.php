@@ -8,18 +8,13 @@ exigirPerfil(["admin"]);
 $erro = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
     $nome = trim($_POST["nome"] ?? "");
     $descricao = trim($_POST["descricao"] ?? "");
 
     if ($nome === "") {
-
         $erro = "Informe o nome da categoria.";
-
     } else {
-
         try {
-
             $stmt = $pdo->prepare(
                 "INSERT INTO categorias (nome, descricao)
                  VALUES (:nome, :descricao)"
@@ -33,13 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             header(
                 "Location: index.php?sucesso=categoria_criada"
             );
-
             exit;
-
         } catch (PDOException $e) {
-
-            $erro =
-                "Não foi possível cadastrar a categoria.";
+            $erro = "Não foi possível cadastrar a categoria.";
         }
     }
 }
@@ -50,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -60,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <title>Nova Categoria - Art&Co</title>
 
+    <!-- DW - Uso do Framework Bootstrap no Desenvolvimento do Layout -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -69,17 +60,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         rel="stylesheet"
         href="../../src/css/style.css"
     >
-
 </head>
 
 <body>
 
 <?php
-
 $base = "../../";
-
 require_once "../../componentes/navbar.php";
-
 ?>
 
 <main class="container py-5">
@@ -97,21 +84,18 @@ require_once "../../componentes/navbar.php";
         </div>
 
         <div class="formulario-card">
-
             <div class="card-body">
 
                 <?php if ($erro !== ""): ?>
-
                     <div class="alert alert-danger">
                         <?= htmlspecialchars($erro) ?>
                     </div>
-
                 <?php endif; ?>
 
+                <!-- DW - CRUD de Categorias -->
                 <form method="POST">
 
                     <div class="mb-3">
-
                         <label
                             for="nome"
                             class="formulario-label"
@@ -130,11 +114,9 @@ require_once "../../componentes/navbar.php";
                                 $_POST["nome"] ?? ""
                             ) ?>"
                         >
-
                     </div>
 
                     <div class="mb-4">
-
                         <label
                             for="descricao"
                             class="formulario-label"
@@ -150,7 +132,6 @@ require_once "../../componentes/navbar.php";
                         ><?= htmlspecialchars(
                             $_POST["descricao"] ?? ""
                         ) ?></textarea>
-
                     </div>
 
                     <div class="d-flex justify-content-between">
@@ -174,19 +155,13 @@ require_once "../../componentes/navbar.php";
                 </form>
 
             </div>
-
         </div>
 
     </div>
 
 </main>
 
-<?php
-
-require_once "../../componentes/footer.php";
-
-?>
+<?php require_once "../../componentes/footer.php"; ?>
 
 </body>
-
 </html>

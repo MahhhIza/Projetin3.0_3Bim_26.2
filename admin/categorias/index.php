@@ -24,8 +24,7 @@ if ($sucesso === "categoria_excluida") {
 }
 
 if ($erro === "categoria_utilizada") {
-    $mensagemErro =
-        "Esta categoria não pode ser excluída porque possui produtos vinculados.";
+    $mensagemErro = "Esta categoria não pode ser excluída porque possui produtos vinculados.";
 }
 
 if ($erro === "nao_encontrada") {
@@ -33,8 +32,7 @@ if ($erro === "nao_encontrada") {
 }
 
 if ($erro === "banco") {
-    $mensagemErro =
-        "Não foi possível realizar a operação. Tente novamente.";
+    $mensagemErro = "Não foi possível realizar a operação. Tente novamente.";
 }
 
 if ($erro === "id") {
@@ -42,7 +40,6 @@ if ($erro === "id") {
 }
 
 try {
-
     $stmt = $pdo->query(
         "SELECT id, nome, descricao
          FROM categorias
@@ -50,124 +47,83 @@ try {
     );
 
     $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 } catch (PDOException $e) {
-
     $categorias = [];
-
-    $mensagemErro =
-        "Não foi possível carregar as categorias.";
+    $mensagemErro = "Não foi possível carregar as categorias.";
 }
 
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciar Categorias - Art&Co</title>
 
+    <!-- DW - Uso do Framework Bootstrap no Desenvolvimento do Layout -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
     >
 
-    <link
-        rel="stylesheet"
-        href="../../src/css/style.css"
-    >
-
+    <link rel="stylesheet" href="../../src/css/style.css">
 </head>
 
 <body>
 
 <?php
-
 $base = "../../";
-
 require_once "../../componentes/navbar.php";
-
 ?>
 
 <div class="container py-5">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-
         <div>
-
-            <h1 class="titulo-pagina">
-                Categorias
-            </h1>
+            <h1 class="titulo-pagina">Categorias</h1>
 
             <p class="subtitulo-pagina">
                 Gerencie as categorias dos produtos.
             </p>
-
         </div>
 
-        <a
-            href="cadastrar.php"
-            class="btn btn-artco"
-        >
+        <a href="cadastrar.php" class="btn btn-artco">
             + Nova categoria
         </a>
-
     </div>
 
-
     <?php if ($mensagemSucesso !== ""): ?>
-
         <div class="alert alert-success">
             <?= htmlspecialchars($mensagemSucesso) ?>
         </div>
-
     <?php endif; ?>
 
-
     <?php if ($mensagemErro !== ""): ?>
-
         <div class="alert alert-danger">
             <?= htmlspecialchars($mensagemErro) ?>
         </div>
-
     <?php endif; ?>
 
-
     <?php if (count($categorias) === 0): ?>
-
         <div class="alert alert-info">
             Nenhuma categoria cadastrada.
         </div>
-
     <?php else: ?>
 
         <div class="card shadow-sm border-0">
-
             <div class="card-body">
 
                 <div class="table-responsive">
-
                     <table class="table table-hover align-middle">
 
                         <thead>
-
                             <tr>
-
                                 <th>ID</th>
                                 <th>Nome</th>
                                 <th>Descrição</th>
                                 <th>Ações</th>
-
                             </tr>
-
                         </thead>
 
                         <tbody>
@@ -175,25 +131,20 @@ require_once "../../componentes/navbar.php";
                         <?php foreach ($categorias as $categoria): ?>
 
                             <tr>
-
                                 <td>
                                     <?= (int) $categoria["id"] ?>
                                 </td>
 
                                 <td>
-                                    <?= htmlspecialchars(
-                                        $categoria["nome"]
-                                    ) ?>
+                                    <?= htmlspecialchars($categoria["nome"]) ?>
                                 </td>
 
                                 <td>
-                                    <?= htmlspecialchars(
-                                        $categoria["descricao"] ?? ""
-                                    ) ?>
+                                    <?= htmlspecialchars($categoria["descricao"] ?? "") ?>
                                 </td>
 
                                 <td>
-
+                                    <!-- DW - CRUD de Categorias -->
                                     <a
                                         href="editar.php?id=<?= (int) $categoria["id"] ?>"
                                         class="btn btn-sm btn-warning"
@@ -201,13 +152,13 @@ require_once "../../componentes/navbar.php";
                                         Editar
                                     </a>
 
+                                    <!-- DW - Regras de exclusão com mensagens claras ao usuário -->
                                     <form
                                         action="excluir.php"
                                         method="POST"
                                         class="d-inline"
                                         onsubmit="return confirm('Tem certeza que deseja excluir esta categoria?');"
                                     >
-
                                         <input
                                             type="hidden"
                                             name="id"
@@ -220,37 +171,25 @@ require_once "../../componentes/navbar.php";
                                         >
                                             Excluir
                                         </button>
-
                                     </form>
-
                                 </td>
-
                             </tr>
 
                         <?php endforeach; ?>
 
                         </tbody>
-
                     </table>
-
                 </div>
 
             </div>
-
         </div>
 
     <?php endif; ?>
 
-
     <div class="mt-4">
-
-        <a
-            href="../index.php"
-            class="btn btn-voltar"
-        >
+        <a href="../index.php" class="btn btn-voltar">
             ← Voltar para administração
         </a>
-
     </div>
 
 </div>
@@ -258,5 +197,4 @@ require_once "../../componentes/navbar.php";
 <?php require_once "../../componentes/footer.php"; ?>
 
 </body>
-
 </html>

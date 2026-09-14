@@ -1,32 +1,25 @@
 <?php
 
 session_start();
-
 require_once "protecao/acesso.php";
-
 exigirPerfil(["admin", "vendedor"]);
-
 require_once "config.php";
 
 $nomeUsuario = $_SESSION["usuario_nome"];
-
 $tipoUsuario = $_SESSION["usuario_tipo"];
 
 ?>
 
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 
 <head>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Art&Co - Início</title>
 
-    <!-- Bootstrap -->
-
+    <!-- DW - Bootstrap -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -39,10 +32,6 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
 
     <style>
 
-        /* ==============================
-           IDENTIDADE VISUAL ART&CO
-        ============================== */
-
         .navbar-artco {
             background-color: #202124;
         }
@@ -50,13 +39,11 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
         .logo-artco {
             font-size: 27px;
             font-weight: bold;
-
             background: linear-gradient(
                 90deg,
                 #9b00ff,
                 #00b894
             );
-
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -75,7 +62,6 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
 
         .linha-colorida {
             height: 4px;
-
             background: linear-gradient(
                 90deg,
                 #ff00cc,
@@ -91,7 +77,6 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
                 #9b00ff,
                 #00b894
             );
-
             border: none;
             color: white;
         }
@@ -111,18 +96,12 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
             background-color: #e6b000;
         }
 
-
-        /* ==============================
-           PAINEL
-        ============================== */
-
         .painel-cabecalho {
             margin-bottom: 30px;
         }
 
         .painel-cabecalho .titulo-pagina {
             margin-bottom: 6px;
-
             text-shadow:
                 0 2px 4px rgba(0, 0, 0, 0.12);
         }
@@ -131,20 +110,12 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
             margin-bottom: 0;
         }
 
-
-        /* ==============================
-           CARDS DE ESTATÍSTICAS
-        ============================== */
-
         .painel-estatistica {
             border: 1px solid #e1e1e1;
             border-radius: 12px;
-
             background-color: #ffffff;
-
             box-shadow:
                 0 3px 10px rgba(0, 0, 0, 0.06);
-
             transition:
                 transform 0.2s ease,
                 box-shadow 0.2s ease;
@@ -152,7 +123,6 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
 
         .painel-estatistica:hover {
             transform: translateY(-3px);
-
             box-shadow:
                 0 7px 18px rgba(0, 0, 0, 0.10);
         }
@@ -165,37 +135,26 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
             color: #555;
             font-size: 1rem;
             font-weight: 600;
-
             margin-bottom: 10px;
         }
 
         .painel-estatistica .estatistica-valor {
             font-size: 2rem;
             font-weight: 800;
-
             line-height: 1.1;
-
             margin-bottom: 10px;
         }
 
         .painel-estatistica .card-text {
             color: #737983;
             font-size: 0.88rem;
-
             margin-bottom: 0;
         }
-
-
-        /* ==============================
-           CARDS DE ANÁLISE
-        ============================== */
 
         .painel-analise {
             border: 1px solid #e1e1e1;
             border-radius: 12px;
-
             background-color: #ffffff;
-
             box-shadow:
                 0 3px 10px rgba(0, 0, 0, 0.06);
         }
@@ -208,7 +167,6 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
             color: #202124;
             font-size: 1.15rem;
             font-weight: 700;
-
             margin-bottom: 7px;
         }
 
@@ -217,18 +175,12 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
             margin-bottom: 18px;
         }
 
-
-        /* ==============================
-           RANKING DE PRODUTOS
-        ============================== */
-
         #rankingProdutos {
             font-size: 0.92rem;
         }
 
         #rankingProdutos > div {
             padding: 9px 0;
-
             border-bottom: 1px solid #eeeeee;
         }
 
@@ -236,18 +188,12 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
             border-bottom: none;
         }
 
-
-        /* ==============================
-           ESTOQUE CRÍTICO
-        ============================== */
-
         #estoqueCritico {
             font-size: 0.92rem;
         }
 
         #estoqueCritico > div {
             padding: 9px 0;
-
             border-bottom: 1px solid #eeeeee;
         }
 
@@ -255,27 +201,15 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
             border-bottom: none;
         }
 
-
-        /* ==============================
-           MENSAGEM DA DASHBOARD
-        ============================== */
-
         #mensagemDashboard {
             border-radius: 10px;
             border: none;
         }
 
-
-        /* ==============================
-           GERENCIAMENTO
-        ============================== */
-
         .painel-gerenciamento {
             border: 1px solid #e1e1e1 !important;
             border-radius: 12px;
-
             background-color: #ffffff;
-
             box-shadow:
                 0 3px 10px rgba(0, 0, 0, 0.06);
         }
@@ -287,27 +221,18 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
         .painel-gerenciamento h3 {
             color: #202124;
             font-size: 1.65rem;
-
             margin-bottom: 8px !important;
         }
 
         .painel-gerenciamento p {
             color: #6f7785;
-
             margin-bottom: 20px;
         }
-
-
-        /* ==============================
-           BOTÕES DO PAINEL
-        ============================== */
 
         .painel-gerenciamento .btn {
             border-radius: 7px;
             font-weight: 600;
-
             padding: 8px 15px;
-
             transition:
                 opacity 0.2s ease,
                 box-shadow 0.2s ease;
@@ -315,15 +240,9 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
 
         .painel-gerenciamento .btn:hover {
             opacity: 0.9;
-
             box-shadow:
                 0 3px 8px rgba(0, 0, 0, 0.12);
         }
-
-
-        /* ==============================
-           RESPONSIVIDADE
-        ============================== */
 
         @media (max-width: 767px) {
 
@@ -338,7 +257,6 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
             .painel-gerenciamento .card-body {
                 padding: 22px;
             }
-
         }
 
     </style>
@@ -347,18 +265,12 @@ $tipoUsuario = $_SESSION["usuario_tipo"];
 
 <body>
 
-
 <?php
-
 $base = "";
-
 require_once "componentes/navbar.php";
-
 ?>
 
-
 <main class="container py-5">
-
 
     <div class="painel-cabecalho">
 
@@ -372,13 +284,8 @@ require_once "componentes/navbar.php";
 
     </div>
 
-
-    <!-- DASHBOARD -->
-
+    <!-- TF - Dashboard -->
     <div class="row g-4">
-
-
-        <!-- FATURAMENTO -->
 
         <div class="col-12 col-md-6 col-lg-3">
 
@@ -407,9 +314,6 @@ require_once "componentes/navbar.php";
 
         </div>
 
-
-        <!-- QUANTIDADE VENDIDA -->
-
         <div class="col-12 col-md-6 col-lg-3">
 
             <div class="card painel-estatistica h-100">
@@ -437,9 +341,6 @@ require_once "componentes/navbar.php";
 
         </div>
 
-
-        <!-- PRODUTOS -->
-
         <div class="col-12 col-md-6 col-lg-3">
 
             <div class="card painel-estatistica h-100">
@@ -466,9 +367,6 @@ require_once "componentes/navbar.php";
             </div>
 
         </div>
-
-
-        <!-- ESTOQUE -->
 
         <div class="col-12 col-md-6 col-lg-3">
 
@@ -499,13 +397,8 @@ require_once "componentes/navbar.php";
 
     </div>
 
-
-    <!-- ANÁLISES DA DASHBOARD -->
-
+    <!-- TF - Dashboard / Indicadores -->
     <div class="row g-4 mt-1">
-
-
-        <!-- RANKING -->
 
         <div class="col-12 col-lg-6">
 
@@ -534,9 +427,6 @@ require_once "componentes/navbar.php";
             </div>
 
         </div>
-
-
-        <!-- ESTOQUE CRÍTICO -->
 
         <div class="col-12 col-lg-6">
 
@@ -568,15 +458,12 @@ require_once "componentes/navbar.php";
 
     </div>
 
-
-    <!-- MENSAGEM DA DASHBOARD -->
-
+    <!-- TF - Tratamento de estados da Dashboard -->
     <div
         id="mensagemDashboard"
         class="alert alert-info text-center mt-4 d-none"
     >
     </div>
-
 
     <?php if ($tipoUsuario === "admin"): ?>
 
@@ -594,8 +481,6 @@ require_once "componentes/navbar.php";
 
                 <div class="d-flex flex-wrap gap-2">
 
-                    <!-- GERENCIAR PRODUTOS -->
-
                     <a
                         href="admin/produtos/index.php"
                         class="btn btn-artco"
@@ -603,18 +488,12 @@ require_once "componentes/navbar.php";
                         Gerenciar produtos
                     </a>
 
-
-                    <!-- ADMINISTRAÇÃO -->
-
                     <a
                         href="admin/index.php"
                         class="btn btn-voltar"
                     >
                         Administração
                     </a>
-
-
-                    <!-- MINHAS COMPRAS -->
 
                     <a
                         href="compras.php"
@@ -628,7 +507,6 @@ require_once "componentes/navbar.php";
             </div>
 
         </div>
-
 
     <?php elseif ($tipoUsuario === "vendedor"): ?>
 
@@ -657,29 +535,22 @@ require_once "componentes/navbar.php";
 
     <?php endif; ?>
 
-
 </main>
 
-
 <?php
-
 require_once "componentes/footer.php";
-
 ?>
 
-
-<!-- Bootstrap JavaScript -->
-
+<!-- DW - Bootstrap JavaScript -->
 <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
-</script>
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+></script>
 
+<!-- TF - Consumo da Dashboard -->
 <script
     type="module"
-    src="src/js/dashboard.js">
-</script>
-
+    src="src/js/dashboard.js"
+></script>
 
 </body>
-
 </html>

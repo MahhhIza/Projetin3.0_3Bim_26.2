@@ -1,12 +1,12 @@
 <?php
 
+// BD - Conexão com o banco de dados
 $host = "localhost";
 $dbname = "artco";
 $user = "root";
 $pass = "";
 
 try {
-
     $pdo = new PDO(
         "mysql:host=$host;dbname=$dbname;charset=utf8mb4",
         $user,
@@ -17,12 +17,8 @@ try {
             PDO::ATTR_EMULATE_PREPARES => false
         ]
     );
-
 } catch (PDOException $e) {
-
     http_response_code(500);
-
     echo "Erro ao conectar com o banco de dados.";
-
     exit;
 }

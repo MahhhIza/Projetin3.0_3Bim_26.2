@@ -5,172 +5,109 @@ require_once "../../protecao/acesso.php";
 
 exigirPerfil(["admin"]);
 
-$id = filter_input(
+$sucesso = $_GET["sucesso"] ?? "";
+$erro = $_GET["erro"] ?? "";
+
+$mensagemSucesso = "";
+$mensagemErro = "";
+
+if ($sucesso === "usuario_criado") {
+    $mensagemSucesso = "Usuário cadastrado com sucesso.";
+}
+
+if ($sucesso === "usuario_editado") {
+    $mensagemSucesso = "Usuário atualizado com sucesso.";
+}
+
+if ($sucesso === "usuario_excluido") {
+    $mensagemSucesso = "Usuário excluído com sucesso.";
+}
+
+if ($erro === "usuario_vinculado") {
+    $mensagemErro =
+        "Este usuário não pode ser excluído porque possui vendas registradas.";
+}
+
+if ($erro === "usuario_atual") {
+    $mensagemErro =
+        "Você não pode excluir o usuário que está conectado.";
+}
+
+if ($erro === "nao_encontrado") {
+    $mensagemErro = "Usuário não encontrado.";
+}
+
+if ($erro === "id") {
+    $mensagemErro = "Usuário inválido.";
+}
+
+if ($erro === "banco") {
+    $mensagemErro =
+        "Não foi possível realizar a operação. Tente novamente.";
+}
+
+$usuariosPorPagina = 6;
+
+$paginaAtual = filter_input(
     INPUT_GET,
-    "id",
+    "pagina",
     FILTER_VALIDATE_INT
 );
 
-if ($id === false || $id === null || $id < 1) {
-
-    header("Location: index.php?erro=id");
-    exit;
+if ($paginaAtual === false || $paginaAtual === null || $paginaAtual < 1) {
+    $paginaAtual = 1;
 }
 
-$erro = "";
+$usuarios = [];
+$totalUsuarios = 0;
+$totalPaginas = 1;
 
 try {
+    $sqlTotal = "
+        SELECT COUNT(*)
+        FROM usuarios
+    ";
 
-    $stmt = $pdo->prepare(
-        "SELECT id, nome, email, tipo, ativo
-         FROM usuarios
-         WHERE id = :id"
+    $stmtTotal = $pdo->query($sqlTotal);
+    $totalUsuarios = (int) $stmtTotal->fetchColumn();
+
+    $totalPaginas = max(
+        1,
+        (int) ceil($totalUsuarios / $usuariosPorPagina)
     );
 
-    $stmt->execute([
-        ":id" => $id
-    ]);
-
-    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$usuario) {
-
-        header(
-            "Location: index.php?erro=nao_encontrado"
-        );
-
-        exit;
+    if ($paginaAtual > $totalPaginas) {
+        $paginaAtual = $totalPaginas;
     }
 
+    $offset =
+        ($paginaAtual - 1) *
+        $usuariosPorPagina;
+
+    $sql = "
+        SELECT
+            id,
+            nome,
+            email,
+            tipo,
+            ativo
+        FROM usuarios
+        ORDER BY nome ASC
+        LIMIT $usuariosPorPagina
+        OFFSET $offset
+    ";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+
+    $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-
-    header(
-        "Location: index.php?erro=banco"
-    );
-
-    exit;
-}
-
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-    $nome = trim($_POST["nome"] ?? "");
-    $email = trim($_POST["email"] ?? "");
-    $tipo = $_POST["tipo"] ?? "";
-    $ativo = isset($_POST["ativo"]) ? 1 : 0;
-    $senha = $_POST["senha"] ?? "";
-
-    $tiposPermitidos = [
-        "admin",
-        "vendedor",
-        "cliente"
-    ];
-
-    if ($nome === "") {
-
-        $erro = "Informe o nome do usuário.";
-
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-
-        $erro = "Informe um e-mail válido.";
-
-    } elseif (!in_array($tipo, $tiposPermitidos, true)) {
-
-        $erro = "Tipo de usuário inválido.";
-
-    } elseif ($senha !== "" && strlen($senha) < 6) {
-
-        $erro =
-            "A nova senha deve possuir pelo menos 6 caracteres.";
-
-    } else {
-
-        try {
-
-            // Verifica se o e-mail já pertence a outro usuário
-            $stmt = $pdo->prepare(
-                "SELECT COUNT(*)
-                 FROM usuarios
-                 WHERE email = :email
-                 AND id <> :id"
-            );
-
-            $stmt->execute([
-                ":email" => $email,
-                ":id" => $id
-            ]);
-
-            if ((int) $stmt->fetchColumn() > 0) {
-
-                $erro =
-                    "Este e-mail já está sendo utilizado.";
-
-            } else {
-
-                if ($senha !== "") {
-
-                    $senhaHash = password_hash(
-                        $senha,
-                        PASSWORD_DEFAULT
-                    );
-
-                    $stmt = $pdo->prepare(
-                        "UPDATE usuarios
-                         SET nome = :nome,
-                             email = :email,
-                             senha = :senha,
-                             tipo = :tipo,
-                             ativo = :ativo
-                         WHERE id = :id"
-                    );
-
-                    $stmt->execute([
-                        ":nome" => $nome,
-                        ":email" => $email,
-                        ":senha" => $senhaHash,
-                        ":tipo" => $tipo,
-                        ":ativo" => $ativo,
-                        ":id" => $id
-                    ]);
-
-                } else {
-
-                    $stmt = $pdo->prepare(
-                        "UPDATE usuarios
-                         SET nome = :nome,
-                             email = :email,
-                             tipo = :tipo,
-                             ativo = :ativo
-                         WHERE id = :id"
-                    );
-
-                    $stmt->execute([
-                        ":nome" => $nome,
-                        ":email" => $email,
-                        ":tipo" => $tipo,
-                        ":ativo" => $ativo,
-                        ":id" => $id
-                    ]);
-                }
-
-                header(
-                    "Location: index.php?sucesso=usuario_editado"
-                );
-
-                exit;
-            }
-
-        } catch (PDOException $e) {
-
-            $erro =
-                "Não foi possível atualizar o usuário.";
-        }
-    }
-
-    $usuario["nome"] = $nome;
-    $usuario["email"] = $email;
-    $usuario["tipo"] = $tipo;
-    $usuario["ativo"] = $ativo;
+    $usuarios = [];
+    $totalUsuarios = 0;
+    $totalPaginas = 1;
+    $paginaAtual = 1;
+    $mensagemErro =
+        "Não foi possível carregar os usuários.";
 }
 
 ?>
@@ -179,7 +116,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -187,8 +123,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Editar Usuário - Art&Co</title>
+    <title>Gerenciar Usuários - Art&Co</title>
 
+    <!-- DW - Uso do Framework Bootstrap no Desenvolvimento do Layout -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -198,214 +135,264 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         rel="stylesheet"
         href="../../src/css/style.css"
     >
-
 </head>
 
 <body>
 
 <?php
-
 $base = "../../";
-
 require_once "../../componentes/navbar.php";
-
 ?>
 
 <main class="container py-5">
 
-    <div class="formulario-pagina">
-
-        <div class="formulario-cabecalho">
-
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
             <h1 class="titulo-pagina">
-                Editar usuário
+                Usuários
             </h1>
 
             <p class="subtitulo-pagina">
-                Atualize os dados do usuário.
+                Gerencie os usuários do sistema.
             </p>
-
         </div>
 
-        <div class="formulario-card">
+        <a
+            href="cadastrar.php"
+            class="btn btn-artco"
+        >
+            + Novo usuário
+        </a>
+    </div>
 
+    <?php if ($mensagemSucesso !== ""): ?>
+        <!-- DW - Regras de exclusão com mensagens claras ao usuário -->
+        <div class="alert alert-success">
+            <?= htmlspecialchars($mensagemSucesso) ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($mensagemErro !== ""): ?>
+        <!-- DW - Regras de exclusão com mensagens claras ao usuário -->
+        <div class="alert alert-danger">
+            <?= htmlspecialchars($mensagemErro) ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if (count($usuarios) > 0): ?>
+
+        <div class="card shadow-sm border-0">
             <div class="card-body">
 
-                <?php if ($erro !== ""): ?>
+                <div class="table-responsive">
 
-                    <div class="alert alert-danger">
-                        <?= htmlspecialchars($erro) ?>
-                    </div>
+                    <table class="table table-hover align-middle">
 
-                <?php endif; ?>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Tipo</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
 
-                <form method="POST">
+                        <tbody>
 
-                    <div class="mb-3">
+                        <?php foreach ($usuarios as $usuario): ?>
 
-                        <label
-                            for="nome"
-                            class="formulario-label"
-                        >
-                            Nome
-                        </label>
+                            <tr>
 
-                        <input
-                            type="text"
-                            id="nome"
-                            name="nome"
-                            class="form-control"
-                            required
-                            value="<?= htmlspecialchars($usuario["nome"]) ?>"
-                        >
+                                <td>
+                                    <?= (int) $usuario["id"] ?>
+                                </td>
 
-                    </div>
+                                <td>
+                                    <?= htmlspecialchars(
+                                        $usuario["nome"]
+                                    ) ?>
+                                </td>
 
-                    <div class="mb-3">
+                                <td>
+                                    <?= htmlspecialchars(
+                                        $usuario["email"]
+                                    ) ?>
+                                </td>
 
-                        <label
-                            for="email"
-                            class="formulario-label"
-                        >
-                            E-mail
-                        </label>
+                                <td>
+                                    <?= htmlspecialchars(
+                                        $usuario["tipo"]
+                                    ) ?>
+                                </td>
 
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            class="form-control"
-                            required
-                            value="<?= htmlspecialchars($usuario["email"]) ?>"
-                        >
+                                <td>
 
-                    </div>
+                                    <?php if (
+                                        (int) $usuario["ativo"] === 1
+                                    ): ?>
 
-                    <div class="mb-3">
+                                        <span class="badge bg-success">
+                                            Ativo
+                                        </span>
 
-                        <label
-                            for="senha"
-                            class="formulario-label"
-                        >
-                            Nova senha
-                        </label>
+                                    <?php else: ?>
 
-                        <input
-                            type="password"
-                            id="senha"
-                            name="senha"
-                            class="form-control"
-                            minlength="6"
-                        >
+                                        <span class="badge bg-secondary">
+                                            Inativo
+                                        </span>
 
-                        <div class="form-text">
-                            Deixe vazio para manter a senha atual.
-                        </div>
+                                    <?php endif; ?>
 
-                    </div>
+                                </td>
 
-                    <div class="mb-3">
+                                <td>
 
-                        <label
-                            for="tipo"
-                            class="formulario-label"
-                        >
-                            Tipo de usuário
-                        </label>
+                                    <a
+                                        href="editar.php?id=<?= (int) $usuario["id"] ?>"
+                                        class="btn btn-sm btn-warning"
+                                    >
+                                        Editar
+                                    </a>
 
-                        <select
-                            id="tipo"
-                            name="tipo"
-                            class="form-select"
-                            required
-                        >
+                                    <form
+                                        action="excluir.php"
+                                        method="POST"
+                                        class="d-inline"
+                                        onsubmit="return confirm('Tem certeza que deseja excluir este usuário?');"
+                                    >
 
-                            <option
-                                value="cliente"
-                                <?= $usuario["tipo"] === "cliente"
-                                    ? "selected"
-                                    : "" ?>
-                            >
-                                Cliente
-                            </option>
+                                        <input
+                                            type="hidden"
+                                            name="id"
+                                            value="<?= (int) $usuario["id"] ?>"
+                                        >
 
-                            <option
-                                value="vendedor"
-                                <?= $usuario["tipo"] === "vendedor"
-                                    ? "selected"
-                                    : "" ?>
-                            >
-                                Vendedor
-                            </option>
+                                        <button
+                                            type="submit"
+                                            class="btn btn-sm btn-danger"
+                                        >
+                                            Excluir
+                                        </button>
 
-                            <option
-                                value="admin"
-                                <?= $usuario["tipo"] === "admin"
-                                    ? "selected"
-                                    : "" ?>
-                            >
-                                Administrador
-                            </option>
+                                    </form>
 
-                        </select>
+                                </td>
 
-                    </div>
+                            </tr>
 
-                    <div class="form-check mb-4">
+                        <?php endforeach; ?>
 
-                        <input
-                            type="checkbox"
-                            id="ativo"
-                            name="ativo"
-                            class="form-check-input"
-                            <?= (int) $usuario["ativo"] === 1
-                                ? "checked"
-                                : "" ?>
-                        >
+                        </tbody>
 
-                        <label
-                            for="ativo"
-                            class="form-check-label"
-                        >
-                            Usuário ativo
-                        </label>
+                    </table>
 
-                    </div>
-
-                    <div class="d-flex justify-content-between">
-
-                        <a
-                            href="index.php"
-                            class="btn btn-voltar"
-                        >
-                            Voltar
-                        </a>
-
-                        <button
-                            type="submit"
-                            class="btn btn-artco"
-                        >
-                            Salvar alterações
-                        </button>
-
-                    </div>
-
-                </form>
+                </div>
 
             </div>
-
         </div>
+
+        <?php if ($totalPaginas > 1): ?>
+
+            <nav
+                class="d-flex justify-content-center mt-4"
+                aria-label="Navegação dos usuários"
+            >
+
+                <ul class="pagination">
+
+                    <li
+                        class="page-item
+                        <?= $paginaAtual <= 1 ? "disabled" : "" ?>"
+                    >
+
+                        <a
+                            class="page-link"
+                            href="?pagina=<?= $paginaAtual - 1 ?>"
+                        >
+                            ← Anterior
+                        </a>
+
+                    </li>
+
+                    <?php for (
+                        $pagina = 1;
+                        $pagina <= $totalPaginas;
+                        $pagina++
+                    ): ?>
+
+                        <li
+                            class="page-item
+                            <?= $pagina === $paginaAtual ? "active" : "" ?>"
+                        >
+
+                            <a
+                                class="page-link"
+                                href="?pagina=<?= $pagina ?>"
+                            >
+                                <?= $pagina ?>
+                            </a>
+
+                        </li>
+
+                    <?php endfor; ?>
+
+                    <li
+                        class="page-item
+                        <?= $paginaAtual >= $totalPaginas ? "disabled" : "" ?>"
+                    >
+
+                        <a
+                            class="page-link"
+                            href="?pagina=<?= $paginaAtual + 1 ?>"
+                        >
+                            Próxima →
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+            <p class="text-center text-muted mt-2">
+                Página <?= $paginaAtual ?>
+                de <?= $totalPaginas ?>
+                •
+                <?= $totalUsuarios ?> usuário(s)
+            </p>
+
+        <?php endif; ?>
+
+    <?php else: ?>
+
+        <div class="alert alert-info text-center">
+            Nenhum usuário cadastrado.
+        </div>
+
+    <?php endif; ?>
+
+    <div class="mt-4">
+
+        <a
+            href="../index.php"
+            class="btn btn-voltar"
+        >
+            ← Voltar para administração
+        </a>
 
     </div>
 
 </main>
 
 <?php
-
 require_once "../../componentes/footer.php";
-
 ?>
 
-</body>
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
 
+</body>
 </html>

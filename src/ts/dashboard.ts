@@ -13,13 +13,10 @@ interface ProdutoRanking {
     quantidade: number;
 }
 
-/*
- * VALIDAÇÃO DO PRODUTO
- */
+// DW - Interfaces TypeScript para tipagem dos dados do backend
 function ehProdutoAnalitico(
     valor: unknown
 ): valor is ProdutoAnalitico {
-
     if (
         typeof valor !== "object" ||
         valor === null
@@ -41,27 +38,20 @@ function ehProdutoAnalitico(
     );
 }
 
-/*
- * VALIDAÇÃO DA LISTA DE PRODUTOS
- */
 function ehListaProdutos(
     valor: unknown
 ): valor is ProdutoAnalitico[] {
-
     return (
         Array.isArray(valor) &&
         valor.every(ehProdutoAnalitico)
     );
 }
 
-/*
- * ATUALIZA TEXTO DE UM ELEMENTO
- */
+// TF - Manipulação segura do DOM
 function atualizarTexto(
     id: string,
     texto: string
 ): void {
-
     const elemento =
         document.getElementById(id);
 
@@ -70,13 +60,9 @@ function atualizarTexto(
     }
 }
 
-/*
- * FORMATA VALORES EM REAL
- */
 function formatarMoeda(
     valor: number
 ): string {
-
     return valor.toLocaleString(
         "pt-BR",
         {
@@ -86,15 +72,10 @@ function formatarMoeda(
     );
 }
 
-/*
- * EXIBE RANKING DOS PRODUTOS
- *
- * FILTER + MAP + SORT + SLICE
- */
+// LA - Ranking e transformação de dados com filter, reduce, map, sort e slice
 function exibirRanking(
     produtos: ProdutoAnalitico[]
 ): void {
-
     const elemento =
         document.getElementById("rankingProdutos");
 
@@ -102,17 +83,38 @@ function exibirRanking(
         return;
     }
 
-    const ranking: ProdutoRanking[] =
+    const contagemProdutos: Record<string, number> =
         produtos
             .filter(
                 (produto) =>
                     produto.quantidade_vendida > 0
             )
+            .reduce<Record<string, number>>(
+                (
+                    acumulador,
+                    produto
+                ): Record<string, number> => {
+                    const nomeProduto =
+                        produto.produto;
+
+                    if (!acumulador[nomeProduto]) {
+                        acumulador[nomeProduto] = 0;
+                    }
+
+                    acumulador[nomeProduto] +=
+                        produto.quantidade_vendida;
+
+                    return acumulador;
+                },
+                {}
+            );
+
+    const ranking: ProdutoRanking[] =
+        Object.entries(contagemProdutos)
             .map(
-                (produto) => ({
-                    nome: produto.produto,
-                    quantidade:
-                        produto.quantidade_vendida
+                ([nome, quantidade]): ProdutoRanking => ({
+                    nome,
+                    quantidade
                 })
             )
             .sort(
@@ -124,7 +126,6 @@ function exibirRanking(
     elemento.replaceChildren();
 
     if (ranking.length === 0) {
-
         const mensagem =
             document.createElement("p");
 
@@ -135,13 +136,11 @@ function exibirRanking(
             "Nenhuma venda registrada.";
 
         elemento.appendChild(mensagem);
-
         return;
     }
 
     ranking.forEach(
         (produto, indice) => {
-
             const linha =
                 document.createElement("div");
 
@@ -177,21 +176,15 @@ function exibirRanking(
 
             linha.appendChild(nome);
             linha.appendChild(badge);
-
             elemento.appendChild(linha);
         }
     );
 }
 
-/*
- * EXIBE PRODUTOS COM ESTOQUE CRÍTICO
- *
- * FILTER
- */
+// LA - Segmentação de produtos com filter
 function exibirEstoqueCritico(
     produtos: ProdutoAnalitico[]
 ): void {
-
     const elemento =
         document.getElementById("estoqueCritico");
 
@@ -208,7 +201,6 @@ function exibirEstoqueCritico(
     elemento.replaceChildren();
 
     if (produtosCriticos.length === 0) {
-
         const mensagem =
             document.createElement("p");
 
@@ -219,13 +211,11 @@ function exibirEstoqueCritico(
             "Nenhum produto com estoque crítico.";
 
         elemento.appendChild(mensagem);
-
         return;
     }
 
     produtosCriticos.forEach(
         (produto) => {
-
             const linha =
                 document.createElement("div");
 
@@ -250,17 +240,12 @@ function exibirEstoqueCritico(
 
             linha.appendChild(nome);
             linha.appendChild(badge);
-
             elemento.appendChild(linha);
         }
     );
 }
 
-/*
- * ATUALIZA CARDS COM BANCO VAZIO
- */
 function limparDashboard(): void {
-
     atualizarTexto(
         "faturamentoTotal",
         "R$ 0,00"
@@ -282,32 +267,17 @@ function limparDashboard(): void {
     );
 
     exibirRanking([]);
-
     exibirEstoqueCritico([]);
 }
 
-/*
- * BUSCA OS PRODUTOS NA API
- *
- * FETCH + ASYNC/AWAIT + TRY/CATCH
- */
+// TF - Consumo de API e fluxo assíncrono com fetch, async/await e try/catch
 async function buscarProdutos(): Promise<void> {
-
     try {
-
-        /*
-         * O painel é um dashboard geral.
-         *
-         * Por isso não usamos paginação aqui.
-         * Buscamos até 100 produtos para que os
-         * indicadores representem o conjunto do catálogo.
-         */
         const resposta = await fetch(
             "api/produtos.php?limite=100"
         );
 
         if (!resposta.ok) {
-
             throw new Error(
                 "Erro ao carregar os produtos."
             );
@@ -317,7 +287,6 @@ async function buscarProdutos(): Promise<void> {
             await resposta.json();
 
         if (!ehListaProdutos(dados)) {
-
             throw new Error(
                 "Formato de dados inválido."
             );
@@ -328,13 +297,8 @@ async function buscarProdutos(): Promise<void> {
                 "mensagemDashboard"
             );
 
-        /*
-         * BANCO VAZIO
-         */
         if (dados.length === 0) {
-
             if (mensagem) {
-
                 mensagem.textContent =
                     "Nenhum dado registrado.";
 
@@ -352,93 +316,65 @@ async function buscarProdutos(): Promise<void> {
             }
 
             limparDashboard();
-
             return;
         }
 
-        /*
-         * ESCONDE MENSAGEM DE BANCO VAZIO
-         */
         if (mensagem) {
-
             mensagem.classList.add(
                 "d-none"
             );
         }
 
-        /*
-         * REDUCE
-         *
-         * Faturamento total
-         */
+        // LA - Agregação de dados com reduce
         const faturamentoTotal =
             dados.reduce(
                 (
                     total: number,
                     produto: ProdutoAnalitico
                 ): number => {
-
                     return total +
-                        produto.faturamento;
+                        (
+                            produto.quantidade_vendida *
+                            produto.preco
+                        );
                 },
                 0
             );
 
-        /*
-         * REDUCE
-         *
-         * Quantidade vendida
-         */
         const quantidadeTotal =
             dados.reduce(
                 (
                     total: number,
                     produto: ProdutoAnalitico
                 ): number => {
-
                     return total +
                         produto.quantidade_vendida;
                 },
                 0
             );
 
-        /*
-         * REDUCE
-         *
-         * Estoque total
-         */
         const estoqueTotal =
             dados.reduce(
                 (
                     total: number,
                     produto: ProdutoAnalitico
                 ): number => {
-
                     return total +
                         produto.estoque;
                 },
                 0
             );
 
-        /*
-         * REDUCE
-         *
-         * Quantidade de produtos
-         */
         const totalProdutos =
             dados.reduce(
                 (
                     total: number
                 ): number => {
-
                     return total + 1;
                 },
                 0
             );
 
-        /*
-         * ATUALIZAÇÃO DOS CARDS
-         */
         atualizarTexto(
             "faturamentoTotal",
             formatarMoeda(
@@ -461,22 +397,9 @@ async function buscarProdutos(): Promise<void> {
             estoqueTotal.toString()
         );
 
-        /*
-         * FILTER + MAP + SORT
-         *
-         * Ranking dos produtos
-         */
         exibirRanking(dados);
-
-        /*
-         * FILTER
-         *
-         * Estoque crítico
-         */
         exibirEstoqueCritico(dados);
-
     } catch (erro: unknown) {
-
         console.error(
             "Não foi possível carregar os produtos.",
             erro
@@ -488,7 +411,6 @@ async function buscarProdutos(): Promise<void> {
             );
 
         if (mensagem) {
-
             mensagem.textContent =
                 "Não foi possível carregar " +
                 "os dados da dashboard.";
@@ -508,9 +430,6 @@ async function buscarProdutos(): Promise<void> {
     }
 }
 
-/*
- * INICIALIZAÇÃO DA DASHBOARD
- */
 void buscarProdutos();
 
 export {};

@@ -10,14 +10,13 @@ if (!isset($_SESSION["usuario_id"])) {
 }
 
 $usuarioId = $_SESSION["usuario_id"];
-
 $compraSucesso = isset($_SESSION["compra_sucesso"]);
 
 unset($_SESSION["compra_sucesso"]);
 
 try {
-
-    $sql = "SELECT 
+    // BD - SELECT
+    $sql = "SELECT
                 v.id,
                 v.data_venda,
                 v.total
@@ -27,11 +26,8 @@ try {
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$usuarioId]);
-
     $vendas = $stmt->fetchAll();
-
 } catch (PDOException $e) {
-
     $vendas = [];
 }
 
@@ -41,82 +37,66 @@ try {
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compra realizada - Art&Co</title>
 
+    <!-- DW - Bootstrap -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
         rel="stylesheet"
     >
 
-    <link
-        rel="stylesheet"
-        href="src/css/style.css"
-    >
+    <link rel="stylesheet" href="src/css/style.css">
 
     <style>
-    body {
-        background-color: #f8f9fa;
-    }
+        body {
+            background-color: #f8f9fa;
+        }
 
-    .card-compra {
-        border: none;
-        border-radius: 12px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
+        .card-compra {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
 
-    .card-compra:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 7px 18px rgba(0, 0, 0, 0.10);
-    }
+        .card-compra:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 18px rgba(0, 0, 0, 0.10);
+        }
 
-    .numero-compra {
-        font-weight: bold;
-        color: #7b1fa2;
-    }
+        .numero-compra {
+            font-weight: bold;
+            color: #7b1fa2;
+        }
 
-    .valor-compra {
-        font-size: 21px;
-        font-weight: bold;
-        color: #7b1fa2;
-    }
+        .valor-compra {
+            font-size: 21px;
+            font-weight: bold;
+            color: #7b1fa2;
+        }
 
-    .status-compra {
-        font-size: 0.8rem;
-        padding: 6px 10px;
-        border-radius: 20px;
-    }
-</style>
-
+        .status-compra {
+            font-size: 0.8rem;
+            padding: 6px 10px;
+            border-radius: 20px;
+        }
+    </style>
 </head>
 
 <body>
 
 <?php
-
 $base = "";
-
 require_once "componentes/navbar.php";
-
 ?>
 
 <main class="container py-5">
 
+    <!-- DW - Bootstrap / Alert -->
     <div class="text-center mb-5">
-
-        <div
-            class="alert alert-success"
-            role="alert"
-        >
-
+        <div class="alert alert-success" role="alert">
             <h2 class="fw-bold">
                 Compra realizada com sucesso!
             </h2>
@@ -124,9 +104,7 @@ require_once "componentes/navbar.php";
             <p class="mb-0">
                 Obrigado por comprar na Art&Co.
             </p>
-
         </div>
-
     </div>
 
     <h3 class="titulo-pagina">
@@ -139,79 +117,85 @@ require_once "componentes/navbar.php";
 
     <?php if (count($vendas) > 0): ?>
 
+        <!-- DW - Bootstrap / Grid / Card / Badge / Button -->
         <div class="row g-4">
-    <?php foreach ($vendas as $venda): ?>
-        <div class="col-12 col-md-6">
-            <div class="card card-compra h-100">
-                <div class="card-body p-4">
 
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <div class="numero-compra">
-                                Compra #<?= $venda["id"] ?>
+            <?php foreach ($vendas as $venda): ?>
+
+                <div class="col-12 col-md-6">
+                    <div class="card card-compra h-100">
+
+                        <div class="card-body p-4">
+
+                            <div class="d-flex justify-content-between align-items-start">
+
+                                <div>
+                                    <div class="numero-compra">
+                                        Compra #<?= $venda["id"] ?>
+                                    </div>
+
+                                    <small class="text-muted">
+                                        <?= date(
+                                            "d/m/Y H:i",
+                                            strtotime($venda["data_venda"])
+                                        ) ?>
+                                    </small>
+                                </div>
+
+                                <span class="badge bg-success status-compra">
+                                    Concluída
+                                </span>
+
                             </div>
 
-                            <small class="text-muted">
-                                <?= date(
-                                    "d/m/Y H:i",
-                                    strtotime($venda["data_venda"])
+                            <hr>
+
+                            <p class="mb-2">
+                                Compra realizada com sucesso
+                            </p>
+
+                            <div class="valor-compra">
+                                R$
+                                <?= number_format(
+                                    $venda["total"],
+                                    2,
+                                    ",",
+                                    "."
                                 ) ?>
-                            </small>
+                            </div>
+
+                            <a
+                                href="venda.php?id=<?= $venda["id"] ?>"
+                                class="btn btn-outline-primary w-100 mt-3"
+                            >
+                                Ver detalhes
+                            </a>
+
                         </div>
 
-                        <span class="badge bg-success status-compra">
-                            Concluída
-                        </span>
                     </div>
-
-                    <hr>
-
-                    <p class="mb-2">
-                        Compra realizada com sucesso
-                    </p>
-
-                    <div class="valor-compra">
-                        R$
-                        <?= number_format(
-                            $venda["total"],
-                            2,
-                            ",",
-                            "."
-                        ) ?>
-                    </div>
-
-                    <a
-                        href="venda.php?id=<?= $venda["id"] ?>"
-                        class="btn btn-outline-primary w-100 mt-3"
-                    >
-                        Ver detalhes
-                    </a>
-
                 </div>
-            </div>
+
+            <?php endforeach; ?>
+
         </div>
-    <?php endforeach; ?>
-</div>
 
     <?php else: ?>
 
+        <!-- DW - Bootstrap / Alert -->
         <div class="alert alert-info">
-
             Você ainda não possui compras registradas.
-
         </div>
 
     <?php endif; ?>
 
     <div class="text-center mt-4">
-
         <a
             href="produtos/produtos.php"
             class="btn btn-artco"
         >
             Continuar comprando
         </a>
-
     </div>
 
 </main>
@@ -220,10 +204,8 @@ require_once "componentes/navbar.php";
 require_once "componentes/footer.php";
 ?>
 
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
-></script>
+<!-- DW - Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
-
 </html>
