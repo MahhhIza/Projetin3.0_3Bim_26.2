@@ -84,19 +84,7 @@ if ($vendaId !== null && is_numeric($vendaId)) {
     >
 
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .cabecalho-compra {
-            padding: 45px 0 30px;
-        }
-
-        .cabecalho-compra h1 {
-            font-weight: bold;
-        }
-
-        .card-detalhes {
+    .card-detalhes {
             border: none;
             border-radius: 12px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
@@ -121,12 +109,12 @@ require_once "componentes/navbar.php";
 
     <?php if ($compra): ?>
 
-        <div class="cabecalho-compra">
-            <h1>
-                🧾 Compra #<?= $compra["id"] ?>
+        <div class="container">
+            <h1 class="titulo-pagina">
+                Compra #<?= $compra["id"] ?>
             </h1>
 
-            <p class="text-muted">
+            <p class="subtitulo-pagina">
                 Realizada em
                 <?= date(
                     "d/m/Y H:i",
