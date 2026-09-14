@@ -189,11 +189,16 @@ require_once "componentes/navbar.php";
 
 <main class="container py-5">
 
-    <h1 class="fw-bold mb-4">
+    <h1 class="titulo-pagina">
 
-        🛒 Meu Carrinho
+        Meu Carrinho
 
     </h1>
+
+    <p class="subtitulo-pagina">
+
+        Tudo o que você escolheu está aqui. Confira os detalhes do seu pedido.
+</p>
 
     <?php if (empty($_SESSION["carrinho"])): ?>
 
@@ -205,7 +210,7 @@ require_once "componentes/navbar.php";
 
         <a
             href="produtos/produtos.php"
-            class="btn btn-primary"
+            class="btn btn-artco"
         >
 
             Ver produtos
@@ -388,10 +393,10 @@ require_once "componentes/navbar.php";
 
             <a
                 href="produtos/produtos.php"
-                class="btn btn-outline-secondary"
+                class="btn btn-voltar"
             >
 
-                ← Continuar comprando
+                Continuar comprando
 
             </a>
 
@@ -399,7 +404,7 @@ require_once "componentes/navbar.php";
 
                 <a
                     href="finalizar_compra.php"
-                    class="btn btn-success"
+                    class="btn btn-artco"
                 >
 
                     Finalizar compra

@@ -61,6 +61,41 @@ try {
         href="src/css/style.css"
     >
 
+    <style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .card-compra {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card-compra:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 18px rgba(0, 0, 0, 0.10);
+    }
+
+    .numero-compra {
+        font-weight: bold;
+        color: #7b1fa2;
+    }
+
+    .valor-compra {
+        font-size: 21px;
+        font-weight: bold;
+        color: #7b1fa2;
+    }
+
+    .status-compra {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+        border-radius: 20px;
+    }
+</style>
+
 </head>
 
 <body>
@@ -83,7 +118,7 @@ require_once "componentes/navbar.php";
         >
 
             <h2 class="fw-bold">
-                Compra realizada com sucesso! 🎉
+                Compra realizada com sucesso!
             </h2>
 
             <p class="mb-0">
@@ -94,77 +129,69 @@ require_once "componentes/navbar.php";
 
     </div>
 
-    <h3 class="fw-bold mb-4">
+    <h3 class="titulo-pagina">
         Minhas compras
     </h3>
 
+    <p class="subtitulo-pagina">
+        Confira o histórico das compras realizadas na Art&Co.
+    </p>
+
     <?php if (count($vendas) > 0): ?>
 
-        <div class="table-responsive">
+        <div class="row g-4">
+    <?php foreach ($vendas as $venda): ?>
+        <div class="col-12 col-md-6">
+            <div class="card card-compra h-100">
+                <div class="card-body p-4">
 
-            <table class="table table-bordered table-hover">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="numero-compra">
+                                Compra #<?= $venda["id"] ?>
+                            </div>
 
-                <thead class="table-dark">
-
-                    <tr>
-
-                        <th>
-                            Nº da venda
-                        </th>
-
-                        <th>
-                            Data
-                        </th>
-
-                        <th>
-                            Total
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-
-                    <?php foreach ($vendas as $venda): ?>
-
-                        <tr>
-
-                            <td>
-                                <a
-                                    href="venda.php?id=<?= $venda["id"] ?>"
-                                    class="text-decoration-none fw-bold"
-                                >
-                                    #<?= $venda["id"] ?>
-                                </a>
-                            </td>
-
-                            <td>
+                            <small class="text-muted">
                                 <?= date(
                                     "d/m/Y H:i",
                                     strtotime($venda["data_venda"])
                                 ) ?>
-                            </td>
+                            </small>
+                        </div>
 
-                            <td class="fw-bold">
-                                R$
-                                <?= number_format(
-                                    $venda["total"],
-                                    2,
-                                    ",",
-                                    "."
-                                ) ?>
-                            </td>
+                        <span class="badge bg-success status-compra">
+                            Concluída
+                        </span>
+                    </div>
 
-                        </tr>
+                    <hr>
 
-                    <?php endforeach; ?>
+                    <p class="mb-2">
+                        Compra realizada com sucesso
+                    </p>
 
-                </tbody>
+                    <div class="valor-compra">
+                        R$
+                        <?= number_format(
+                            $venda["total"],
+                            2,
+                            ",",
+                            "."
+                        ) ?>
+                    </div>
 
-            </table>
+                    <a
+                        href="venda.php?id=<?= $venda["id"] ?>"
+                        class="btn btn-outline-primary w-100 mt-3"
+                    >
+                        Ver detalhes
+                    </a>
 
+                </div>
+            </div>
         </div>
+    <?php endforeach; ?>
+</div>
 
     <?php else: ?>
 
@@ -180,7 +207,7 @@ require_once "componentes/navbar.php";
 
         <a
             href="produtos/produtos.php"
-            class="btn btn-primary"
+            class="btn btn-artco"
         >
             Continuar comprando
         </a>

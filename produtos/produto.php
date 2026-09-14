@@ -300,10 +300,10 @@ require_once "../componentes/navbar.php";
 
                             <a
                                 href="../carrinho.php?adicionar=<?= $produto["id"] ?>"
-                                class="btn btn-primary mt-3"
+                                class="btn btn-artco mt-3"
                             >
 
-                                🛒 Adicionar ao carrinho
+                                Adicionar ao carrinho
 
                             </a>
 
@@ -312,7 +312,7 @@ require_once "../componentes/navbar.php";
 
 
                             <span
-                                class="btn btn-secondary mt-3 disabled"
+                                class="btn btn-cancelar mt-3 disabled"
                                 aria-disabled="true"
                             >
 
@@ -328,7 +328,7 @@ require_once "../componentes/navbar.php";
 
                         <a
                             href="produtos.php"
-                            class="btn btn-secondary mt-3"
+                            class="btn btn-voltar mt-3"
                         >
 
                             Voltar para produtos
@@ -360,7 +360,7 @@ require_once "../componentes/navbar.php";
 
             <a
                 href="produtos.php"
-                class="btn btn-primary mt-3"
+                class="btn btn-voltar mt-3"
             >
 
                 Voltar para produtos

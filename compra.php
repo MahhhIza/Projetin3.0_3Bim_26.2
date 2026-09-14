@@ -354,7 +354,7 @@ require_once "componentes/navbar.php";
 
             <a
                 href="compras.php"
-                class="btn btn-primary"
+                class="btn btn-voltar"
             >
                 Voltar para minhas compras
             </a>

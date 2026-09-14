@@ -105,7 +105,7 @@ require_once "componentes/navbar.php";
 
         <div class="mb-4">
 
-            <h1 class="fw-bold">
+            <h1 class="titulo-pagina">
                 Compra #<?= $venda["id"] ?>
             </h1>
 
@@ -234,7 +234,7 @@ require_once "componentes/navbar.php";
 
             <a
                 href="finalizar.php"
-                class="btn btn-secondary"
+                class="btn btn-voltar"
             >
                 ← Voltar para minhas compras
             </a>
@@ -255,7 +255,7 @@ require_once "componentes/navbar.php";
 
             <a
                 href="finalizar.php"
-                class="btn btn-primary"
+                class="btn btn-voltar"
             >
                 Voltar para minhas compras
             </a>

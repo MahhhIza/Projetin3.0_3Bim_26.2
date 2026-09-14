@@ -152,7 +152,6 @@ require_once "../../componentes/navbar.php";
     <div class="formulario-pagina">
 
         <div class="formulario-cabecalho">
-
             <h1 class="titulo-pagina">
                 Cadastrar produto
             </h1>
@@ -160,173 +159,157 @@ require_once "../../componentes/navbar.php";
             <p class="subtitulo-pagina">
                 Cadastre um novo produto no catálogo.
             </p>
+        </div>
 
-                    <?php if ($mensagem !== ""): ?>
+        <div class="formulario-card">
 
-                        <div class="alert alert-<?= $tipoMensagem ?>">
+            <div class="card-body">
 
-                            <?= htmlspecialchars($mensagem) ?>
+                <?php if ($mensagem !== ""): ?>
+                    <div class="alert alert-<?= $tipoMensagem ?>">
+                        <?= htmlspecialchars($mensagem) ?>
+                    </div>
+                <?php endif; ?>
 
+                <?php if (count($categorias) === 0): ?>
+
+                    <div class="alert alert-warning">
+                        Nenhuma categoria cadastrada.
+                        <br>
+                        Cadastre uma categoria antes de criar um produto.
+                    </div>
+
+                <?php else: ?>
+
+                    <form method="POST">
+
+                        <div class="mb-3">
+                            <label
+                                for="nome"
+                                class="formulario-label"
+                            >
+                                Nome do produto
+                            </label>
+
+                            <input
+                                type="text"
+                                id="nome"
+                                name="nome"
+                                class="form-control"
+                                required
+                            >
                         </div>
 
-                    <?php endif; ?>
+                        <div class="mb-3">
+                            <label
+                                for="descricao"
+                                class="formulario-label"
+                            >
+                                Descrição
+                            </label>
 
-                    <?php if (count($categorias) === 0): ?>
-
-                        <div class="alert alert-warning">
-
-                            Nenhuma categoria cadastrada.
-
-                            <br>
-
-                            Cadastre uma categoria antes de criar um produto.
-
+                            <textarea
+                                id="descricao"
+                                name="descricao"
+                                class="form-control"
+                                rows="4"
+                                required
+                            ></textarea>
                         </div>
 
-                    <?php else: ?>
+                        <div class="row">
 
-                        <form method="POST">
-
-                            <div class="mb-3">
-
+                            <div class="col-md-6 mb-3">
                                 <label
-                                    for="nome"
-                                    class="form-label"
+                                    for="preco"
+                                    class="formulario-label"
                                 >
-                                    Nome do produto
+                                    Preço
                                 </label>
 
                                 <input
-                                    type="text"
-                                    id="nome"
-                                    name="nome"
+                                    type="number"
+                                    id="preco"
+                                    name="preco"
                                     class="form-control"
+                                    step="0.01"
+                                    min="0"
                                     required
                                 >
-
                             </div>
 
-                            <div class="mb-3">
-
+                            <div class="col-md-6 mb-3">
                                 <label
-                                    for="descricao"
-                                    class="form-label"
+                                    for="estoque"
+                                    class="formulario-label"
                                 >
-                                    Descrição
+                                    Estoque
                                 </label>
 
-                                <textarea
-                                    id="descricao"
-                                    name="descricao"
+                                <input
+                                    type="number"
+                                    id="estoque"
+                                    name="estoque"
                                     class="form-control"
-                                    rows="4"
-                                    required
-                                ></textarea>
-
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-md-6 mb-3">
-
-                                    <label
-                                        for="preco"
-                                        class="form-label"
-                                    >
-                                        Preço
-                                    </label>
-
-                                    <input
-                                        type="number"
-                                        id="preco"
-                                        name="preco"
-                                        class="form-control"
-                                        step="0.01"
-                                        min="0"
-                                        required
-                                    >
-
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-
-                                    <label
-                                        for="estoque"
-                                        class="form-label"
-                                    >
-                                        Estoque
-                                    </label>
-
-                                    <input
-                                        type="number"
-                                        id="estoque"
-                                        name="estoque"
-                                        class="form-control"
-                                        min="0"
-                                        required
-                                    >
-
-                                </div>
-
-                            </div>
-
-                            <div class="mb-4">
-
-                                <label
-                                    for="categoria_id"
-                                    class="form-label"
-                                >
-                                    Categoria
-                                </label>
-
-                                <select
-                                    id="categoria_id"
-                                    name="categoria_id"
-                                    class="form-select"
+                                    min="0"
                                     required
                                 >
+                            </div>
 
-                                    <option value="">
-                                        Selecione uma categoria
+                        </div>
+
+                        <div class="mb-4">
+                            <label
+                                for="categoria_id"
+                                class="formulario-label"
+                            >
+                                Categoria
+                            </label>
+
+                            <select
+                                id="categoria_id"
+                                name="categoria_id"
+                                class="form-select"
+                                required
+                            >
+                                <option value="">
+                                    Selecione uma categoria
+                                </option>
+
+                                <?php foreach ($categorias as $categoria): ?>
+
+                                    <option
+                                        value="<?= $categoria["id"] ?>"
+                                    >
+                                        <?= htmlspecialchars($categoria["nome"]) ?>
                                     </option>
 
-                                    <?php foreach ($categorias as $categoria): ?>
+                                <?php endforeach; ?>
 
-                                        <option
-                                            value="<?= $categoria["id"] ?>"
-                                        >
-                                            <?= htmlspecialchars($categoria["nome"]) ?>
-                                        </option>
+                            </select>
+                        </div>
 
-                                    <?php endforeach; ?>
+                        <div class="d-flex justify-content-between">
 
-                                </select>
+                            <a
+                                href="index.php"
+                                class="btn btn-voltar"
+                            >
+                                Voltar
+                            </a>
 
-                            </div>
+                            <button
+                                type="submit"
+                                class="btn btn-artco"
+                            >
+                                Cadastrar produto
+                            </button>
 
-                            <div class="d-flex justify-content-between">
+                        </div>
 
-                                <a
-                                    href="index.php"
-                                    class="btn btn-outline-secondary"
-                                >
-                                    ← Voltar
-                                </a>
+                    </form>
 
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary"
-                                >
-                                    Cadastrar produto
-                                </button>
-
-                            </div>
-
-                        </form>
-
-                    <?php endif; ?>
-
-                </div>
+                <?php endif; ?>
 
             </div>
 
@@ -337,7 +320,7 @@ require_once "../../componentes/navbar.php";
 </main>
 
 <?php
-require_once "componentes/footer.php";
+require_once "../../componentes/footer.php";
 ?>
 
 <script

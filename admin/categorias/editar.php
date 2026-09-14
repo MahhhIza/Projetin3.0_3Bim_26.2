@@ -132,7 +132,6 @@ require_once "../../componentes/navbar.php";
     <div class="formulario-pagina">
 
         <div class="formulario-cabecalho">
-
             <h1 class="titulo-pagina">
                 Editar categoria
             </h1>
@@ -140,79 +139,86 @@ require_once "../../componentes/navbar.php";
             <p class="subtitulo-pagina">
                 Atualize os dados da categoria.
             </p>
+        </div>
 
+        <div class="formulario-card">
 
-            <?php if ($erro !== ""): ?>
+            <div class="card-body">
 
-                <div class="alert alert-danger">
-                    <?= htmlspecialchars($erro) ?>
-                </div>
+                <?php if ($erro !== ""): ?>
 
-            <?php endif; ?>
+                    <div class="alert alert-danger">
+                        <?= htmlspecialchars($erro) ?>
+                    </div>
 
+                <?php endif; ?>
 
-            <form method="POST">
+                <form method="POST">
 
-                <div class="mb-3">
+                    <div class="mb-3">
 
-                    <label
-                        for="nome"
-                        class="form-label formulario-label"
-                    >
-                        Nome
-                    </label>
+                        <label
+                            for="nome"
+                            class="formulario-label"
+                        >
+                            Nome
+                        </label>
 
-                    <input
-                        type="text"
-                        id="nome"
-                        name="nome"
-                        class="form-control"
-                        maxlength="100"
-                        required
-                        value="<?= htmlspecialchars(
-                            $categoria["nome"]
-                        ) ?>"
-                    >
+                        <input
+                            type="text"
+                            id="nome"
+                            name="nome"
+                            class="form-control"
+                            maxlength="100"
+                            required
+                            value="<?= htmlspecialchars(
+                                $categoria["nome"]
+                            ) ?>"
+                        >
 
-                </div>
+                    </div>
 
+                    <div class="mb-4">
 
-                <div class="mb-3">
+                        <label
+                            for="descricao"
+                            class="formulario-label"
+                        >
+                            Descrição
+                        </label>
 
-                    <label
-                        for="descricao"
-                        class="form-label formulario-label"
-                    >
-                        Descrição
-                    </label>
+                        <textarea
+                            id="descricao"
+                            name="descricao"
+                            class="form-control"
+                            rows="4"
+                        ><?= htmlspecialchars(
+                            $categoria["descricao"] ?? ""
+                        ) ?></textarea>
 
-                    <textarea
-                        id="descricao"
-                        name="descricao"
-                        class="form-control"
-                        rows="4"
-                    ><?= htmlspecialchars(
-                        $categoria["descricao"] ?? ""
-                    ) ?></textarea>
+                    </div>
 
-                </div>
+                    <div class="d-flex justify-content-between">
 
+                        <a
+                            href="index.php"
+                            class="btn btn-voltar"
+                        >
+                            Voltar
+                        </a>
 
-                <button
-                    type="submit"
-                    class="btn btn-artco"
-                >
-                    Salvar alterações
-                </button>
+                        <button
+                            type="submit"
+                            class="btn btn-artco"
+                        >
+                            Salvar alterações
+                        </button>
 
-                <a
-                    href="index.php"
-                    class="btn btn-secundary"
-                >
-                    Cancelar
-                </a>
+                    </div>
 
-            </form>
+                </form>
+
+            </div>
 
         </div>
 

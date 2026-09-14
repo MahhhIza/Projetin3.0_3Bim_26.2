@@ -136,7 +136,6 @@ require_once "../../componentes/navbar.php";
     <div class="formulario-pagina">
 
         <div class="formulario-cabecalho">
-
             <h1 class="titulo-pagina">
                 Novo usuário
             </h1>
@@ -144,149 +143,149 @@ require_once "../../componentes/navbar.php";
             <p class="subtitulo-pagina">
                 Cadastre um novo usuário no sistema.
             </p>
+        </div>
 
+        <div class="formulario-card">
 
-                    <?php if ($mensagemErro !== ""): ?>
+            <div class="card-body">
 
-                        <div class="alert alert-danger">
+                <?php if ($mensagemErro !== ""): ?>
 
-                            <?= htmlspecialchars($mensagemErro) ?>
+                    <div class="alert alert-danger">
+                        <?= htmlspecialchars($mensagemErro) ?>
+                    </div>
 
+                <?php endif; ?>
+
+                <form
+                    method="POST"
+                    action="cadastrar.php"
+                >
+
+                    <div class="mb-3">
+
+                        <label
+                            for="nome"
+                            class="formulario-label"
+                        >
+                            Nome
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="nome"
+                            name="nome"
+                            value="<?= htmlspecialchars($nome) ?>"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label
+                            for="email"
+                            class="formulario-label"
+                        >
+                            E-mail
+                        </label>
+
+                        <input
+                            type="email"
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            value="<?= htmlspecialchars($email) ?>"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label
+                            for="senha"
+                            class="formulario-label"
+                        >
+                            Senha
+                        </label>
+
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="senha"
+                            name="senha"
+                            minlength="6"
+                            required
+                        >
+
+                        <div class="form-text">
+                            A senha deve possuir pelo menos 6 caracteres.
                         </div>
 
-                    <?php endif; ?>
+                    </div>
 
-                    <form
-                        method="POST"
-                        action="cadastrar.php"
-                    >
+                    <div class="mb-4">
 
-                        <div class="mb-3">
+                        <label
+                            for="tipo"
+                            class="formulario-label"
+                        >
+                            Tipo de usuário
+                        </label>
 
-                            <label
-                                for="nome"
-                                class="form-label formulario-label"
+                        <select
+                            class="form-select"
+                            id="tipo"
+                            name="tipo"
+                            required
+                        >
+
+                            <option
+                                value="cliente"
+                                <?= $tipo === "cliente" ? "selected" : "" ?>
                             >
-                                Nome
-                            </label>
+                                Cliente
+                            </option>
 
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="nome"
-                                name="nome"
-                                value="<?= htmlspecialchars($nome) ?>"
-                                required
+                            <option
+                                value="vendedor"
+                                <?= $tipo === "vendedor" ? "selected" : "" ?>
                             >
+                                Vendedor
+                            </option>
 
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label
-                                for="email"
-                                class="form-label formulario-label"
+                            <option
+                                value="admin"
+                                <?= $tipo === "admin" ? "selected" : "" ?>
                             >
-                                E-mail
-                            </label>
+                                Administrador
+                            </option>
 
-                            <input
-                                type="email"
-                                class="form-control"
-                                id="email"
-                                name="email"
-                                value="<?= htmlspecialchars($email) ?>"
-                                required
-                            >
+                        </select>
 
-                        </div>
+                    </div>
 
-                        <div class="mb-3">
+                    <div class="d-flex justify-content-between">
 
-                            <label
-                                for="senha"
-                                class="form-label formulario-label"
-                            >
-                                Senha
-                            </label>
+                        <a
+                            href="index.php"
+                            class="btn btn-voltar"
+                        >
+                            Voltar
+                        </a>
 
-                            <input
-                                type="password"
-                                class="form-control"
-                                id="senha"
-                                name="senha"
-                                minlength="6"
-                                required
-                            >
+                        <button
+                            type="submit"
+                            class="btn btn-artco"
+                        >
+                            Cadastrar usuário
+                        </button>
 
-                            <div class="form-text">
-                                A senha deve possuir pelo menos 6 caracteres.
-                            </div>
+                    </div>
 
-                        </div>
-
-                        <div class="mb-4">
-
-                            <label
-                                for="tipo"
-                                class="form-label formulario-label"
-                            >
-                                Tipo de usuário
-                            </label>
-
-                            <select
-                                class="form-select"
-                                id="tipo"
-                                name="tipo"
-                                required
-                            >
-
-                                <option
-                                    value="cliente"
-                                    <?= $tipo === "cliente" ? "selected" : "" ?>
-                                >
-                                    Cliente
-                                </option>
-
-                                <option
-                                    value="vendedor"
-                                    <?= $tipo === "vendedor" ? "selected" : "" ?>
-                                >
-                                    Vendedor
-                                </option>
-
-                                <option
-                                    value="admin"
-                                    <?= $tipo === "admin" ? "selected" : "" ?>
-                                >
-                                    Administrador
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="d-flex gap-2">
-
-                            <button
-                                type="submit"
-                                class="btn btn-primary"
-                            >
-                                Cadastrar usuário
-                            </button>
-
-                            <a
-                                href="index.php"
-                                class="btn btn-secondary"
-                            >
-                                Cancelar
-                            </a>
-
-                        </div>
-
-                    </form>
-
-                </div>
+                </form>
 
             </div>
 

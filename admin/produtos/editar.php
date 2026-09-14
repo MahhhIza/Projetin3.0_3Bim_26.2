@@ -175,187 +175,171 @@ require_once "../../componentes/navbar.php";
 
         <div class="formulario-cabecalho">
 
-    <h1 class="titulo-pagina">
-        Editar produto
-    </h1>
+            <h1 class="titulo-pagina">
+                Editar produto
+            </h1>
 
-    <p class="subtitulo-pagina">
-        Atualize os dados do produto.
-    </p>
+            <p class="subtitulo-pagina">
+                Atualize os dados do produto.
+            </p>
 
-</div>
+        </div>
 
-                    <?php if ($mensagem !== ""): ?>
+        <div class="formulario-card">
 
-                        <div class="alert alert-warning">
-                            <?= htmlspecialchars($mensagem) ?>
-                        </div>
+            <div class="card-body">
 
-                    <?php endif; ?>
+                <?php if ($mensagem !== ""): ?>
 
-                    <form method="POST">
+                    <div class="alert alert-warning">
+                        <?= htmlspecialchars($mensagem) ?>
+                    </div>
 
-                        <div class="mb-3">
+                <?php endif; ?>
 
-                            <label
-                                for="nome"
-                                class="form-label formulario-label"
-                            >
-                                Nome do produto
+                <form method="POST">
+
+                    <div class="mb-3">
+
+                        <label for="nome" class="formulario-label">
+                            Nome do produto
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nome"
+                            name="nome"
+                            class="form-control"
+                            value="<?= htmlspecialchars($produto["nome"]) ?>"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label for="descricao" class="formulario-label">
+                            Descrição
+                        </label>
+
+                        <textarea
+                            id="descricao"
+                            name="descricao"
+                            class="form-control"
+                            rows="4"
+                            required
+                        ><?= htmlspecialchars($produto["descricao"]) ?></textarea>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+
+                            <label for="preco" class="formulario-label">
+                                Preço
                             </label>
 
                             <input
-                                type="text"
-                                id="nome"
-                                name="nome"
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                id="preco"
+                                name="preco"
                                 class="form-control"
-                                value="<?= htmlspecialchars($produto["nome"]) ?>"
+                                value="<?= htmlspecialchars($produto["preco"]) ?>"
                                 required
                             >
 
                         </div>
 
-                        <div class="mb-3">
+                        <div class="col-md-6 mb-3">
 
-                            <label
-                                for="descricao"
-                                class="form-label formulario-label"
-                            >
-                                Descrição
+                            <label for="estoque" class="formulario-label">
+                                Estoque
                             </label>
 
-                            <textarea
-                                id="descricao"
-                                name="descricao"
+                            <input
+                                type="number"
+                                min="0"
+                                id="estoque"
+                                name="estoque"
                                 class="form-control"
-                                rows="4"
-                                required
-                            ><?= htmlspecialchars($produto["descricao"]) ?></textarea>
-
-                        </div>
-
-                        <div class="row">
-
-                            <div class="col-md-6 mb-3">
-
-                                <label
-                                    for="preco"
-                                    class="form-label formulario-label"
-                                >
-                                    Preço
-                                </label>
-
-                                <input
-                                    type="number"
-                                    step="0.01"
-                                    min="0"
-                                    id="preco"
-                                    name="preco"
-                                    class="form-control"
-                                    value="<?= htmlspecialchars($produto["preco"]) ?>"
-                                    required
-                                >
-
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-
-                                <label
-                                    for="estoque"
-                                    class="form-label formulario-label"
-                                >
-                                    Estoque
-                                </label>
-
-                                <input
-                                    type="number"
-                                    min="0"
-                                    id="estoque"
-                                    name="estoque"
-                                    class="form-control"
-                                    value="<?= htmlspecialchars($produto["estoque"]) ?>"
-                                    required
-                                >
-
-                            </div>
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label
-                                for="categoria_id"
-                                class="form-label formulario-label"
-                            >
-                                Categoria
-                            </label>
-
-                            <select
-                                id="categoria_id"
-                                name="categoria_id"
-                                class="form-select"
+                                value="<?= htmlspecialchars($produto["estoque"]) ?>"
                                 required
                             >
 
-                                <option value="">
-                                    Selecione uma categoria
+                        </div>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label for="categoria_id" class="formulario-label">
+                            Categoria
+                        </label>
+
+                        <select
+                            id="categoria_id"
+                            name="categoria_id"
+                            class="form-select"
+                            required
+                        >
+
+                            <option value="">
+                                Selecione uma categoria
+                            </option>
+
+                            <?php foreach ($categorias as $categoria): ?>
+
+                                <option
+                                    value="<?= $categoria["id"] ?>"
+                                    <?= $produto["categoria_id"] == $categoria["id"] ? "selected" : "" ?>
+                                >
+                                    <?= htmlspecialchars($categoria["nome"]) ?>
                                 </option>
 
-                                <?php foreach ($categorias as $categoria): ?>
+                            <?php endforeach; ?>
 
-                                    <option
-                                        value="<?= $categoria["id"] ?>"
-                                        <?= $produto["categoria_id"] == $categoria["id"] ? "selected" : "" ?>
-                                    >
-                                        <?= htmlspecialchars($categoria["nome"]) ?>
-                                    </option>
+                        </select>
 
-                                <?php endforeach; ?>
+                    </div>
 
-                            </select>
+                    <div class="form-check mb-4">
 
-                        </div>
+                        <input
+                            type="checkbox"
+                            id="ativo"
+                            name="ativo"
+                            class="form-check-input"
+                            <?= $produto["ativo"] ? "checked" : "" ?>
+                        >
 
-                        <div class="form-check mb-4">
+                        <label for="ativo" class="form-check-label">
+                            Produto ativo
+                        </label>
 
-                            <input
-                                type="checkbox"
-                                id="ativo"
-                                name="ativo"
-                                class="form-check-input"
-                                <?= $produto["ativo"] ? "checked" : "" ?>
-                            >
+                    </div>
 
-                            <label
-                                for="ativo"
-                                class="form-check-label"
-                            >
-                                Produto ativo
-                            </label>
+                    <div class="d-flex justify-content-between">
 
-                        </div>
+                        <a
+                            href="index.php"
+                            class="btn btn-voltar"
+                        >
+                            Voltar
+                        </a>
 
-                        <div class="d-flex justify-content-between">
+                        <button
+                            type="submit"
+                            class="btn btn-artco"
+                        >
+                            Salvar alterações
+                        </button>
 
-                            <a
-                                href="index.php"
-                                class="btn btn-secundary"
-                            >
-                                ← Voltar
-                            </a>
+                    </div>
 
-                            <button
-                                type="submit"
-                                class="btn btn-artco"
-                            >
-                                Salvar alterações
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                </div>
+                </form>
 
             </div>
 

@@ -218,176 +218,181 @@ require_once "../../componentes/navbar.php";
         <div class="formulario-cabecalho">
 
             <h1 class="titulo-pagina">
-                Editar Usuário
+                Editar usuário
             </h1>
 
+            <p class="subtitulo-pagina">
+                Atualize os dados do usuário.
+            </p>
 
-            <?php if ($erro !== ""): ?>
+        </div>
 
-                <div class="alert alert-danger">
-                    <?= htmlspecialchars($erro) ?>
-                </div>
+        <div class="formulario-card">
 
-            <?php endif; ?>
+            <div class="card-body">
 
+                <?php if ($erro !== ""): ?>
 
-            <form method="POST">
-
-                <div class="mb-3">
-
-                    <label
-                        for="nome"
-                        class="form-label formulario-label"
-                    >
-                        Nome
-                    </label>
-
-                    <input
-                        type="text"
-                        id="nome"
-                        name="nome"
-                        class="form-control"
-                        required
-                        value="<?= htmlspecialchars(
-                            $usuario["nome"]
-                        ) ?>"
-                    >
-
-                </div>
-
-
-                <div class="mb-3">
-
-                    <label
-                        for="email"
-                        class="form-label formulario-label"
-                    >
-                        E-mail
-                    </label>
-
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        class="form-control"
-                        required
-                        value="<?= htmlspecialchars(
-                            $usuario["email"]
-                        ) ?>"
-                    >
-
-                </div>
-
-
-                <div class="mb-3">
-
-                    <label
-                        for="senha"
-                        class="form-label formulario-label"
-                    >
-                        Nova senha
-                    </label>
-
-                    <input
-                        type="password"
-                        id="senha"
-                        name="senha"
-                        class="form-control"
-                        minlength="6"
-                    >
-
-                    <div class="form-text">
-                        Deixe vazio para manter a senha atual.
+                    <div class="alert alert-danger">
+                        <?= htmlspecialchars($erro) ?>
                     </div>
 
-                </div>
+                <?php endif; ?>
 
+                <form method="POST">
 
-                <div class="mb-3">
+                    <div class="mb-3">
 
-                    <label
-                        for="tipo"
-                        class="form-label formulario-label"
-                    >
-                        Tipo de usuário
-                    </label>
+                        <label
+                            for="nome"
+                            class="formulario-label"
+                        >
+                            Nome
+                        </label>
 
-                    <select
-                        id="tipo"
-                        name="tipo"
-                        class="form-select"
-                        required
-                    >
+                        <input
+                            type="text"
+                            id="nome"
+                            name="nome"
+                            class="form-control"
+                            required
+                            value="<?= htmlspecialchars($usuario["nome"]) ?>"
+                        >
 
-                        <option
-                            value="cliente"
-                            <?= $usuario["tipo"] === "cliente"
-                                ? "selected"
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label
+                            for="email"
+                            class="formulario-label"
+                        >
+                            E-mail
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-control"
+                            required
+                            value="<?= htmlspecialchars($usuario["email"]) ?>"
+                        >
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label
+                            for="senha"
+                            class="formulario-label"
+                        >
+                            Nova senha
+                        </label>
+
+                        <input
+                            type="password"
+                            id="senha"
+                            name="senha"
+                            class="form-control"
+                            minlength="6"
+                        >
+
+                        <div class="form-text">
+                            Deixe vazio para manter a senha atual.
+                        </div>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label
+                            for="tipo"
+                            class="formulario-label"
+                        >
+                            Tipo de usuário
+                        </label>
+
+                        <select
+                            id="tipo"
+                            name="tipo"
+                            class="form-select"
+                            required
+                        >
+
+                            <option
+                                value="cliente"
+                                <?= $usuario["tipo"] === "cliente"
+                                    ? "selected"
+                                    : "" ?>
+                            >
+                                Cliente
+                            </option>
+
+                            <option
+                                value="vendedor"
+                                <?= $usuario["tipo"] === "vendedor"
+                                    ? "selected"
+                                    : "" ?>
+                            >
+                                Vendedor
+                            </option>
+
+                            <option
+                                value="admin"
+                                <?= $usuario["tipo"] === "admin"
+                                    ? "selected"
+                                    : "" ?>
+                            >
+                                Administrador
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-check mb-4">
+
+                        <input
+                            type="checkbox"
+                            id="ativo"
+                            name="ativo"
+                            class="form-check-input"
+                            <?= (int) $usuario["ativo"] === 1
+                                ? "checked"
                                 : "" ?>
                         >
-                            Cliente
-                        </option>
 
-                        <option
-                            value="vendedor"
-                            <?= $usuario["tipo"] === "vendedor"
-                                ? "selected"
-                                : "" ?>
+                        <label
+                            for="ativo"
+                            class="form-check-label"
                         >
-                            Vendedor
-                        </option>
+                            Usuário ativo
+                        </label>
 
-                        <option
-                            value="admin"
-                            <?= $usuario["tipo"] === "admin"
-                                ? "selected"
-                                : "" ?>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+
+                        <a
+                            href="index.php"
+                            class="btn btn-voltar"
                         >
-                            Administrador
-                        </option>
+                            Voltar
+                        </a>
 
-                    </select>
+                        <button
+                            type="submit"
+                            class="btn btn-artco"
+                        >
+                            Salvar alterações
+                        </button>
 
-                </div>
+                    </div>
 
+                </form>
 
-                <div class="form-check mb-4">
-
-                    <input
-                        type="checkbox"
-                        id="ativo"
-                        name="ativo"
-                        class="form-check-input"
-                        <?= (int) $usuario["ativo"] === 1
-                            ? "checked"
-                            : "" ?>
-                    >
-
-                    <label
-                        for="ativo"
-                        class="form-check-label"
-                    >
-                        Usuário ativo
-                    </label>
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                >
-                    Salvar alterações
-                </button>
-
-                <a
-                    href="index.php"
-                    class="btn btn-secondary"
-                >
-                    Cancelar
-                </a>
-
-            </form>
+            </div>
 
         </div>
 

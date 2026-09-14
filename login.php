@@ -94,94 +94,85 @@ exit;
 
     <main class="container py-5">
 
-        <div class="row justify-content-center">
+    <div class="formulario-pagina">
 
-            <div class="col-12 col-md-7 col-lg-5">
+        <div class="formulario-cabecalho text-center">
+            <h1 class="titulo-pagina">
+                Login
+            </h1>
 
-                <div class="card shadow-sm border-0">
+            <p class="subtitulo-pagina">
+                Acesse sua conta para continuar na Art&Co.
+            </p>
+        </div>
 
-                    <div class="card-body p-4">
+        <div class="formulario-card">
 
-                        <h1 class="text-center fw-bold mb-4">
-                            Login
-                        </h1>
+            <div class="card-body">
 
-                        <?php if ($mensagem !== ""): ?>
+                <?php if ($mensagem !== ""): ?>
+                    <div class="alert alert-danger text-center">
+                        <?= htmlspecialchars($mensagem) ?>
+                    </div>
+                <?php endif; ?>
 
-    <div class="alert alert-danger text-center">
-        <?= htmlspecialchars($mensagem) ?>
-    </div>
+                <form method="POST">
 
-<?php endif; ?>
+                    <div class="mb-3">
+                        <label
+                            for="email"
+                            class="formulario-label"
+                        >
+                            E-mail
+                        </label>
 
-                        <form method="POST">
-
-                            <div class="mb-3">
-
-                                <label
-                                    for="email"
-                                    class="form-label"
-                                >
-                                    E-mail
-                                </label>
-
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    class="form-control"
-                                    required
-                                >
-
-                            </div>
-
-                            <div class="mb-3">
-
-                                <label
-                                    for="senha"
-                                    class="form-label"
-                                >
-                                    Senha
-                                </label>
-
-                                <input
-                                    type="password"
-                                    id="senha"
-                                    name="senha"
-                                    class="form-control"
-                                    required
-                                >
-
-                            </div>
-
-                            <button
-                                type="submit"
-                                class="btn btn-primary w-100"
-                            >
-                                Entrar
-                            </button>
-
-                        </form>
-
-                        <p class="text-center text-muted mt-4 mb-0">
-
-                            Ainda não possui uma conta?
-
-                            <a href="cadastro.php">
-                                Cadastre-se
-                            </a>
-
-                        </p>
-
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-control"
+                            required
+                        >
                     </div>
 
-                </div>
+                    <div class="mb-3">
+                        <label
+                            for="senha"
+                            class="formulario-label"
+                        >
+                            Senha
+                        </label>
+
+                        <input
+                            type="password"
+                            id="senha"
+                            name="senha"
+                            class="form-control"
+                            required
+                        >
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="btn btn-artco w-100"
+                    >
+                        Entrar
+                    </button>
+
+                </form>
+
+                <p class="text-center text-muted mt-4 mb-0">
+                    Ainda não possui uma conta?
+                    <a href="cadastro.php" class="link-cad-log">Cadastre-se</a>
+                </p>
 
             </div>
 
         </div>
 
-    </main>
+    </div>
+
+</main>
 
     <?php
     require_once "componentes/footer.php";
